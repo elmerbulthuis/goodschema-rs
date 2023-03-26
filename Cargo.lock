@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "goodschema-rs"
+name = "goodschema"
 version = "0.1.0"
