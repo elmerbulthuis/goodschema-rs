@@ -1,8 +1,27 @@
 [package]
 name = "goodschema"
-version = "0.1.0"
+version = "0.0.0"
 edition = "2021"
+description = "generate structs and validators from json schema"
+license = "ISC"
+authors = ["Elmer Bulthuis"]
+homepage = "https://www.goodschema.org"
+keywords = ["good", "json", "schema"]
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[badges]
+maintenance = { status = "actively-developed" }
 
 [dependencies]
+clap = { version = "4.1.14", features = ["derive"] }
+serde = "1.0.158"
+serde_json = "1.0.94"
+url = "2.3.1"
+urlencoding = "2.1.2"
+
+[lib]
+name = "goodschema"
+path = "src/lib.rs"
+
+[[bin]]
+name = "goodschema"
+path = "src/main.rs"

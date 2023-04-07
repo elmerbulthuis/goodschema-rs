@@ -1,0 +1,1 @@
+# goodschema, Rust edition
