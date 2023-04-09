@@ -1,1 +1,1 @@
-# goodschema, Rust edition
+# jns42-generator, Rust edition

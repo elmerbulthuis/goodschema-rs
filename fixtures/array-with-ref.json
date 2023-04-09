@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://goodschema.org/array-with-ref",
+  "$id": "https://jns42-generator.org/array-with-ref",
   "description": "So this is an array!",
   "type": [
     "array"

@@ -9,11 +9,11 @@
           "test",
           "--no-run",
           "--lib",
-          "--package=goodschema",
+          "--package=jns42-generator",
           "--all-targets"
         ],
         "filter": {
-          "name": "goodschema",
+          "name": "jns42-generator",
           "kind": "lib"
         }
       },
@@ -27,11 +27,11 @@
       "cargo": {
         "args": [
           "build",
-          "--bin=goodschema",
-          "--package=goodschema"
+          "--bin=jns42-generator",
+          "--package=jns42-generator"
         ],
         "filter": {
-          "name": "goodschema",
+          "name": "jns42-generator",
           "kind": "bin"
         }
       },
@@ -55,11 +55,11 @@
       "cargo": {
         "args": [
           "build",
-          "--bin=goodschema",
-          "--package=goodschema"
+          "--bin=jns42-generator",
+          "--package=jns42-generator"
         ],
         "filter": {
-          "name": "goodschema",
+          "name": "jns42-generator",
           "kind": "bin"
         }
       },
@@ -83,11 +83,11 @@
       "cargo": {
         "args": [
           "build",
-          "--bin=goodschema",
-          "--package=goodschema"
+          "--bin=jns42-generator",
+          "--package=jns42-generator"
         ],
         "filter": {
-          "name": "goodschema",
+          "name": "jns42-generator",
           "kind": "bin"
         }
       },
@@ -111,11 +111,11 @@
       "cargo": {
         "args": [
           "build",
-          "--bin=goodschema",
-          "--package=goodschema"
+          "--bin=jns42-generator",
+          "--package=jns42-generator"
         ],
         "filter": {
-          "name": "goodschema",
+          "name": "jns42-generator",
           "kind": "bin"
         }
       },
@@ -138,11 +138,11 @@
       "cargo": {
         "args": [
           "build",
-          "--bin=goodschema",
-          "--package=goodschema"
+          "--bin=jns42-generator",
+          "--package=jns42-generator"
         ],
         "filter": {
-          "name": "goodschema",
+          "name": "jns42-generator",
           "kind": "bin"
         }
       },
@@ -165,11 +165,11 @@
       "cargo": {
         "args": [
           "build",
-          "--bin=goodschema",
-          "--package=goodschema"
+          "--bin=jns42-generator",
+          "--package=jns42-generator"
         ],
         "filter": {
-          "name": "goodschema",
+          "name": "jns42-generator",
           "kind": "bin"
         }
       },
@@ -192,11 +192,11 @@
       "cargo": {
         "args": [
           "build",
-          "--bin=goodschema",
-          "--package=goodschema"
+          "--bin=jns42-generator",
+          "--package=jns42-generator"
         ],
         "filter": {
-          "name": "goodschema",
+          "name": "jns42-generator",
           "kind": "bin"
         }
       },
@@ -219,11 +219,11 @@
       "cargo": {
         "args": [
           "build",
-          "--bin=goodschema",
-          "--package=goodschema"
+          "--bin=jns42-generator",
+          "--package=jns42-generator"
         ],
         "filter": {
-          "name": "goodschema",
+          "name": "jns42-generator",
           "kind": "bin"
         }
       },
@@ -246,11 +246,11 @@
       "cargo": {
         "args": [
           "build",
-          "--bin=goodschema",
-          "--package=goodschema"
+          "--bin=jns42-generator",
+          "--package=jns42-generator"
         ],
         "filter": {
-          "name": "goodschema",
+          "name": "jns42-generator",
           "kind": "bin"
         }
       },
@@ -273,11 +273,11 @@
       "cargo": {
         "args": [
           "build",
-          "--bin=goodschema",
-          "--package=goodschema"
+          "--bin=jns42-generator",
+          "--package=jns42-generator"
         ],
         "filter": {
-          "name": "goodschema",
+          "name": "jns42-generator",
           "kind": "bin"
         }
       },
@@ -300,11 +300,11 @@
       "cargo": {
         "args": [
           "build",
-          "--bin=goodschema",
-          "--package=goodschema"
+          "--bin=jns42-generator",
+          "--package=jns42-generator"
         ],
         "filter": {
-          "name": "goodschema",
+          "name": "jns42-generator",
           "kind": "bin"
         }
       },
@@ -327,11 +327,11 @@
       "cargo": {
         "args": [
           "build",
-          "--bin=goodschema",
-          "--package=goodschema"
+          "--bin=jns42-generator",
+          "--package=jns42-generator"
         ],
         "filter": {
-          "name": "goodschema",
+          "name": "jns42-generator",
           "kind": "bin"
         }
       },
