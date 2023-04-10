@@ -23,4 +23,5 @@ urlencoding = "2.1.2"
 path = "src/lib.rs"
 
 [[bin]]
+name = "jns42_generator"
 path = "src/main.rs"
