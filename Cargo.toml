@@ -1,12 +1,13 @@
 [package]
-name = "goodschema"
+name = "jns42_generator"
 version = "0.0.0"
 edition = "2021"
-description = "generate structs and validators from json schema"
+description = "Generate structs and validators from json schema"
 license = "ISC"
 authors = ["Elmer Bulthuis"]
-homepage = "https://www.goodschema.org"
-keywords = ["good", "json", "schema"]
+homepage = "https://www.JsonSchema42.org"
+keywords = ["json", "schema", "generator"]
+repository = "git@github.com:JsonSchema42/jns42-generator-ts"
 
 [badges]
 maintenance = { status = "actively-developed" }
@@ -19,9 +20,7 @@ url = "2.3.1"
 urlencoding = "2.1.2"
 
 [lib]
-name = "goodschema"
 path = "src/lib.rs"
 
 [[bin]]
-name = "goodschema"
 path = "src/main.rs"
