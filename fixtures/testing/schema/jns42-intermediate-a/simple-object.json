@@ -1,0 +1,103 @@
+{
+	"$schema": "https://schema.JsonSchema42.org/jns42-intermediate-a/schema.json",
+	"nodes": {
+		"file:///simple-object.json": {
+			"deprecated": false,
+			"title": "",
+			"description": "A very simple object",
+			"examples": [
+				{
+					"id": 1
+				},
+				{
+					"id": 2,
+					"name": "hi"
+				}
+			],
+			"types": [
+				{
+					"type": "interface",
+					"requiredProperties": ["id"],
+					"propertyTypeNodeIds": {
+						"id": "file:///simple-object.json#/properties/id",
+						"name": "file:///simple-object.json#/properties/name",
+						"child": "file:///simple-object.json#/properties/child"
+					}
+				}
+			],
+			"compounds": []
+		},
+		"file:///simple-object.json#/properties/id": {
+			"superNodeId": "file:///models.json#/$defs/id",
+			"deprecated": false,
+			"title": "",
+			"description": "",
+			"examples": [],
+			"types": [],
+			"compounds": []
+		},
+		"file:///simple-object.json#/properties/name": {
+			"superNodeId": "file:///models.json#/$defs/name",
+			"deprecated": false,
+			"title": "",
+			"description": "",
+			"examples": [],
+			"types": [],
+			"compounds": []
+		},
+		"file:///simple-object.json#/properties/child": {
+			"superNodeId": "file:///models.json#/$defs/child",
+			"deprecated": false,
+			"title": "",
+			"description": "",
+			"examples": [],
+			"types": [],
+			"compounds": []
+		},
+		"file:///models.json": {
+			"deprecated": false,
+			"title": "",
+			"description": "Collection of models",
+			"examples": [],
+			"types": [],
+			"compounds": []
+		},
+		"file:///models.json#/$defs/id": {
+			"deprecated": false,
+			"title": "",
+			"description": "An identity",
+			"examples": [1, 2, 3],
+			"types": [
+				{
+					"type": "number",
+					"numberType": "integer",
+					"minimumExclusive": 0
+				}
+			],
+			"compounds": []
+		},
+		"file:///models.json#/$defs/name": {
+			"deprecated": false,
+			"title": "",
+			"description": "A name",
+			"examples": ["Jack", "John", "Elmer"],
+			"types": [
+				{
+					"type": "string",
+					"minimumLength": 2,
+					"maximumLength": 20
+				}
+			],
+			"compounds": []
+		},
+		"file:///models.json#/$defs/child": {
+			"superNodeId": "file:///simple-object.json",
+			"deprecated": false,
+			"title": "",
+			"description": "",
+			"examples": [],
+			"types": [],
+			"compounds": []
+		}
+	}
+}

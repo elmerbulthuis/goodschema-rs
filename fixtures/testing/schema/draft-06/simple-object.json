@@ -1,0 +1,26 @@
+{
+	"$schema": "http://json-schema.org/draft-06/schema#",
+	"description": "A very simple object",
+	"type": ["object"],
+	"required": ["id"],
+	"properties": {
+		"id": {
+			"$ref": "./models.json#/definitions/id"
+		},
+		"name": {
+			"$ref": "./models.json#/definitions/name"
+		},
+		"child": {
+			"$ref": "./models.json#/definitions/child"
+		}
+	},
+	"examples": [
+		{
+			"id": 1
+		},
+		{
+			"id": 2,
+			"name": "hi"
+		}
+	]
+}

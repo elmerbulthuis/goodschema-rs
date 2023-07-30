@@ -1,0 +1,103 @@
+{
+	"$schema": "https://schema.JsonSchema42.org/jns42-intermediate-a/schema.json",
+	"nodes": {
+		"file:///any-of-object.json": {
+			"deprecated": false,
+			"title": "",
+			"description": "An object",
+			"examples": [],
+			"types": [],
+			"compounds": [
+				{
+					"type": "any-of",
+					"typeNodeIds": [
+						"file:///any-of-object.json#/anyOf/0",
+						"file:///any-of-object.json#/anyOf/1"
+					]
+				}
+			]
+		},
+		"file:///any-of-object.json#/anyOf/0": {
+			"deprecated": false,
+			"title": "",
+			"description": "",
+			"examples": [],
+			"types": [
+				{
+					"type": "interface",
+					"requiredProperties": ["a", "b"],
+					"propertyTypeNodeIds": {
+						"a": "file:///any-of-object.json#/anyOf/0/properties/a",
+						"b": "file:///any-of-object.json#/anyOf/0/properties/b"
+					}
+				}
+			],
+			"compounds": []
+		},
+		"file:///any-of-object.json#/anyOf/1": {
+			"deprecated": false,
+			"title": "",
+			"description": "",
+			"examples": [],
+			"types": [
+				{
+					"type": "interface",
+					"requiredProperties": ["c", "d"],
+					"propertyTypeNodeIds": {
+						"c": "file:///any-of-object.json#/anyOf/1/properties/c",
+						"d": "file:///any-of-object.json#/anyOf/1/properties/d"
+					}
+				}
+			],
+			"compounds": []
+		},
+		"file:///any-of-object.json#/anyOf/0/properties/a": {
+			"deprecated": false,
+			"title": "",
+			"description": "",
+			"examples": [],
+			"types": [
+				{
+					"type": "string"
+				}
+			],
+			"compounds": []
+		},
+		"file:///any-of-object.json#/anyOf/0/properties/b": {
+			"deprecated": false,
+			"title": "",
+			"description": "",
+			"examples": [],
+			"types": [
+				{
+					"type": "string"
+				}
+			],
+			"compounds": []
+		},
+		"file:///any-of-object.json#/anyOf/1/properties/c": {
+			"deprecated": false,
+			"title": "",
+			"description": "",
+			"examples": [],
+			"types": [
+				{
+					"type": "string"
+				}
+			],
+			"compounds": []
+		},
+		"file:///any-of-object.json#/anyOf/1/properties/d": {
+			"deprecated": false,
+			"title": "",
+			"description": "",
+			"examples": [],
+			"types": [
+				{
+					"type": "string"
+				}
+			],
+			"compounds": []
+		}
+	}
+}

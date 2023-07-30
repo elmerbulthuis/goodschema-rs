@@ -1,0 +1,23 @@
+{
+	"$schema": "http://json-schema.org/draft-06/schema#",
+	"description": "Collection of models",
+	"definitions": {
+		"id": {
+			"$id": "#id",
+			"description": "An identity",
+			"type": "integer",
+			"exclusiveMinimum": 0,
+			"examples": [1, 2, 3]
+		},
+		"name": {
+			"description": "A name",
+			"type": "string",
+			"minLength": 2,
+			"maxLength": 20,
+			"examples": ["Jack", "John", "Elmer"]
+		},
+		"child": {
+			"$ref": "./simple-object.json#"
+		}
+	}
+}

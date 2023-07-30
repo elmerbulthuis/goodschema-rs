@@ -1,0 +1,86 @@
+{
+	"$schema": "https://schema.JsonSchema42.org/jns42-intermediate-a/schema.json",
+	"nodes": {
+		"file:///simple-object.json": {
+			"deprecated": false,
+			"title": "",
+			"description": "A very simple object",
+			"examples": [
+				{
+					"id": 1
+				},
+				{
+					"id": 2,
+					"name": "hi"
+				}
+			],
+			"types": [
+				{
+					"type": "interface",
+					"requiredProperties": ["id"],
+					"propertyTypeNodeIds": {
+						"id": "file:///simple-object.json#/properties/id",
+						"name": "file:///simple-object.json#/properties/name"
+					}
+				}
+			],
+			"compounds": []
+		},
+		"file:///simple-object.json#/properties/id": {
+			"deprecated": false,
+			"title": "",
+			"description": "An identity",
+			"examples": [1, 2, 3],
+			"types": [
+				{
+					"type": "number",
+					"numberType": "integer",
+					"minimumExclusive": 0
+				}
+			],
+			"compounds": []
+		},
+		"file:///simple-object.json#/properties/name": {
+			"deprecated": false,
+			"title": "",
+			"description": "A name",
+			"examples": ["Jack", "John", "Elmer"],
+			"types": [
+				{
+					"type": "string",
+					"minimumLength": 2,
+					"maximumLength": 20
+				}
+			],
+			"compounds": []
+		},
+		"file:///array-with-ref.json": {
+			"deprecated": false,
+			"title": "",
+			"description": "So this is an array!",
+			"examples": [],
+			"types": [
+				{
+					"type": "array",
+					"uniqueItems": false,
+					"itemTypeNodeId": "file:///array-with-ref.json#/items"
+				}
+			],
+			"compounds": []
+		},
+		"file:///array-with-ref.json#/items": {
+			"superNodeId": "file:///simple-object.json",
+			"deprecated": false,
+			"title": "",
+			"description": "",
+			"examples": [
+				{
+					"id": 100,
+					"name": "Graham"
+				}
+			],
+			"types": [],
+			"compounds": []
+		}
+	}
+}

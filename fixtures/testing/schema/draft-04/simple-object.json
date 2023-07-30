@@ -1,0 +1,17 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"description": "A very simple object",
+	"type": ["object"],
+	"required": ["id"],
+	"properties": {
+		"id": {
+			"$ref": "./models.json#/definitions/id"
+		},
+		"name": {
+			"$ref": "./models.json#/definitions/name"
+		},
+		"child": {
+			"$ref": "./models.json#/definitions/child"
+		}
+	}
+}

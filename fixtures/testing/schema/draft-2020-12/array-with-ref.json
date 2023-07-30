@@ -1,0 +1,14 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"description": "So this is an array!",
+	"type": ["array"],
+	"items": {
+		"$ref": "simple-object.json",
+		"examples": [
+			{
+				"id": 100,
+				"name": "Graham"
+			}
+		]
+	}
+}

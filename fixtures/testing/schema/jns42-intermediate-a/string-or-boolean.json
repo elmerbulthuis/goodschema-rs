@@ -1,0 +1,20 @@
+{
+	"$schema": "https://schema.JsonSchema42.org/jns42-intermediate-a/schema.json",
+	"nodes": {
+		"file:///string-or-boolean.json": {
+			"deprecated": false,
+			"title": "",
+			"description": "",
+			"examples": ["hi!", false],
+			"types": [
+				{
+					"type": "string"
+				},
+				{
+					"type": "boolean"
+				}
+			],
+			"compounds": []
+		}
+	}
+}
