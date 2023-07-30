@@ -61,22 +61,59 @@ where
         let mut node = self.root_name_node.clone();
         for name_part in name_parts {
             if let Some(child_node) = node.clone().borrow().children.get(name_part.as_ref()) {
-                node = child_node.clone()
-            } else {
-                let name_part = name_part.into_owned();
-                let mut child_node = NameNode::new(name_part.clone());
-                child_node.parent = Some(Rc::downgrade(&node));
-                let child_node = RefCell::new(child_node);
-                let child_node = Rc::new(child_node);
-                assert!(node
-                    .borrow_mut()
-                    .children
-                    .insert(name_part, child_node.clone())
-                    .is_none());
-            };
+                node = child_node.clone();
+                continue;
+            }
+
+            let name_part = name_part.into_owned();
+            let mut child_node = NameNode::new(name_part.clone());
+            child_node.parent = Some(Rc::downgrade(&node));
+            let child_node = RefCell::new(child_node);
+            let child_node = Rc::new(child_node);
+            assert!(node
+                .borrow_mut()
+                .children
+                .insert(name_part, child_node.clone())
+                .is_none());
         }
 
         assert!(self.leaf_nodes.insert(key.clone(), node.clone()).is_none());
         assert!(node.borrow_mut().keys.insert(key));
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn test_1() {
+        let mut namer = Namer::new(Cow::Borrowed("o"));
+
+        namer.register_path("/A", Cow::Borrowed("/A"));
+        namer.register_path("/B", Cow::Borrowed("/B"));
+        namer.register_path("/B/C", Cow::Borrowed("/B/C"));
+        namer.register_path("/A/C", Cow::Borrowed("/A/C"));
+        namer.register_path("/C/A", Cow::Borrowed("/C/A"));
+        namer.register_path("/A/B/C", Cow::Borrowed("/A/B/C"));
+        namer.register_path("/A/B/C/D/E/F", Cow::Borrowed("/A/B/C/D/E/F"));
+        namer.register_path("/X/Y/Z/D/E/F", Cow::Borrowed("/X/Y/Z/D/E/F"));
+        namer.register_path("/X/Y/Z/D/E/1", Cow::Borrowed("/X/Y/Z/D/E/1"));
+    }
+
+    #[test]
+    fn test_2() {
+        let mut namer = Namer::new(Cow::Borrowed("o"));
+
+        namer.register_path("/", Cow::Borrowed("/"));
+        namer.register_path("/A", Cow::Borrowed("/A"));
+    }
+
+    #[test]
+    fn test_3() {
+        let mut namer = Namer::new(Cow::Borrowed("o"));
+
+        namer.register_path("/", Cow::Borrowed("/"));
+        namer.register_path("/1", Cow::Borrowed("/1"));
     }
 }
