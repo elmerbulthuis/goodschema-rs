@@ -1,14 +1,12 @@
-use crate::schemas::manager::Manager;
-use crate::schemas::meta::MetaSchemaId;
+use crate::documents::context::Context;
+use crate::documents::factory::Initializer;
+use crate::documents::intermediate_a::{self, SCHEMA_ID};
 use clap::Parser;
 use url::Url;
 
 #[derive(Parser, Debug)]
 pub struct CommandOptions {
     pub schema_url: Url,
-
-    #[arg(long, default_value_t = MetaSchemaId::Draft202012)]
-    pub default_meta_schema_url: MetaSchemaId,
 
     #[arg(long)]
     pub package_directory: String,
@@ -27,15 +25,25 @@ pub struct CommandOptions {
 }
 
 pub fn run_command(options: CommandOptions) -> Result<(), &'static str> {
-    let CommandOptions {
-        schema_url,
-        default_meta_schema_url,
-        ..
-    } = options;
+    let CommandOptions { schema_url, .. } = options;
 
-    let mut manager = Manager::new();
-
-    manager.load_from_url(&schema_url, &schema_url, default_meta_schema_url)?;
+    let mut context = Context::new();
+    context.register_factory(
+        intermediate_a::SCHEMA_ID.parse().unwrap(),
+        Box::new(
+            |Initializer {
+                 given_url,
+                 document_node,
+                 ..
+             }| {
+                Box::new(intermediate_a::Document::new(
+                    given_url.clone(),
+                    document_node,
+                ))
+            },
+        ),
+    );
+    context.load_from_url(&schema_url, &schema_url, None, SCHEMA_ID)?;
 
     Ok(())
 }
