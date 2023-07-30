@@ -1,3 +1,5 @@
+use once_cell::sync::Lazy;
+use regex::Regex;
 use std::{
     borrow::Cow,
     cell::RefCell,
@@ -7,11 +9,17 @@ use std::{
 };
 use string_morph::to_pascal_case;
 
+type NameNodeRc<K> = Rc<RefCell<NameNode<K>>>;
+type NameNodeWeak<K> = Weak<RefCell<NameNode<K>>>;
+type NameMap<K> = HashMap<String, Vec<(Option<NameNodeRc<K>>, NameNodeRc<K>)>>;
+
+pub static STARTS_WITH_LETTER_REGEX: Lazy<Regex> = Lazy::new(|| Regex::new(r"^[a-zA-Z]").unwrap());
+
 #[derive(Default)]
 struct NameNode<K> {
     part: String,
-    children: HashMap<String, Rc<RefCell<NameNode<K>>>>,
-    parent: Option<Weak<RefCell<NameNode<K>>>>,
+    children: HashMap<String, NameNodeRc<K>>,
+    parent: Option<NameNodeWeak<K>>,
     keys: BTreeSet<K>,
 }
 
@@ -29,8 +37,8 @@ where
 
 #[derive(Default)]
 pub struct Namer<K> {
-    root_name_node: Rc<RefCell<NameNode<K>>>,
-    leaf_nodes: HashMap<K, Rc<RefCell<NameNode<K>>>>,
+    root_name_node: NameNodeRc<K>,
+    leaf_nodes: HashMap<K, NameNodeRc<K>>,
 }
 
 impl<K> Namer<K>
@@ -78,6 +86,66 @@ where
 
         assert!(self.leaf_nodes.insert(key.clone(), node.clone()).is_none());
         assert!(node.borrow_mut().keys.insert(key));
+    }
+
+    pub fn get_names(&self) -> HashMap<String, String> {
+        let mut name_map: NameMap<K> = HashMap::new();
+
+        /*
+        Should we continue?
+        */
+        let mut should_continue_counter = 0;
+
+        /*
+        Initially fill nameMap
+        */
+        for (_, leaf_node) in self.leaf_nodes.iter() {
+            let nodes = name_map.entry(leaf_node.borrow().part.clone()).or_default();
+            if !nodes.is_empty() || STARTS_WITH_LETTER_REGEX.is_match(&leaf_node.borrow().part) {
+                should_continue_counter += 1;
+            }
+            nodes.push((Some(leaf_node.clone()), leaf_node.clone()));
+        }
+
+        while should_continue_counter > 0 {
+            let mut new_name_map: NameMap<K> = HashMap::new();
+
+            should_continue_counter = 0;
+
+            for (part, mut nodes) in name_map.into_iter() {
+                /*
+                if nodes.length is one then there are no duplicates. If then name starts
+                with a letter, we can move on to the next name.
+                */
+                if nodes.len() == 1 && STARTS_WITH_LETTER_REGEX.is_match(&part) {
+                    let (current_node, target_node) = nodes.pop().unwrap();
+                    assert!(new_name_map
+                        .insert(part, vec![(current_node, target_node)])
+                        .is_none());
+                    continue;
+                }
+
+                /*
+                Collect unique parents nameParts. If there are no unique parents, we want
+                to not include the parents namePart in the name.
+                */
+                let mut unique_parent_name_parts = BTreeSet::new();
+                for (current_node, _) in nodes {
+                    if let Some(current_node) = current_node {
+                        if let Some(parent) = &current_node.borrow().parent {
+                            let parent = parent.upgrade().unwrap();
+                            unique_parent_name_parts.insert(parent.borrow().part.clone());
+                        }
+                    }
+                }
+
+                todo!();
+            }
+
+            name_map = new_name_map;
+        }
+
+        todo!();
     }
 }
 
