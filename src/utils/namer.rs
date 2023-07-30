@@ -5,7 +5,6 @@ use std::{
     hash::Hash,
     rc::{Rc, Weak},
 };
-
 use string_morph::to_pascal_case;
 
 #[derive(Default)]
