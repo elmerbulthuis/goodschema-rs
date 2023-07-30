@@ -102,3 +102,47 @@ impl Context {
         Ok(())
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use std::env::current_dir;
+
+    use crate::documents::intermediate_a;
+
+    use super::*;
+
+    #[test]
+    fn t() {
+        let mut context = Context::new();
+        context.register_factory(
+            intermediate_a::SCHEMA_ID.parse().unwrap(),
+            Box::new(
+                |Initializer {
+                     given_url,
+                     document_node,
+                     ..
+                 }| {
+                    Box::new(intermediate_a::Document::new(
+                        given_url.clone(),
+                        document_node,
+                    ))
+                },
+            ),
+        );
+
+        let mut path = current_dir().unwrap();
+        path.push("fixtures");
+        path.push("testing");
+        path.push("schema");
+        path.push("jns42-intermediate-a");
+        path.push("string-or-boolean.json");
+
+        let url: Url = format!("file://{}", path.to_str().unwrap())
+            .parse()
+            .unwrap();
+
+        context
+            .load_from_url(&url, &url, None, intermediate_a::SCHEMA_ID)
+            .unwrap();
+    }
+}
