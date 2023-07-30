@@ -1,6 +1,7 @@
+use crate::documents;
 use crate::documents::context::Context;
 use crate::documents::factory::Initializer;
-use crate::documents::intermediate_a::{self, SCHEMA_ID};
+use crate::schemas;
 use clap::Parser;
 use url::Url;
 
@@ -29,21 +30,26 @@ pub fn run_command(options: CommandOptions) -> Result<(), &'static str> {
 
     let mut context = Context::new();
     context.register_factory(
-        intermediate_a::SCHEMA_ID.parse().unwrap(),
+        schemas::intermediate_a::SCHEMA_ID.parse().unwrap(),
         Box::new(
             |Initializer {
                  given_url,
                  document_node,
                  ..
              }| {
-                Box::new(intermediate_a::Document::new(
+                Box::new(documents::intermediate_a::Document::new(
                     given_url.clone(),
                     document_node,
                 ))
             },
         ),
     );
-    context.load_from_url(&schema_url, &schema_url, None, SCHEMA_ID)?;
+    context.load_from_url(
+        &schema_url,
+        &schema_url,
+        None,
+        schemas::intermediate_a::SCHEMA_ID,
+    )?;
 
     Ok(())
 }

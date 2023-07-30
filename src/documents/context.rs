@@ -105,24 +105,23 @@ impl Context {
 
 #[cfg(test)]
 mod tests {
-    use std::env::current_dir;
-
-    use crate::documents::intermediate_a;
-
     use super::*;
+    use crate::documents;
+    use crate::schemas;
+    use std::env::current_dir;
 
     #[test]
     fn t() {
         let mut context = Context::new();
         context.register_factory(
-            intermediate_a::SCHEMA_ID.parse().unwrap(),
+            schemas::intermediate_a::SCHEMA_ID.parse().unwrap(),
             Box::new(
                 |Initializer {
                      given_url,
                      document_node,
                      ..
                  }| {
-                    Box::new(intermediate_a::Document::new(
+                    Box::new(documents::intermediate_a::Document::new(
                         given_url.clone(),
                         document_node,
                     ))
@@ -142,7 +141,7 @@ mod tests {
             .unwrap();
 
         context
-            .load_from_url(&url, &url, None, intermediate_a::SCHEMA_ID)
+            .load_from_url(&url, &url, None, schemas::intermediate_a::SCHEMA_ID)
             .unwrap();
     }
 }
