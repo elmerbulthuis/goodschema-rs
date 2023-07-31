@@ -18,6 +18,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bef38d45163c2f1dde094a7dfd33ccf595c92905c8f8f4fdc18d06fb1037718a"
 
 [[package]]
+name = "case_style"
+version = "0.2.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0be601f05a919236af08cb96053cf9e9ebcfd08edca86cfad401591400f59896"
+
+[[package]]
 name = "cc"
 version = "1.0.79"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -150,12 +156,12 @@ checksum = "453ad9f582a441959e5f0d088b02ce04cfe8d51a8eaf077f12ac6d3e94164ca6"
 name = "jns42_generator"
 version = "0.0.0"
 dependencies = [
+ "case_style",
  "clap",
  "once_cell",
  "regex",
  "serde",
  "serde_json",
- "string_morph",
  "url",
  "urlencoding",
 ]
@@ -287,12 +293,6 @@ dependencies = [
  "ryu",
  "serde",
 ]
-
-[[package]]
-name = "string_morph"
-version = "0.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "183aaf7fa637cc7b5f54c45b8f7cb6e8d73831f9f75a56b6defa5bf8c51d1699"
 
 [[package]]
 name = "strsim"

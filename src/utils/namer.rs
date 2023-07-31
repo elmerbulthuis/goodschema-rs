@@ -1,3 +1,4 @@
+use case_style::CaseStyle;
 use once_cell::sync::Lazy;
 use regex::Regex;
 use std::{
@@ -7,7 +8,6 @@ use std::{
     hash::Hash,
     rc::{Rc, Weak},
 };
-use string_morph::to_pascal_case;
 
 type NameNodeRc<K> = Rc<RefCell<NameNode<K>>>;
 type NameNodeWeak<K> = Weak<RefCell<NameNode<K>>>;
@@ -46,10 +46,12 @@ where
     K: Default + Ord + Hash + Clone,
 {
     pub fn new(root_name_part: &str) -> Self {
-        let root_name_part = to_pascal_case(root_name_part);
+        let root_name_part = CaseStyle::guess(root_name_part).unwrap().to_pascalcase();
+
         let root_name_node = NameNode::new(root_name_part);
         let root_name_node = RefCell::new(root_name_node);
         let root_name_node = Rc::new(root_name_node);
+
         Self {
             root_name_node,
             ..Default::default()
@@ -60,29 +62,29 @@ where
         let name_parts = path
             .split('/')
             .map(|part| urlencoding::decode(part).unwrap())
+            .filter(|part| !part.is_empty())
             .collect();
         self.register_name_parts(key, name_parts)
     }
 
-    pub fn register_name_parts(&mut self, key: K, name_parts: Vec<Cow<str>>) {
+    fn register_name_parts(&mut self, key: K, name_parts: Vec<Cow<str>>) {
         let mut node = self.root_name_node.clone();
         for name_part in name_parts {
-            if let Some(child_node) = node.clone().borrow().children.get(name_part.as_ref()) {
-                node = child_node.clone();
-                continue;
-            }
-
-            let name_part = name_part.to_string();
-            let mut child_node = NameNode::new(name_part.clone());
-            child_node.parent = Some(Rc::downgrade(&node));
-            let child_node = RefCell::new(child_node);
-            let child_node = Rc::new(child_node);
-
-            assert!(node
-                .borrow_mut()
+            let name_part = CaseStyle::guess(name_part).unwrap().to_pascalcase();
+            let child_node = node.clone();
+            let mut child_node = child_node.borrow_mut();
+            let child_node = child_node
                 .children
-                .insert(name_part, child_node.clone())
-                .is_none());
+                .entry(name_part.clone())
+                .or_insert_with(|| {
+                    let mut child_node = NameNode::new(name_part.clone());
+                    child_node.parent = Some(Rc::downgrade(&node));
+                    let child_node = RefCell::new(child_node);
+                    let child_node = Rc::new(child_node);
+                    child_node
+                });
+
+            node = child_node.clone();
         }
 
         assert!(self.leaf_nodes.insert(key.clone(), node.clone()).is_none());
@@ -117,15 +119,18 @@ where
 
             should_continue_counter = 0;
 
-            for (part, mut nodes) in name_map.into_iter() {
+            for (name_part, nodes) in name_map.iter() {
                 /*
                 if nodes.length is one then there are no duplicates. If then name starts
                 with a letter, we can move on to the next name.
                 */
-                if nodes.len() == 1 && STARTS_WITH_LETTER_REGEX.is_match(&part) {
-                    let (current_node, target_node) = nodes.pop().unwrap();
+                if nodes.len() == 1 && STARTS_WITH_LETTER_REGEX.is_match(name_part) {
+                    let (current_node, target_node) = nodes.first().unwrap();
                     assert!(new_name_map
-                        .insert(part, vec![(current_node, target_node)])
+                        .insert(
+                            name_part.clone(),
+                            vec![(current_node.clone(), target_node.clone())]
+                        )
                         .is_none());
                     continue;
                 }
@@ -146,23 +151,23 @@ where
                     }
                 }
 
-                for (current_node, target_node) in nodes {
+                for (current_node, target_node) in nodes.iter() {
                     if current_node.is_none() {
-                        new_name_map.insert(part.clone(), vec![(None, target_node)]);
-                        if !STARTS_WITH_LETTER_REGEX.is_match(&part) {
+                        new_name_map.insert(name_part.clone(), vec![(None, target_node.clone())]);
+                        if !STARTS_WITH_LETTER_REGEX.is_match(name_part) {
                             should_continue_counter += 1;
                         }
                         continue;
                     }
 
-                    let current_node = current_node.unwrap();
+                    let current_node = current_node.clone().unwrap();
                     let current_node = current_node.borrow();
                     let new_current_node =
                         current_node.parent.clone().map(|v| v.upgrade().unwrap());
-                    let mut new_part = part.clone();
+                    let mut new_part = name_part.clone();
                     if let Some(new_current_node) = new_current_node.clone() {
-                        if (unique_parent_name_parts.len() > 1
-                            || !STARTS_WITH_LETTER_REGEX.is_match(&new_part))
+                        if unique_parent_name_parts.len() > 1
+                            || !STARTS_WITH_LETTER_REGEX.is_match(&new_part)
                         {
                             new_part = new_current_node.borrow().part.clone() + &new_part;
                         }
@@ -172,7 +177,7 @@ where
                     if !new_nodes.is_empty() || !STARTS_WITH_LETTER_REGEX.is_match(&new_part) {
                         should_continue_counter += 1;
                     }
-                    new_nodes.push((new_current_node, target_node));
+                    new_nodes.push((new_current_node, target_node.clone()));
                 }
             }
 
@@ -183,7 +188,7 @@ where
         /*
         Output nameMap
         */
-        for (name, nodes) in name_map {
+        for (name, nodes) in name_map.iter() {
             let nodes_len = nodes.len();
             assert_eq!(nodes_len, 1);
             let (_, target_node) = nodes.first().unwrap();
@@ -193,7 +198,7 @@ where
             match keys_len {
                 1 => {
                     let key = target_node.keys.first().unwrap();
-                    result.insert(key.clone(), name);
+                    result.insert(key.clone(), name.clone());
                 }
                 _ => {
                     for (index, key) in target_node.keys.iter().enumerate() {
