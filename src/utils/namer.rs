@@ -77,6 +77,7 @@ where
             child_node.parent = Some(Rc::downgrade(&node));
             let child_node = RefCell::new(child_node);
             let child_node = Rc::new(child_node);
+
             assert!(node
                 .borrow_mut()
                 .children
@@ -88,7 +89,7 @@ where
         assert!(node.borrow_mut().keys.insert(key));
     }
 
-    pub fn get_names(&self) -> HashMap<String, String> {
+    pub fn get_names(&self) -> HashMap<K, String> {
         let mut name_map: NameMap<K> = HashMap::new();
 
         /*
@@ -100,10 +101,14 @@ where
         Initially fill nameMap
         */
         for (_, leaf_node) in self.leaf_nodes.iter() {
-            let nodes = name_map.entry(leaf_node.borrow().part.clone()).or_default();
-            if !nodes.is_empty() || STARTS_WITH_LETTER_REGEX.is_match(&leaf_node.borrow().part) {
-                should_continue_counter += 1;
-            }
+            let nodes = {
+                let leaf_node = leaf_node.borrow();
+                let nodes = name_map.entry(leaf_node.part.clone()).or_default();
+                if !nodes.is_empty() || STARTS_WITH_LETTER_REGEX.is_match(&leaf_node.part) {
+                    should_continue_counter += 1;
+                }
+                nodes
+            };
             nodes.push((Some(leaf_node.clone()), leaf_node.clone()));
         }
 
@@ -132,9 +137,11 @@ where
                 let mut unique_parent_name_parts = BTreeSet::new();
                 for (current_node, _) in nodes {
                     if let Some(current_node) = current_node {
-                        if let Some(parent) = &current_node.borrow().parent {
+                        let current_node = current_node.borrow();
+                        if let Some(parent) = &current_node.parent {
                             let parent = parent.upgrade().unwrap();
-                            unique_parent_name_parts.insert(parent.borrow().part.clone());
+                            let parent = parent.borrow();
+                            unique_parent_name_parts.insert(parent.part.clone());
                         }
                     }
                 }
@@ -145,7 +152,31 @@ where
             name_map = new_name_map;
         }
 
-        todo!();
+        let mut result = HashMap::new();
+        /*
+        Output nameMap
+        */
+        for (name, nodes) in name_map {
+            let nodes_len = nodes.len();
+            assert_eq!(nodes_len, 1);
+            let (_, target_node) = nodes.first().unwrap();
+
+            let target_node = target_node.borrow();
+            let keys_len = target_node.keys.len();
+            match keys_len {
+                1 => {
+                    let key = target_node.keys.first().unwrap();
+                    result.insert(key.clone(), name);
+                }
+                _ => {
+                    for (index, key) in target_node.keys.iter().enumerate() {
+                        result.insert(key.clone(), format!("{}${}", name, index));
+                    }
+                }
+            }
+        }
+
+        result
     }
 }
 
@@ -153,8 +184,8 @@ where
 mod test {
     use super::*;
 
-    fn to_string_map((k, v): (&str, &str)) -> (String, String) {
-        (k.to_string(), v.to_string())
+    fn to_string_map<'l>((k, v): (&'l str, &'l str)) -> (&'l str, String) {
+        (k, v.to_string())
     }
 
     #[test]
