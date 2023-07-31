@@ -4,7 +4,7 @@ use regex::Regex;
 use std::{
     borrow::Cow,
     cell::RefCell,
-    collections::{BTreeSet, HashMap},
+    collections::{BTreeSet, HashMap, HashSet},
     hash::Hash,
     rc::{Rc, Weak},
 };
@@ -20,6 +20,10 @@ struct NameNode<K> {
     part: String,
     children: HashMap<String, NameNodeRc<K>>,
     parent: Option<NameNodeWeak<K>>,
+    /*
+    keep sorted set of keys for stable names, the first key always gets a
+    lower number appended when resolving collision
+    */
     keys: BTreeSet<K>,
 }
 
@@ -80,8 +84,7 @@ where
                     let mut child_node = NameNode::new(name_part.clone());
                     child_node.parent = Some(Rc::downgrade(&node));
                     let child_node = RefCell::new(child_node);
-                    let child_node = Rc::new(child_node);
-                    child_node
+                    Rc::new(child_node)
                 });
 
             node = child_node.clone();
@@ -139,7 +142,7 @@ where
                 Collect unique parents nameParts. If there are no unique parents, we want
                 to not include the parents namePart in the name.
                 */
-                let mut unique_parent_name_parts = BTreeSet::new();
+                let mut unique_parent_name_parts = HashSet::new();
                 for (current_node, _) in nodes.iter() {
                     if let Some(current_node) = current_node {
                         let current_node = current_node.borrow();
