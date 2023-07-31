@@ -104,7 +104,7 @@ where
             let nodes = {
                 let leaf_node = leaf_node.borrow();
                 let nodes = name_map.entry(leaf_node.part.clone()).or_default();
-                if !nodes.is_empty() || STARTS_WITH_LETTER_REGEX.is_match(&leaf_node.part) {
+                if !nodes.is_empty() || !STARTS_WITH_LETTER_REGEX.is_match(&leaf_node.part) {
                     should_continue_counter += 1;
                 }
                 nodes
@@ -135,7 +135,7 @@ where
                 to not include the parents namePart in the name.
                 */
                 let mut unique_parent_name_parts = BTreeSet::new();
-                for (current_node, _) in nodes {
+                for (current_node, _) in nodes.iter() {
                     if let Some(current_node) = current_node {
                         let current_node = current_node.borrow();
                         if let Some(parent) = &current_node.parent {
@@ -146,7 +146,34 @@ where
                     }
                 }
 
-                todo!();
+                for (current_node, target_node) in nodes {
+                    if current_node.is_none() {
+                        new_name_map.insert(part.clone(), vec![(None, target_node)]);
+                        if !STARTS_WITH_LETTER_REGEX.is_match(&part) {
+                            should_continue_counter += 1;
+                        }
+                        continue;
+                    }
+
+                    let current_node = current_node.unwrap();
+                    let current_node = current_node.borrow();
+                    let new_current_node =
+                        current_node.parent.clone().map(|v| v.upgrade().unwrap());
+                    let mut new_part = part.clone();
+                    if let Some(new_current_node) = new_current_node.clone() {
+                        if (unique_parent_name_parts.len() > 1
+                            || !STARTS_WITH_LETTER_REGEX.is_match(&new_part))
+                        {
+                            new_part = new_current_node.borrow().part.clone() + &new_part;
+                        }
+                    }
+
+                    let new_nodes = new_name_map.entry(new_part.clone()).or_default();
+                    if !new_nodes.is_empty() || !STARTS_WITH_LETTER_REGEX.is_match(&new_part) {
+                        should_continue_counter += 1;
+                    }
+                    new_nodes.push((new_current_node, target_node));
+                }
             }
 
             name_map = new_name_map;
