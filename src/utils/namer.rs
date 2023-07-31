@@ -142,14 +142,14 @@ where
                 Collect unique parents nameParts. If there are no unique parents, we want
                 to not include the parents namePart in the name.
                 */
-                let mut unique_parent_name_parts = HashSet::new();
+                let mut parent_name_parts = HashSet::new();
                 for (current_node, _) in nodes.iter() {
                     if let Some(current_node) = current_node {
                         let current_node = current_node.borrow();
                         if let Some(parent) = &current_node.parent {
                             let parent = parent.upgrade().unwrap();
                             let parent = parent.borrow();
-                            unique_parent_name_parts.insert(parent.part.clone());
+                            parent_name_parts.insert(parent.part.clone());
                         }
                     }
                 }
@@ -169,7 +169,7 @@ where
                         current_node.parent.clone().map(|v| v.upgrade().unwrap());
                     let mut new_part = name_part.clone();
                     if let Some(new_current_node) = new_current_node.clone() {
-                        if unique_parent_name_parts.len() > 1
+                        if parent_name_parts.len() > 1
                             || !STARTS_WITH_LETTER_REGEX.is_match(&new_part)
                         {
                             new_part = new_current_node.borrow().part.clone() + &new_part;
