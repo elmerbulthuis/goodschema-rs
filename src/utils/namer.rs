@@ -45,8 +45,8 @@ impl<K> Namer<K>
 where
     K: Default + Ord + Hash + Clone,
 {
-    pub fn new(root_name_part: Cow<str>) -> Self {
-        let root_name_part = to_pascal_case(root_name_part.as_ref());
+    pub fn new(root_name_part: &str) -> Self {
+        let root_name_part = to_pascal_case(root_name_part);
         let root_name_node = NameNode::new(root_name_part);
         let root_name_node = RefCell::new(root_name_node);
         let root_name_node = Rc::new(root_name_node);
@@ -56,7 +56,7 @@ where
         }
     }
 
-    pub fn register_path(&mut self, key: K, path: Cow<str>) {
+    pub fn register_path(&mut self, key: K, path: &str) {
         let name_parts = path
             .split('/')
             .map(|part| urlencoding::decode(part).unwrap())
@@ -72,7 +72,7 @@ where
                 continue;
             }
 
-            let name_part = name_part.into_owned();
+            let name_part = name_part.to_string();
             let mut child_node = NameNode::new(name_part.clone());
             child_node.parent = Some(Rc::downgrade(&node));
             let child_node = RefCell::new(child_node);
@@ -153,34 +153,156 @@ where
 mod test {
     use super::*;
 
+    fn to_string_map((k, v): (&str, &str)) -> (String, String) {
+        (k.to_string(), v.to_string())
+    }
+
     #[test]
     fn test_1() {
-        let mut namer = Namer::new(Cow::Borrowed("o"));
+        let mut namer = Namer::new("o");
 
-        namer.register_path("/A", Cow::Borrowed("/A"));
-        namer.register_path("/B", Cow::Borrowed("/B"));
-        namer.register_path("/B/C", Cow::Borrowed("/B/C"));
-        namer.register_path("/A/C", Cow::Borrowed("/A/C"));
-        namer.register_path("/C/A", Cow::Borrowed("/C/A"));
-        namer.register_path("/A/B/C", Cow::Borrowed("/A/B/C"));
-        namer.register_path("/A/B/C/D/E/F", Cow::Borrowed("/A/B/C/D/E/F"));
-        namer.register_path("/X/Y/Z/D/E/F", Cow::Borrowed("/X/Y/Z/D/E/F"));
-        namer.register_path("/X/Y/Z/D/E/1", Cow::Borrowed("/X/Y/Z/D/E/1"));
+        namer.register_path("/A", "/A");
+        assert_eq!(
+            namer.get_names(),
+            HashMap::from([("/A", "A")].map(to_string_map))
+        );
+
+        namer.register_path("/B", "/B");
+        assert_eq!(
+            namer.get_names(),
+            HashMap::from([("/A", "A"), ("/B", "B"),].map(to_string_map))
+        );
+
+        namer.register_path("/B/C", "/B/C");
+        assert_eq!(
+            namer.get_names(),
+            HashMap::from([("/A", "A"), ("/B", "B"), ("/B/C", "C"),].map(to_string_map))
+        );
+
+        namer.register_path("/A/C", "/A/C");
+        assert_eq!(
+            namer.get_names(),
+            HashMap::from(
+                [("/A", "A"), ("/B", "B"), ("/B/C", "BC"), ("/A/C", "AC"),].map(to_string_map)
+            )
+        );
+
+        namer.register_path("/C/A", "/C/A");
+        assert_eq!(
+            namer.get_names(),
+            HashMap::from(
+                [
+                    ("/A", "OA"),
+                    ("/B", "B"),
+                    ("/B/C", "BC"),
+                    ("/A/C", "AC"),
+                    ("/C/A", "CA"),
+                ]
+                .map(to_string_map)
+            )
+        );
+
+        namer.register_path("/A/B/C", "/A/B/C");
+        assert_eq!(
+            namer.get_names(),
+            HashMap::from(
+                [
+                    ("/A", "OA"),
+                    ("/B", "B"),
+                    ("/B/C", "OBC"),
+                    ("/A/C", "AC"),
+                    ("/C/A", "CA"),
+                    ("/A/B/C", "ABC"),
+                ]
+                .map(to_string_map)
+            )
+        );
+
+        namer.register_path("/A/B/C/D/E/F", "/A/B/C/D/E/F");
+        assert_eq!(
+            namer.get_names(),
+            HashMap::from(
+                [
+                    ("/A", "OA"),
+                    ("/B", "B"),
+                    ("/B/C", "OBC"),
+                    ("/A/C", "AC"),
+                    ("/C/A", "CA"),
+                    ("/A/B/C", "ABC"),
+                    ("/A/B/C/D/E/F", "F"),
+                ]
+                .map(to_string_map)
+            )
+        );
+
+        namer.register_path("/X/Y/Z/D/E/F", "/X/Y/Z/D/E/F");
+        assert_eq!(
+            namer.get_names(),
+            HashMap::from(
+                [
+                    ("/A", "OA"),
+                    ("/B", "B"),
+                    ("/B/C", "OBC"),
+                    ("/A/C", "AC"),
+                    ("/C/A", "CA"),
+                    ("/A/B/C", "ABC"),
+                    ("/A/B/C/D/E/F", "CF"),
+                    ("/X/Y/Z/D/E/F", "ZF"),
+                ]
+                .map(to_string_map)
+            )
+        );
+        namer.register_path("/X/Y/Z/D/E/1", "/X/Y/Z/D/E/1");
+        assert_eq!(
+            namer.get_names(),
+            HashMap::from(
+                [
+                    ("/A", "OA"),
+                    ("/B", "B"),
+                    ("/B/C", "OBC"),
+                    ("/A/C", "AC"),
+                    ("/C/A", "CA"),
+                    ("/A/B/C", "ABC"),
+                    ("/A/B/C/D/E/F", "CF"),
+                    ("/X/Y/Z/D/E/F", "ZF"),
+                    ("/X/Y/Z/D/E/1", "E1"),
+                ]
+                .map(to_string_map)
+            )
+        );
     }
 
     #[test]
     fn test_2() {
-        let mut namer = Namer::new(Cow::Borrowed("o"));
+        let mut namer = Namer::new("o");
 
-        namer.register_path("/", Cow::Borrowed("/"));
-        namer.register_path("/A", Cow::Borrowed("/A"));
+        namer.register_path("/", "/");
+        assert_eq!(
+            namer.get_names(),
+            HashMap::from([("/", "O"),].map(to_string_map))
+        );
+
+        namer.register_path("/A", "/A");
+        assert_eq!(
+            namer.get_names(),
+            HashMap::from([("/", "O"), ("/A", "A"),].map(to_string_map))
+        );
     }
 
     #[test]
     fn test_3() {
-        let mut namer = Namer::new(Cow::Borrowed("o"));
+        let mut namer = Namer::new("o");
 
-        namer.register_path("/", Cow::Borrowed("/"));
-        namer.register_path("/1", Cow::Borrowed("/1"));
+        namer.register_path("/", "/");
+        assert_eq!(
+            namer.get_names(),
+            HashMap::from([("/", "O"),].map(to_string_map))
+        );
+
+        namer.register_path("/1", "/1");
+        assert_eq!(
+            namer.get_names(),
+            HashMap::from([("/", "O"), ("/1", "O1"),].map(to_string_map))
+        );
     }
 }
