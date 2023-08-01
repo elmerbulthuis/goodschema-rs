@@ -1,4 +1,3 @@
-use case_style::CaseStyle;
 use once_cell::sync::Lazy;
 use regex::Regex;
 use std::{
@@ -50,9 +49,7 @@ where
     K: Default + Ord + Hash + Clone,
 {
     pub fn new(root_name_part: &str) -> Self {
-        let root_name_part = CaseStyle::guess(root_name_part).unwrap().to_pascalcase();
-
-        let root_name_node = NameNode::new(root_name_part);
+        let root_name_node = NameNode::new(root_name_part.to_string());
         let root_name_node = RefCell::new(root_name_node);
         let root_name_node = Rc::new(root_name_node);
 
@@ -78,7 +75,6 @@ where
     fn register_name_parts(&mut self, key: K, name_parts: impl Iterator<Item = String>) {
         let mut node = self.root_name_node.clone();
         for name_part in name_parts {
-            let name_part = CaseStyle::guess(name_part).unwrap().to_pascalcase();
             let child_node = node.clone();
             let mut child_node = child_node.borrow_mut();
             let child_node = child_node

@@ -1,3 +1,4 @@
+use inflector::Inflector;
 use proc_macro2::TokenStream;
 use quote::{format_ident, quote, TokenStreamExt};
 use std::collections::HashMap;
@@ -258,6 +259,7 @@ impl<'a> ModelsRsGenerator<'a> {
 
     fn get_model_name(&self, node_id: &str) -> Result<String, &'static str> {
         let model_name = self.names.get(node_id).ok_or("could not find name")?;
+        let model_name = model_name.to_pascal_case();
 
         Ok(model_name.to_string())
     }
@@ -269,7 +271,9 @@ impl<'a> ModelsRsGenerator<'a> {
     ) -> Result<String, &'static str> {
         let model_name = self.get_model_name(node_id)?;
         let type_name = self.to_type_name(node_type);
-        let model_type_name = format!("{}{}", model_name, type_name);
+        let model_type_name = format!("{}_{}", model_name, type_name);
+        let model_type_name = model_type_name.to_pascal_case();
+
         Ok(model_type_name)
     }
 
@@ -280,8 +284,10 @@ impl<'a> ModelsRsGenerator<'a> {
     ) -> Result<String, &'static str> {
         let model_name = self.get_model_name(node_id)?;
         let compound_name = self.to_compound_name(node_compound);
-        let model_type_name = format!("{}{}", model_name, compound_name);
-        Ok(model_type_name)
+        let model_compound_name = format!("{}_{}", model_name, compound_name);
+        let model_compound_name = model_compound_name.to_pascal_case();
+
+        Ok(model_compound_name)
     }
 
     fn to_type_name(&self, node_type: &intermediate_a::TypeEnum) -> &'static str {
@@ -308,6 +314,6 @@ impl<'a> ModelsRsGenerator<'a> {
     }
 
     fn to_member_name(&self, property_name: &str) -> String {
-        property_name.to_string()
+        property_name.to_snake_case()
     }
 }

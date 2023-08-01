@@ -5,6 +5,7 @@
   "useGitignore": true,
   "enableGlobDot": true,
   "words": [
+    "inflector",
     "pascalcase",
     "urlencoding"
   ]
