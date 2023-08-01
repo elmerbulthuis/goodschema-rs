@@ -7,13 +7,13 @@ pub static SCHEMA_ID: &str = "https://schema.JsonSchema42.org/jns42-intermediate
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct SchemaNode {
-    super_node_id: Option<String>,
-    deprecated: bool,
-    title: String,
-    description: String,
-    examples: Vec<Value>,
-    types: Vec<TypeEnum>,
-    compounds: Vec<CompoundEnum>,
+    pub super_node_id: Option<String>,
+    pub deprecated: bool,
+    pub title: String,
+    pub description: String,
+    pub examples: Vec<Value>,
+    pub types: Vec<TypeEnum>,
+    pub compounds: Vec<CompoundEnum>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -42,6 +42,7 @@ pub enum TypeEnum {
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
+#[serde(tag = "type")]
 pub enum CompoundEnum {
     OneOf(OneOfCompound),
     AnyOf(AnyOfCompound),
@@ -63,59 +64,59 @@ pub struct NeverType {}
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct BooleanType {
-    options: Option<Vec<bool>>,
+    pub options: Option<Vec<bool>>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct NumberType {
     // numberType: PropertiesNumberType,
-    options: Option<Vec<usize>>,
-    minimum_inclusive: Option<usize>,
-    minimum_exclusive: Option<usize>,
-    maximum_inclusive: Option<usize>,
-    maximum_exclusive: Option<usize>,
-    multiple_of: Option<usize>,
+    pub options: Option<Vec<usize>>,
+    pub minimum_inclusive: Option<usize>,
+    pub minimum_exclusive: Option<usize>,
+    pub maximum_inclusive: Option<usize>,
+    pub maximum_exclusive: Option<usize>,
+    pub multiple_of: Option<usize>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct StringType {
-    options: Option<Vec<String>>,
-    minimum_length: Option<usize>,
-    maximum_length: Option<usize>,
-    value_pattern: Option<String>,
+    pub options: Option<Vec<String>>,
+    pub minimum_length: Option<usize>,
+    pub maximum_length: Option<usize>,
+    pub value_pattern: Option<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct TupleType {
-    item_type_node_ids: Vec<String>,
+    pub item_type_node_ids: Vec<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct ArrayType {
-    minimum_items: Option<usize>,
-    maximum_items: Option<usize>,
-    unique_items: Option<usize>,
-    item_type_node_id: String,
+    pub minimum_items: Option<usize>,
+    pub maximum_items: Option<usize>,
+    pub unique_items: Option<bool>,
+    pub item_type_node_id: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct InterfaceType {
-    required_properties: Vec<String>,
-    property_type_node_ids: HashMap<String, String>,
+    pub required_properties: Vec<String>,
+    pub property_type_node_ids: HashMap<String, String>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct RecordType {
-    required_properties: Vec<String>,
-    minimum_properties: Option<usize>,
-    maximum_properties: Option<usize>,
-    property_type_node_id: String,
+    pub required_properties: Vec<String>,
+    pub minimum_properties: Option<usize>,
+    pub maximum_properties: Option<usize>,
+    pub property_type_node_id: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]

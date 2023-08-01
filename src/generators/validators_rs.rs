@@ -1,7 +1,6 @@
 use proc_macro2::TokenStream;
-use quote::{format_ident, quote, TokenStreamExt};
+use quote::{quote, TokenStreamExt};
 use std::collections::HashMap;
-use url::Url;
 
 use crate::schemas::intermediate_a::{self, SchemaNode};
 
@@ -38,9 +37,9 @@ impl<'a> ValidatorsRsGenerator<'a> {
     fn generate_model_token_stream(
         &self,
         node_id: &str,
-        node: &SchemaNode,
+        _node: &SchemaNode,
     ) -> Result<TokenStream, &'static str> {
-        let node_name = self.names.get(node_id).ok_or("could not find name")?;
+        let _node_name = self.names.get(node_id).ok_or("could not find name")?;
 
         // let validator_name = node_name.join(" ");
         // let validator_name = format!("validate_{}", validator_name);
@@ -51,7 +50,7 @@ impl<'a> ValidatorsRsGenerator<'a> {
         // let model_name = to_class_case(&model_name);
         // let model_name = format_ident!("r#{}", model_name);
 
-        let mut tokens = quote! {};
+        let tokens = quote! {};
 
         // tokens.append_all(quote! {
 
