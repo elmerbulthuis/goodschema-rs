@@ -25,7 +25,7 @@ pub struct Schema {
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "kebab-case")]
 #[serde(tag = "type")]
 pub enum TypeEnum {
     Null(NullType),
@@ -41,7 +41,7 @@ pub enum TypeEnum {
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "kebab-case")]
 #[serde(tag = "type")]
 pub enum CompoundEnum {
     OneOf(OneOfCompound),
