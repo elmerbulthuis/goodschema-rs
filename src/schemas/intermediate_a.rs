@@ -12,11 +12,21 @@ pub struct SchemaNode {
     title: String,
     description: String,
     examples: Vec<Value>,
-    types: Vec<Value>,
-    compounds: Vec<Value>,
+    types: Vec<TypeEnum>,
+    compounds: Vec<CompoundEnum>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Schema {
     pub nodes: HashMap<String, SchemaNode>,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub enum TypeEnum {
+    //
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub enum CompoundEnum {
+    //
 }

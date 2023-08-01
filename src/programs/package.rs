@@ -1,18 +1,20 @@
+use clap::Parser;
+use std::path::PathBuf;
+use url::Url;
+
 use crate::documents;
 use crate::documents::context::Context;
 use crate::documents::factory::Initializer;
 use crate::generators::PackageGenerator;
 use crate::schemas;
 use crate::utils::namer::Namer;
-use clap::Parser;
-use url::Url;
 
 #[derive(Parser, Debug)]
 pub struct CommandOptions {
     pub schema_url: Url,
 
     #[arg(long)]
-    pub package_directory: String,
+    pub package_directory: PathBuf,
 
     #[arg(long)]
     pub package_name: String,
