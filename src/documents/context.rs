@@ -3,7 +3,7 @@ use super::{
     Document,
 };
 use crate::{
-    schemas,
+    schemas::{self, intermediate_a::SCHEMA_ID},
     utils::{load::load_json, schema::discover_schema_id},
 };
 use serde_json::Value;
@@ -110,6 +110,7 @@ impl Context {
 
     pub fn get_intermediate_data(&self) -> schemas::intermediate_a::Schema {
         schemas::intermediate_a::Schema {
+            schema: SCHEMA_ID.to_string(),
             nodes: HashMap::from_iter(self.get_intermediate_node_pairs()),
         }
     }
