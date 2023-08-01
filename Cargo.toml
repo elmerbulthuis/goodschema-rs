@@ -14,7 +14,7 @@ maintenance = { status = "actively-developed" }
 
 [dependencies]
 case_style = "0.2.1"
-clap = { version = "4.1.14", features = ["derive"] }
+clap = { version = "4.1.14", features = ["derive", "string"] }
 once_cell = "1.18.0"
 regex = "1.9.1"
 serde = { version = "1.0.158", features = ["derive"] }

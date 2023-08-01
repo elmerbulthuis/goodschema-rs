@@ -19,15 +19,16 @@ pub struct CommandOptions {
     #[arg(long)]
     pub package_version: String,
 
-    #[arg(long)]
-    pub generate_test: bool,
-
-    #[arg(long, default_value_t = 0)]
-    pub unique_name_seed: usize,
+    #[arg(long, default_value = "schema")]
+    pub root_name_part: String,
 }
 
 pub fn run_command(options: CommandOptions) -> Result<(), &'static str> {
-    let CommandOptions { schema_url, .. } = options;
+    let CommandOptions {
+        schema_url,
+        root_name_part,
+        ..
+    } = options;
 
     let mut context = Context::new();
     context.register_factory(
@@ -54,7 +55,7 @@ pub fn run_command(options: CommandOptions) -> Result<(), &'static str> {
 
     let intermediate_data = context.get_intermediate_data();
 
-    let mut namer = Namer::new("schema");
+    let mut namer = Namer::new(root_name_part.as_str());
     for key in intermediate_data.nodes.keys() {
         let url: Url = key.parse().unwrap();
         let path = url.path().to_string() + url.fragment().unwrap_or_default();

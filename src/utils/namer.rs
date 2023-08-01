@@ -2,7 +2,6 @@ use case_style::CaseStyle;
 use once_cell::sync::Lazy;
 use regex::Regex;
 use std::{
-    borrow::Cow,
     cell::RefCell,
     collections::{BTreeSet, HashMap, HashSet},
     hash::Hash,
@@ -14,6 +13,7 @@ type NameNodeWeak<K> = Weak<RefCell<NameNode<K>>>;
 type NameMap<K> = HashMap<String, Vec<(Option<NameNodeRc<K>>, NameNodeRc<K>)>>;
 
 pub static STARTS_WITH_LETTER_REGEX: Lazy<Regex> = Lazy::new(|| Regex::new(r"^[a-zA-Z]").unwrap());
+pub static NON_IDENTIFIER_REGEX: Lazy<Regex> = Lazy::new(|| Regex::new(r"[^a-zA-Z0-9]").unwrap());
 
 #[derive(Default)]
 struct NameNode<K> {
@@ -65,13 +65,17 @@ where
     pub fn register_path(&mut self, key: K, path: &str) {
         let name_parts = path
             .split('/')
-            .map(|part| urlencoding::decode(part).unwrap())
-            .filter(|part| !part.is_empty())
-            .collect();
+            .map(|part| urlencoding::decode(part).unwrap().to_string())
+            .map(|part| {
+                NON_IDENTIFIER_REGEX
+                    .replace_all(part.as_str(), "_")
+                    .to_string()
+            })
+            .filter(|part| !part.is_empty());
         self.register_name_parts(key, name_parts)
     }
 
-    fn register_name_parts(&mut self, key: K, name_parts: Vec<Cow<str>>) {
+    fn register_name_parts(&mut self, key: K, name_parts: impl Iterator<Item = String>) {
         let mut node = self.root_name_node.clone();
         for name_part in name_parts {
             let name_part = CaseStyle::guess(name_part).unwrap().to_pascalcase();
