@@ -145,10 +145,12 @@ impl<'a> ModelsRsGenerator<'a> {
 
                             if type_node.required_properties.contains(&member_name) {
                                 property_tokens.append_all(quote! {
+                                    #[serde(rename = #property_name)]
                                     pub #member_identifier: #property_type_identifier,
                                 })
                             } else {
                                 property_tokens.append_all(quote! {
+                                    #[serde(rename = #property_name)]
                                     pub #member_identifier: Option<#property_type_identifier>,
                                 })
                             }
@@ -156,7 +158,6 @@ impl<'a> ModelsRsGenerator<'a> {
 
                         tokens.append_all(quote! {
                             #[derive(serde::Serialize, serde::Deserialize, Debug)]
-                            #[serde(rename = "#property_name")]
                             pub struct #model_type_identifier {
                                 #property_tokens
                             }
