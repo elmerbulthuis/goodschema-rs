@@ -1,6 +1,7 @@
 use crate::documents;
 use crate::documents::context::Context;
 use crate::documents::factory::Initializer;
+use crate::generators::PackageGenerator;
 use crate::schemas;
 use crate::utils::namer::Namer;
 use clap::Parser;
@@ -27,6 +28,9 @@ pub fn run_command(options: CommandOptions) -> Result<(), &'static str> {
     let CommandOptions {
         schema_url,
         root_name_part,
+        package_name,
+        package_version,
+        package_directory,
         ..
     } = options;
 
@@ -63,6 +67,10 @@ pub fn run_command(options: CommandOptions) -> Result<(), &'static str> {
     }
 
     let names = namer.get_names();
+
+    let package_generator = PackageGenerator::new(&intermediate_data, &names);
+
+    package_generator.generate_package(&package_name, &package_version, &package_directory)?;
 
     Ok(())
 }
