@@ -122,17 +122,17 @@ pub struct RecordType {
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct OneOfCompound {
-    type_node_ids: Vec<String>,
+    pub type_node_ids: Vec<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct AnyOfCompound {
-    type_node_ids: Vec<String>,
+    pub type_node_ids: Vec<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct AllOfCompound {
-    type_node_ids: Vec<String>,
+    pub type_node_ids: Vec<String>,
 }

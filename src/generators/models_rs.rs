@@ -2,7 +2,7 @@ use proc_macro2::TokenStream;
 use quote::{format_ident, quote, TokenStreamExt};
 use std::collections::HashMap;
 
-use crate::schemas::intermediate_a::{self, SchemaNode, TypeEnum};
+use crate::schemas::intermediate_a::{self, CompoundEnum, SchemaNode, TypeEnum};
 
 pub struct ModelsRsGenerator<'a> {
     intermediate_data: &'a intermediate_a::Schema,
@@ -47,12 +47,21 @@ impl<'a> ModelsRsGenerator<'a> {
                 pub type #model_identifier = #super_model_identifier;
             });
         } else {
-            if node.types.len() == 1 {
+            if node.types.len() + node.compounds.len() == 1 {
                 for node_type in &node.types {
                     let model_type_name = self.get_model_type_name(node_id, node_type)?;
                     let model_type_identifier = format_ident!("r#{}", model_type_name);
                     tokens.append_all(quote! {
                         pub type #model_identifier = #model_type_identifier;
+                    });
+                }
+
+                for node_compound in &node.compounds {
+                    let model_compound_name =
+                        self.get_model_compound_name(node_id, node_compound)?;
+                    let model_compound_identifier = format_ident!("r#{}", model_compound_name);
+                    tokens.append_all(quote! {
+                        pub type #model_identifier = #model_compound_identifier;
                     });
                 }
             } else {
@@ -173,6 +182,75 @@ impl<'a> ModelsRsGenerator<'a> {
                     }
                 }
             }
+
+            for node_compound in &node.compounds {
+                let model_compound_name = self.get_model_compound_name(node_id, node_compound)?;
+                let model_compound_identifier = format_ident!("r#{}", model_compound_name);
+
+                match node_compound {
+                    CompoundEnum::OneOf(compound_node) => {
+                        let mut enum_tokens = quote! {};
+
+                        for type_node_id in &compound_node.type_node_ids {
+                            let type_name = self.get_model_name(type_node_id)?;
+                            let type_identifier = format_ident!("r#{}", type_name);
+                            enum_tokens.append_all(quote! {
+                                #type_identifier(#type_identifier),
+                            });
+                        }
+
+                        tokens.append_all(quote! {
+                            #[derive(serde::Serialize, serde::Deserialize, Debug)]
+                            #[serde(untagged)]
+                            pub enum #model_compound_identifier {
+                                #enum_tokens
+                            }
+                        });
+                    }
+                    CompoundEnum::AnyOf(compound_node) => {
+                        let mut property_tokens = quote! {};
+
+                        for type_node_id in &compound_node.type_node_ids {
+                            let type_name = self.get_model_name(type_node_id)?;
+                            let type_identifier = format_ident!("r#{}", type_name);
+
+                            let member_name = self.to_member_name(&type_name);
+                            let member_identifier = format_ident!("r#{}", member_name);
+
+                            property_tokens.append_all(quote! {
+                                #[serde(flatten)]
+                                #member_identifier: Option<#type_identifier>,
+                            });
+                        }
+
+                        tokens.append_all(quote! {
+                            #[derive(serde::Serialize, serde::Deserialize, Debug)]
+                            pub struct #model_compound_identifier{
+                                #property_tokens
+                            }
+                        });
+
+                        for type_node_id in &compound_node.type_node_ids {
+                            let type_name = self.get_model_name(type_node_id)?;
+                            let type_identifier = format_ident!("r#{}", type_name);
+
+                            let member_name = self.to_member_name(&type_name);
+                            let member_identifier = format_ident!("r#{}", member_name);
+
+                            tokens.append_all(quote!{
+                                impl TryFrom<#model_compound_identifier> for #type_identifier {
+                                    type Error = ();
+
+                                    fn try_from(value: #model_compound_identifier) -> Result<Self, Self::Error> {
+                                        value.#member_identifier.ok_or(())
+                                    }
+                                }
+                            });
+                        }
+                    }
+                    CompoundEnum::AllOf(_) => todo!(),
+                }
+            }
         }
 
         Ok(tokens)
@@ -195,6 +273,17 @@ impl<'a> ModelsRsGenerator<'a> {
         Ok(model_type_name)
     }
 
+    fn get_model_compound_name(
+        &self,
+        node_id: &str,
+        node_compound: &intermediate_a::CompoundEnum,
+    ) -> Result<String, &'static str> {
+        let model_name = self.get_model_name(node_id)?;
+        let compound_name = self.to_compound_name(node_compound);
+        let model_type_name = format!("{}{}", model_name, compound_name);
+        Ok(model_type_name)
+    }
+
     fn to_type_name(&self, node_type: &intermediate_a::TypeEnum) -> &'static str {
         match node_type {
             TypeEnum::Null(_) => "Null",
@@ -207,6 +296,14 @@ impl<'a> ModelsRsGenerator<'a> {
             TypeEnum::Array(_) => "Array",
             TypeEnum::Interface(_) => "Interface",
             TypeEnum::Record(_) => "Record",
+        }
+    }
+
+    fn to_compound_name(&self, node_compound: &intermediate_a::CompoundEnum) -> &'static str {
+        match node_compound {
+            CompoundEnum::OneOf(_) => "OneOf",
+            CompoundEnum::AnyOf(_) => "AnyOf",
+            CompoundEnum::AllOf(_) => "AllOf",
         }
     }
 
