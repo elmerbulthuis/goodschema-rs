@@ -2,6 +2,7 @@ use crate::documents;
 use crate::documents::context::Context;
 use crate::documents::factory::Initializer;
 use crate::schemas;
+use crate::utils::namer::Namer;
 use clap::Parser;
 use url::Url;
 
@@ -50,6 +51,17 @@ pub fn run_command(options: CommandOptions) -> Result<(), &'static str> {
         None,
         schemas::intermediate_a::SCHEMA_ID,
     )?;
+
+    let intermediate_data = context.get_intermediate_data();
+
+    let mut namer = Namer::new("schema");
+    for key in intermediate_data.nodes.keys() {
+        let url: Url = key.parse().unwrap();
+        let path = url.path().to_string() + url.fragment().unwrap_or_default();
+        namer.register_path(key.clone(), &path);
+    }
+
+    let names = namer.get_names();
 
     Ok(())
 }

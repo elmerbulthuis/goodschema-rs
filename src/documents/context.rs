@@ -2,9 +2,15 @@ use super::{
     factory::{Factory, Initializer},
     Document,
 };
-use crate::utils::{load::load_json, schema::discover_schema_id};
+use crate::{
+    schemas,
+    utils::{load::load_json, schema::discover_schema_id},
+};
 use serde_json::Value;
-use std::collections::{HashMap, HashSet};
+use std::{
+    collections::{HashMap, HashSet},
+    iter::empty,
+};
 use url::Url;
 
 #[derive(Default)]
@@ -100,6 +106,25 @@ impl Context {
         }
 
         Ok(())
+    }
+
+    pub fn get_intermediate_data(&self) -> schemas::intermediate_a::Schema {
+        schemas::intermediate_a::Schema {
+            nodes: HashMap::from_iter(self.get_intermediate_node_pairs()),
+        }
+    }
+
+    fn get_intermediate_node_pairs(
+        &self,
+    ) -> Box<dyn Iterator<Item = (String, schemas::intermediate_a::SchemaNode)> + '_> {
+        let mut iter: Box<dyn Iterator<Item = (String, schemas::intermediate_a::SchemaNode)>> =
+            Box::new(empty());
+
+        for document in self.documents.values() {
+            iter = Box::new(iter.chain(document.get_intermediate_node_pairs()));
+        }
+
+        iter
     }
 }
 

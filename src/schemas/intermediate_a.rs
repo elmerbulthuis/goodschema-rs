@@ -4,7 +4,7 @@ use std::collections::HashMap;
 
 pub static SCHEMA_ID: &str = "https://schema.JsonSchema42.org/jns42-intermediate-a/schema.json";
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct SchemaNode {
     super_node_id: Option<String>,
@@ -16,7 +16,7 @@ pub struct SchemaNode {
     compounds: Vec<Value>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Schema {
     pub nodes: HashMap<String, SchemaNode>,
 }

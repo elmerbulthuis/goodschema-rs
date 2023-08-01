@@ -1,7 +1,9 @@
 pub mod documents;
-mod programs;
+pub mod generators;
 pub mod schemas;
 pub mod utils;
+
+mod programs;
 
 use clap::Parser;
 use programs::{run_program, ProgramOptions};

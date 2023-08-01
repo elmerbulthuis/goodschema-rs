@@ -29,4 +29,15 @@ impl super::Document for Document {
             .map(|key| key.parse().unwrap())
             .collect()
     }
+
+    fn get_intermediate_node_pairs(
+        &self,
+    ) -> Box<dyn Iterator<Item = (String, crate::schemas::intermediate_a::SchemaNode)> + '_> {
+        Box::new(
+            self.document_node
+                .nodes
+                .iter()
+                .map(|(k, v)| (k.clone(), v.clone())),
+        )
+    }
 }
