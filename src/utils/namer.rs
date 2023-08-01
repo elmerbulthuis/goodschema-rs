@@ -225,7 +225,7 @@ mod test {
 
     #[test]
     fn test_1() {
-        let mut namer = Namer::new("o");
+        let mut namer = Namer::new("O");
 
         namer.register_path("/A", "/A");
         assert_eq!(
@@ -340,7 +340,7 @@ mod test {
 
     #[test]
     fn test_2() {
-        let mut namer = Namer::new("o");
+        let mut namer = Namer::new("O");
 
         namer.register_path("/", "/");
         assert_eq!(
@@ -357,7 +357,7 @@ mod test {
 
     #[test]
     fn test_3() {
-        let mut namer = Namer::new("o");
+        let mut namer = Namer::new("O");
 
         namer.register_path("/", "/");
         assert_eq!(
