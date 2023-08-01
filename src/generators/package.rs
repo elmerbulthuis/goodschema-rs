@@ -2,9 +2,8 @@ use super::{
     cargo_toml, file::generate_file_content, lib_rs, models_rs::ModelsRsGenerator,
     validators_rs::ValidatorsRsGenerator,
 };
-use crate::{schemas::InterpreterContext, utils::Namer};
-use std::{fs, path::PathBuf};
-use url::Url;
+use crate::schemas::intermediate_a;
+use std::{collections::HashMap, fs, path::PathBuf};
 
 pub struct PackageGenerator<'a> {
     models_rs_generator: ModelsRsGenerator<'a>,
@@ -12,10 +11,13 @@ pub struct PackageGenerator<'a> {
 }
 
 impl<'a> PackageGenerator<'a> {
-    pub fn new(schema_loader: &'a InterpreterContext<'a>, namer: &'a Namer<Url>) -> Self {
+    pub fn new(
+        intermediate_data: &'a intermediate_a::Schema,
+        names: &'a HashMap<String, String>,
+    ) -> Self {
         Self {
-            models_rs_generator: ModelsRsGenerator::new(schema_loader, namer),
-            validators_rs_generator: ValidatorsRsGenerator::new(schema_loader, namer),
+            models_rs_generator: ModelsRsGenerator::new(intermediate_data, names),
+            validators_rs_generator: ValidatorsRsGenerator::new(intermediate_data, names),
         }
     }
 
