@@ -136,26 +136,27 @@ impl<'a> ModelsRsGenerator<'a> {
                         for (property_name, property_type_node_id) in
                             &type_node.property_type_node_ids
                         {
-                            let property_name = self.to_property_name(property_name);
-                            let property_identifier = format_ident!("r#{}", property_name);
+                            let member_name = self.to_member_name(property_name);
+                            let member_identifier = format_ident!("r#{}", member_name);
 
                             let property_type_name = self.get_model_name(property_type_node_id)?;
                             let property_type_identifier =
                                 format_ident!("r#{}", property_type_name);
 
-                            if type_node.required_properties.contains(&property_name) {
+                            if type_node.required_properties.contains(&member_name) {
                                 property_tokens.append_all(quote! {
-                                    pub #property_identifier: #property_type_identifier,
+                                    pub #member_identifier: #property_type_identifier,
                                 })
                             } else {
                                 property_tokens.append_all(quote! {
-                                    pub #property_identifier: Option<#property_type_identifier>,
+                                    pub #member_identifier: Option<#property_type_identifier>,
                                 })
                             }
                         }
 
                         tokens.append_all(quote! {
                             #[derive(serde::Serialize, serde::Deserialize, Debug)]
+                            #[serde(rename = "#property_name")]
                             pub struct #model_type_identifier {
                                 #property_tokens
                             }
@@ -208,7 +209,7 @@ impl<'a> ModelsRsGenerator<'a> {
         }
     }
 
-    fn to_property_name(&self, property_name: &str) -> String {
+    fn to_member_name(&self, property_name: &str) -> String {
         property_name.to_string()
     }
 }
