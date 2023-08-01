@@ -249,7 +249,29 @@ impl<'a> ModelsRsGenerator<'a> {
                             });
                         }
                     }
-                    CompoundEnum::AllOf(_) => todo!(),
+                    CompoundEnum::AllOf(compound_node) => {
+                        tokens.append_all(quote! {
+                            #[derive(serde::Serialize, serde::Deserialize, Debug)]
+                            pub struct #model_compound_identifier{
+                                //
+                            }
+                        });
+
+                        for type_node_id in &compound_node.type_node_ids {
+                            let type_name = self.get_model_name(type_node_id)?;
+                            let type_identifier = format_ident!("r#{}", type_name);
+
+                            tokens.append_all(quote!{
+                                impl TryFrom<#model_compound_identifier> for #type_identifier {
+                                    type Error = ();
+
+                                    fn try_from(value: #model_compound_identifier) -> Result<Self, Self::Error> {
+                                        todo!();
+                                    }
+                                }
+                            });
+                        }
+                    }
                 }
             }
         }
@@ -257,8 +279,40 @@ impl<'a> ModelsRsGenerator<'a> {
         Ok(tokens)
     }
 
+    fn get_name(&self, node_id: &str) -> Result<&str, &'static str> {
+        self.names
+            .get(node_id)
+            .map(|v| v.as_str())
+            .ok_or("name not found")
+    }
+
+    fn get_node(&self, node_id: &str) -> Result<&SchemaNode, &'static str> {
+        self.intermediate_data
+            .nodes
+            .get(node_id)
+            .ok_or("node not found")
+    }
+
+    fn get_nodes_recursive(&self, node_id: &str) -> Result<Vec<&SchemaNode>, &'static str> {
+        let mut queue = Vec::new();
+        let mut result = Vec::new();
+
+        let node = self.get_node(node_id)?;
+        queue.push(node);
+
+        while let Some(node) = queue.pop() {
+            if let Some(node_id) = &node.super_node_id {
+                let node = self.get_node(node_id)?;
+                queue.push(node);
+            }
+            result.push(node);
+        }
+
+        Ok(result)
+    }
+
     fn get_model_name(&self, node_id: &str) -> Result<String, &'static str> {
-        let model_name = self.names.get(node_id).ok_or("could not find name")?;
+        let model_name = self.get_name(node_id)?;
         let model_name = model_name.to_pascal_case();
 
         Ok(model_name.to_string())
