@@ -79,7 +79,7 @@ impl<'a> ModelsRsGenerator<'a> {
                 }
 
                 tokens.append_all(quote! {
-                    #[derive(serde::Serialize, serde::Deserialize, Debug)]
+                    #[derive(serde::Serialize, serde::Deserialize, Debug, PartialEq, Eq)]
                     #[serde(untagged)]
                     pub enum #model_identifier {
                         #enum_tokens
@@ -167,7 +167,7 @@ impl<'a> ModelsRsGenerator<'a> {
                         }
 
                         tokens.append_all(quote! {
-                            #[derive(serde::Serialize, serde::Deserialize, Debug)]
+                            #[derive(serde::Serialize, serde::Deserialize, Debug, PartialEq, Eq)]
                             pub struct #model_type_identifier {
                                 #property_tokens
                             }
@@ -201,7 +201,7 @@ impl<'a> ModelsRsGenerator<'a> {
                         }
 
                         tokens.append_all(quote! {
-                            #[derive(serde::Serialize, serde::Deserialize, Debug)]
+                            #[derive(serde::Serialize, serde::Deserialize, Debug, PartialEq, Eq)]
                             #[serde(untagged)]
                             pub enum #model_compound_identifier {
                                 #enum_tokens
@@ -225,7 +225,7 @@ impl<'a> ModelsRsGenerator<'a> {
                         }
 
                         tokens.append_all(quote! {
-                            #[derive(serde::Serialize, serde::Deserialize, Debug)]
+                            #[derive(serde::Serialize, serde::Deserialize, Debug, PartialEq, Eq)]
                             pub struct #model_compound_identifier{
                                 #property_tokens
                             }
@@ -251,7 +251,7 @@ impl<'a> ModelsRsGenerator<'a> {
                     }
                     CompoundEnum::AllOf(compound_node) => {
                         tokens.append_all(quote! {
-                            #[derive(serde::Serialize, serde::Deserialize, Debug)]
+                            #[derive(serde::Serialize, serde::Deserialize, Debug, PartialEq, Eq)]
                             pub struct #model_compound_identifier{
                                 //
                             }
