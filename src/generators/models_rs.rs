@@ -1,18 +1,17 @@
+use crate::schemas;
 use inflector::Inflector;
 use proc_macro2::TokenStream;
 use quote::{format_ident, quote, TokenStreamExt};
 use std::collections::HashMap;
 
-use crate::schemas::intermediate_a::{self, CompoundEnum, SchemaNode, TypeEnum};
-
 pub struct ModelsRsGenerator<'a> {
-    intermediate_data: &'a intermediate_a::Schema,
+    intermediate_data: &'a schemas::intermediate_a::Schema,
     names: &'a HashMap<String, String>,
 }
 
 impl<'a> ModelsRsGenerator<'a> {
     pub fn new(
-        intermediate_data: &'a intermediate_a::Schema,
+        intermediate_data: &'a schemas::intermediate_a::Schema,
         names: &'a HashMap<String, String>,
     ) -> Self {
         Self {
@@ -34,7 +33,7 @@ impl<'a> ModelsRsGenerator<'a> {
     fn generate_model_token_stream(
         &self,
         node_id: &str,
-        node: &SchemaNode,
+        node: &schemas::intermediate_a::SchemaNode,
     ) -> Result<TokenStream, &'static str> {
         let model_name = self.get_model_name(node_id)?;
         let model_identifier = format_ident!("r#{}", model_name);
@@ -92,33 +91,33 @@ impl<'a> ModelsRsGenerator<'a> {
                 let model_type_identifier = format_ident!("r#{}", model_type_name);
 
                 match node_type {
-                    TypeEnum::Null(_) => {
+                    schemas::intermediate_a::TypeEnum::Null(_) => {
                         tokens.append_all(quote! {
                             pub type #model_type_identifier = ();
                         });
                     }
-                    TypeEnum::Any(_) => {
+                    schemas::intermediate_a::TypeEnum::Any(_) => {
                         tokens.append_all(quote! {
                             pub type #model_type_identifier = Box<dyn std::any::Any>;
                         });
                     }
-                    TypeEnum::Never(_) => todo!(),
-                    TypeEnum::Boolean(_) => {
+                    schemas::intermediate_a::TypeEnum::Never(_) => todo!(),
+                    schemas::intermediate_a::TypeEnum::Boolean(_) => {
                         tokens.append_all(quote! {
                             pub type #model_type_identifier = bool;
                         });
                     }
-                    TypeEnum::Number(_) => {
+                    schemas::intermediate_a::TypeEnum::Number(_) => {
                         tokens.append_all(quote! {
                             pub type #model_type_identifier = i64;
                         });
                     }
-                    TypeEnum::String(_) => {
+                    schemas::intermediate_a::TypeEnum::String(_) => {
                         tokens.append_all(quote! {
                             pub type #model_type_identifier = String;
                         });
                     }
-                    TypeEnum::Tuple(type_node) => {
+                    schemas::intermediate_a::TypeEnum::Tuple(type_node) => {
                         let mut tuple_tokens = quote! {};
 
                         for item_type_node_id in &type_node.item_type_node_ids {
@@ -133,14 +132,14 @@ impl<'a> ModelsRsGenerator<'a> {
                             pub type #model_type_identifier = (#tuple_tokens);
                         });
                     }
-                    TypeEnum::Array(type_node) => {
+                    schemas::intermediate_a::TypeEnum::Array(type_node) => {
                         let item_type_name = self.get_model_name(&type_node.item_type_node_id)?;
                         let item_type_identifier = format_ident!("r#{}", item_type_name);
                         tokens.append_all(quote! {
                             pub type #model_type_identifier = Vec<#item_type_identifier>;
                         });
                     }
-                    TypeEnum::Interface(type_node) => {
+                    schemas::intermediate_a::TypeEnum::Interface(type_node) => {
                         let mut property_tokens = quote! {};
 
                         for (property_name, property_type_node_id) in
@@ -173,7 +172,7 @@ impl<'a> ModelsRsGenerator<'a> {
                             }
                         });
                     }
-                    TypeEnum::Record(type_node) => {
+                    schemas::intermediate_a::TypeEnum::Record(type_node) => {
                         let property_type_name =
                             self.get_model_name(&type_node.property_type_node_id)?;
                         let property_type_identifier = format_ident!("r#{}", property_type_name);
@@ -189,7 +188,7 @@ impl<'a> ModelsRsGenerator<'a> {
                 let model_compound_identifier = format_ident!("r#{}", model_compound_name);
 
                 match node_compound {
-                    CompoundEnum::OneOf(compound_node) => {
+                    schemas::intermediate_a::CompoundEnum::OneOf(compound_node) => {
                         let mut enum_tokens = quote! {};
 
                         for type_node_id in &compound_node.type_node_ids {
@@ -208,7 +207,7 @@ impl<'a> ModelsRsGenerator<'a> {
                             }
                         });
                     }
-                    CompoundEnum::AnyOf(compound_node) => {
+                    schemas::intermediate_a::CompoundEnum::AnyOf(compound_node) => {
                         let mut property_tokens = quote! {};
 
                         for type_node_id in &compound_node.type_node_ids {
@@ -249,7 +248,7 @@ impl<'a> ModelsRsGenerator<'a> {
                             });
                         }
                     }
-                    CompoundEnum::AllOf(compound_node) => {
+                    schemas::intermediate_a::CompoundEnum::AllOf(compound_node) => {
                         tokens.append_all(quote! {
                             #[derive(serde::Serialize, serde::Deserialize, Debug, PartialEq, Eq)]
                             pub struct #model_compound_identifier{
@@ -286,14 +285,20 @@ impl<'a> ModelsRsGenerator<'a> {
             .ok_or("name not found")
     }
 
-    fn get_node(&self, node_id: &str) -> Result<&SchemaNode, &'static str> {
+    fn get_node(
+        &self,
+        node_id: &str,
+    ) -> Result<&schemas::intermediate_a::SchemaNode, &'static str> {
         self.intermediate_data
             .nodes
             .get(node_id)
             .ok_or("node not found")
     }
 
-    fn get_nodes_recursive(&self, node_id: &str) -> Result<Vec<&SchemaNode>, &'static str> {
+    fn get_nodes_recursive(
+        &self,
+        node_id: &str,
+    ) -> Result<Vec<&schemas::intermediate_a::SchemaNode>, &'static str> {
         let mut queue = Vec::new();
         let mut result = Vec::new();
 
@@ -321,7 +326,7 @@ impl<'a> ModelsRsGenerator<'a> {
     fn get_model_type_name(
         &self,
         node_id: &str,
-        node_type: &intermediate_a::TypeEnum,
+        node_type: &schemas::intermediate_a::TypeEnum,
     ) -> Result<String, &'static str> {
         let model_name = self.get_model_name(node_id)?;
         let type_name = self.to_type_name(node_type);
@@ -334,7 +339,7 @@ impl<'a> ModelsRsGenerator<'a> {
     fn get_model_compound_name(
         &self,
         node_id: &str,
-        node_compound: &intermediate_a::CompoundEnum,
+        node_compound: &schemas::intermediate_a::CompoundEnum,
     ) -> Result<String, &'static str> {
         let model_name = self.get_model_name(node_id)?;
         let compound_name = self.to_compound_name(node_compound);
@@ -344,26 +349,29 @@ impl<'a> ModelsRsGenerator<'a> {
         Ok(model_compound_name)
     }
 
-    fn to_type_name(&self, node_type: &intermediate_a::TypeEnum) -> &'static str {
+    fn to_type_name(&self, node_type: &schemas::intermediate_a::TypeEnum) -> &'static str {
         match node_type {
-            TypeEnum::Null(_) => "Null",
-            TypeEnum::Any(_) => "Any",
-            TypeEnum::Never(_) => "Never",
-            TypeEnum::Boolean(_) => "Boolean",
-            TypeEnum::Number(_) => "Number",
-            TypeEnum::String(_) => "String",
-            TypeEnum::Tuple(_) => "Tuple",
-            TypeEnum::Array(_) => "Array",
-            TypeEnum::Interface(_) => "Interface",
-            TypeEnum::Record(_) => "Record",
+            schemas::intermediate_a::TypeEnum::Null(_) => "Null",
+            schemas::intermediate_a::TypeEnum::Any(_) => "Any",
+            schemas::intermediate_a::TypeEnum::Never(_) => "Never",
+            schemas::intermediate_a::TypeEnum::Boolean(_) => "Boolean",
+            schemas::intermediate_a::TypeEnum::Number(_) => "Number",
+            schemas::intermediate_a::TypeEnum::String(_) => "String",
+            schemas::intermediate_a::TypeEnum::Tuple(_) => "Tuple",
+            schemas::intermediate_a::TypeEnum::Array(_) => "Array",
+            schemas::intermediate_a::TypeEnum::Interface(_) => "Interface",
+            schemas::intermediate_a::TypeEnum::Record(_) => "Record",
         }
     }
 
-    fn to_compound_name(&self, node_compound: &intermediate_a::CompoundEnum) -> &'static str {
+    fn to_compound_name(
+        &self,
+        node_compound: &schemas::intermediate_a::CompoundEnum,
+    ) -> &'static str {
         match node_compound {
-            CompoundEnum::OneOf(_) => "OneOf",
-            CompoundEnum::AnyOf(_) => "AnyOf",
-            CompoundEnum::AllOf(_) => "AllOf",
+            schemas::intermediate_a::CompoundEnum::OneOf(_) => "OneOf",
+            schemas::intermediate_a::CompoundEnum::AnyOf(_) => "AnyOf",
+            schemas::intermediate_a::CompoundEnum::AllOf(_) => "AllOf",
         }
     }
 
