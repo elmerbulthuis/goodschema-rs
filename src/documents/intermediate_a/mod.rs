@@ -32,12 +32,12 @@ impl super::Document for Document {
 
     fn get_intermediate_node_pairs(
         &self,
-    ) -> Box<dyn Iterator<Item = (String, crate::schemas::intermediate_a::SchemaNode)> + '_> {
+    ) -> Box<dyn Iterator<Item = (&str, &crate::schemas::intermediate_a::SchemaNode)> + '_> {
         Box::new(
             self.document_node
                 .nodes
                 .iter()
-                .map(|(k, v)| (k.clone(), v.clone())),
+                .map(|(k, v)| (k.as_str(), v)),
         )
     }
 }

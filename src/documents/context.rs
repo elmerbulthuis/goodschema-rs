@@ -111,14 +111,17 @@ impl Context {
     pub fn get_intermediate_data(&self) -> schemas::intermediate_a::Schema {
         schemas::intermediate_a::Schema {
             schema: SCHEMA_ID.to_string(),
-            nodes: HashMap::from_iter(self.get_intermediate_node_pairs()),
+            nodes: HashMap::from_iter(
+                self.get_intermediate_node_pairs()
+                    .map(|(k, v)| (k.to_string(), v.clone())),
+            ),
         }
     }
 
     fn get_intermediate_node_pairs(
         &self,
-    ) -> Box<dyn Iterator<Item = (String, schemas::intermediate_a::SchemaNode)> + '_> {
-        let mut iter: Box<dyn Iterator<Item = (String, schemas::intermediate_a::SchemaNode)>> =
+    ) -> Box<dyn Iterator<Item = (&str, &schemas::intermediate_a::SchemaNode)> + '_> {
+        let mut iter: Box<dyn Iterator<Item = (&str, &schemas::intermediate_a::SchemaNode)>> =
             Box::new(empty());
 
         for document in self.documents.values() {
