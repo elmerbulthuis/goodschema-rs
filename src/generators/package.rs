@@ -2,7 +2,7 @@ use super::{
     cargo_toml, file::generate_file_content, lib_rs, models_rs::ModelsRsGenerator,
     validators_rs::ValidatorsRsGenerator,
 };
-use crate::schemas::intermediate_a;
+use crate::schemas;
 use std::{collections::HashMap, fs, path::PathBuf};
 
 pub struct PackageGenerator<'a> {
@@ -12,7 +12,7 @@ pub struct PackageGenerator<'a> {
 
 impl<'a> PackageGenerator<'a> {
     pub fn new(
-        intermediate_data: &'a intermediate_a::Schema,
+        intermediate_data: &'a schemas::intermediate_a::Schema,
         names: &'a HashMap<String, String>,
     ) -> Self {
         Self {

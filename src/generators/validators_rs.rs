@@ -1,17 +1,16 @@
+use crate::schemas;
 use proc_macro2::TokenStream;
 use quote::{quote, TokenStreamExt};
 use std::collections::HashMap;
 
-use crate::schemas::intermediate_a::{self, SchemaNode};
-
 pub struct ValidatorsRsGenerator<'a> {
-    intermediate_data: &'a intermediate_a::Schema,
+    intermediate_data: &'a schemas::intermediate_a::Schema,
     names: &'a HashMap<String, String>,
 }
 
 impl<'a> ValidatorsRsGenerator<'a> {
     pub fn new(
-        intermediate_data: &'a intermediate_a::Schema,
+        intermediate_data: &'a schemas::intermediate_a::Schema,
         names: &'a HashMap<String, String>,
     ) -> Self {
         Self {
@@ -37,7 +36,7 @@ impl<'a> ValidatorsRsGenerator<'a> {
     fn generate_model_token_stream(
         &self,
         node_id: &str,
-        _node: &SchemaNode,
+        _node: &schemas::intermediate_a::SchemaNode,
     ) -> Result<TokenStream, &'static str> {
         let _node_name = self.names.get(node_id).ok_or("could not find name")?;
 

@@ -1,9 +1,9 @@
-use crate::schemas::intermediate_a::Schema;
+use crate::schemas;
 use serde_json::Value;
 use url::Url;
 
 pub struct Document {
-    document_node: Schema,
+    document_node: schemas::intermediate_a::Schema,
     document_url: Url,
 }
 
