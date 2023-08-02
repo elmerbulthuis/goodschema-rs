@@ -1,3 +1,4 @@
+use inflector::Inflector;
 use once_cell::sync::Lazy;
 use regex::Regex;
 use std::{
@@ -68,6 +69,7 @@ where
                     .replace_all(part.as_str(), "_")
                     .to_string()
             })
+            .map(|part| part.to_snake_case())
             .filter(|part| !part.is_empty());
         self.register_name_parts(key, name_parts)
     }
@@ -172,7 +174,8 @@ where
                         if parent_name_parts.len() > 1
                             || !STARTS_WITH_LETTER_REGEX.is_match(&new_part)
                         {
-                            new_part = new_current_node.borrow().part.clone() + &new_part;
+                            new_part =
+                                format!("{0}_{1}", &new_current_node.borrow().part, &new_part);
                         }
                     }
 
