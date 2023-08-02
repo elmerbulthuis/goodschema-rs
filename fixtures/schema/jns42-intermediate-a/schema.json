@@ -1,0 +1,1284 @@
+{
+    "$schema": "https://schema.JsonSchema42.org/jns42-intermediate-a/schema.json",
+    "nodes": {
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json": {
+            "deprecated": false,
+            "title": "JsonSchema42 intermediate schema",
+            "description": "",
+            "examples": [
+                {
+                    "$schema": "https://schema.JsonSchema42.org/jns42-intermediate-a/schema.json",
+                    "nodes": {
+                        "file:///simple-object.json": {
+                            "deprecated": false,
+                            "title": "",
+                            "description": "A very simple object",
+                            "examples": [],
+                            "types": [
+                                {
+                                    "type": "interface",
+                                    "requiredProperties": ["id"],
+                                    "propertyTypeNodeIds": {
+                                        "id": "file:///simple-object.json#/properties/id",
+                                        "name": "file:///simple-object.json#/properties/name"
+                                    }
+                                }
+                            ],
+                            "compounds": []
+                        },
+                        "file:///simple-object.json#/properties/id": {
+                            "deprecated": false,
+                            "title": "",
+                            "description": "An identity",
+                            "examples": [],
+                            "types": [
+                                {
+                                    "type": "number",
+                                    "numberType": "integer",
+                                    "minimumExclusive": 0
+                                }
+                            ],
+                            "compounds": []
+                        },
+                        "file:///simple-object.json#/properties/name": {
+                            "deprecated": false,
+                            "title": "",
+                            "description": "A name",
+                            "examples": [],
+                            "types": [
+                                {
+                                    "type": "string",
+                                    "minimumLength": 2,
+                                    "maximumLength": 20
+                                }
+                            ],
+                            "compounds": []
+                        }
+                    }
+                }
+            ],
+            "types": [
+                {
+                    "type": "interface",
+                    "requiredProperties": ["$schema", "nodes"],
+                    "propertyTypeNodeIds": {
+                        "$schema": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/properties/$schema",
+                        "nodes": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/properties/nodes"
+                    }
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/node": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "interface",
+                    "requiredProperties": [
+                        "deprecated",
+                        "title",
+                        "description",
+                        "examples",
+                        "types",
+                        "compounds"
+                    ],
+                    "propertyTypeNodeIds": {
+                        "superNodeId": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/node/properties/superNodeId",
+                        "deprecated": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/node/properties/deprecated",
+                        "title": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/node/properties/title",
+                        "description": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/node/properties/description",
+                        "examples": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/node/properties/examples",
+                        "types": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/node/properties/types",
+                        "compounds": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/node/properties/compounds"
+                    }
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/type-union": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [],
+            "compounds": [
+                {
+                    "type": "one-of",
+                    "typeNodeIds": [
+                        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/type-union/oneOf/0",
+                        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/type-union/oneOf/1",
+                        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/type-union/oneOf/2",
+                        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/type-union/oneOf/3",
+                        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/type-union/oneOf/4",
+                        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/type-union/oneOf/5",
+                        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/type-union/oneOf/6",
+                        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/type-union/oneOf/7",
+                        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/type-union/oneOf/8",
+                        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/type-union/oneOf/9"
+                    ]
+                }
+            ]
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/compound-union": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [],
+            "compounds": [
+                {
+                    "type": "one-of",
+                    "typeNodeIds": [
+                        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/compound-union/oneOf/0",
+                        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/compound-union/oneOf/1",
+                        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/compound-union/oneOf/2"
+                    ]
+                }
+            ]
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/null-type": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "interface",
+                    "requiredProperties": ["type"],
+                    "propertyTypeNodeIds": {
+                        "type": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/null-type/properties/type"
+                    }
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/any-type": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "interface",
+                    "requiredProperties": ["type"],
+                    "propertyTypeNodeIds": {
+                        "type": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/any-type/properties/type"
+                    }
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/never-type": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "interface",
+                    "requiredProperties": ["type"],
+                    "propertyTypeNodeIds": {
+                        "type": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/never-type/properties/type"
+                    }
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/boolean-type": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "interface",
+                    "requiredProperties": ["type"],
+                    "propertyTypeNodeIds": {
+                        "type": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/boolean-type/properties/type",
+                        "options": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/boolean-type/properties/options"
+                    }
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/number-type": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "interface",
+                    "requiredProperties": ["type", "numberType"],
+                    "propertyTypeNodeIds": {
+                        "type": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/number-type/properties/type",
+                        "numberType": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/number-type/properties/numberType",
+                        "options": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/number-type/properties/options",
+                        "minimumInclusive": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/number-type/properties/minimumInclusive",
+                        "minimumExclusive": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/number-type/properties/minimumExclusive",
+                        "maximumInclusive": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/number-type/properties/maximumInclusive",
+                        "maximumExclusive": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/number-type/properties/maximumExclusive",
+                        "multipleOf": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/number-type/properties/multipleOf"
+                    }
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/string-type": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "interface",
+                    "requiredProperties": ["type"],
+                    "propertyTypeNodeIds": {
+                        "type": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/string-type/properties/type",
+                        "options": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/string-type/properties/options",
+                        "minimumLength": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/string-type/properties/minimumLength",
+                        "maximumLength": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/string-type/properties/maximumLength",
+                        "valuePattern": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/string-type/properties/valuePattern"
+                    }
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/tuple-type": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "interface",
+                    "requiredProperties": ["type", "itemTypeNodeIds"],
+                    "propertyTypeNodeIds": {
+                        "type": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/tuple-type/properties/type",
+                        "itemTypeNodeIds": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/tuple-type/properties/itemTypeNodeIds"
+                    }
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/array-type": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "interface",
+                    "requiredProperties": ["type", "itemTypeNodeId"],
+                    "propertyTypeNodeIds": {
+                        "type": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/array-type/properties/type",
+                        "minimumItems": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/array-type/properties/minimumItems",
+                        "maximumItems": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/array-type/properties/maximumItems",
+                        "uniqueItems": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/array-type/properties/uniqueItems",
+                        "itemTypeNodeId": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/array-type/properties/itemTypeNodeId"
+                    }
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/interface-type": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "interface",
+                    "requiredProperties": ["type", "requiredProperties", "propertyTypeNodeIds"],
+                    "propertyTypeNodeIds": {
+                        "type": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/interface-type/properties/type",
+                        "requiredProperties": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/interface-type/properties/requiredProperties",
+                        "propertyTypeNodeIds": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/interface-type/properties/propertyTypeNodeIds"
+                    }
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/record-type": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "interface",
+                    "requiredProperties": ["type", "requiredProperties", "propertyTypeNodeId"],
+                    "propertyTypeNodeIds": {
+                        "type": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/record-type/properties/type",
+                        "requiredProperties": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/record-type/properties/requiredProperties",
+                        "minimumProperties": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/record-type/properties/minimumProperties",
+                        "maximumProperties": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/record-type/properties/maximumProperties",
+                        "propertyTypeNodeId": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/record-type/properties/propertyTypeNodeId"
+                    }
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/one-of-compound": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "interface",
+                    "requiredProperties": ["type", "typeNodeIds"],
+                    "propertyTypeNodeIds": {
+                        "type": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/one-of-compound/properties/type",
+                        "typeNodeIds": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/one-of-compound/properties/typeNodeIds"
+                    }
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/any-of-compound": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "interface",
+                    "requiredProperties": ["type", "typeNodeIds"],
+                    "propertyTypeNodeIds": {
+                        "type": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/any-of-compound/properties/type",
+                        "typeNodeIds": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/any-of-compound/properties/typeNodeIds"
+                    }
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/all-of-compound": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "interface",
+                    "requiredProperties": ["type", "typeNodeIds"],
+                    "propertyTypeNodeIds": {
+                        "type": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/all-of-compound/properties/type",
+                        "typeNodeIds": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/all-of-compound/properties/typeNodeIds"
+                    }
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/properties/$schema": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "string",
+                    "options": ["https://schema.JsonSchema42.org/jns42-intermediate-a/schema.json"]
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/properties/nodes": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "record",
+                    "requiredProperties": [],
+                    "propertyTypeNodeId": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/properties/nodes/additionalProperties"
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/node/properties/superNodeId": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "string"
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/node/properties/deprecated": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "boolean"
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/node/properties/title": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "string"
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/node/properties/description": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "string"
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/node/properties/examples": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "array",
+                    "uniqueItems": false,
+                    "itemTypeNodeId": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/node/properties/examples/items"
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/node/properties/types": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "array",
+                    "uniqueItems": false,
+                    "itemTypeNodeId": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/node/properties/types/items"
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/node/properties/compounds": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "array",
+                    "uniqueItems": false,
+                    "itemTypeNodeId": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/node/properties/compounds/items"
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/type-union/oneOf/0": {
+            "superNodeId": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/null-type",
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/type-union/oneOf/1": {
+            "superNodeId": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/any-type",
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/type-union/oneOf/2": {
+            "superNodeId": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/never-type",
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/type-union/oneOf/3": {
+            "superNodeId": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/boolean-type",
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/type-union/oneOf/4": {
+            "superNodeId": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/number-type",
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/type-union/oneOf/5": {
+            "superNodeId": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/string-type",
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/type-union/oneOf/6": {
+            "superNodeId": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/tuple-type",
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/type-union/oneOf/7": {
+            "superNodeId": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/array-type",
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/type-union/oneOf/8": {
+            "superNodeId": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/interface-type",
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/type-union/oneOf/9": {
+            "superNodeId": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/record-type",
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/compound-union/oneOf/0": {
+            "superNodeId": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/one-of-compound",
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/compound-union/oneOf/1": {
+            "superNodeId": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/any-of-compound",
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/compound-union/oneOf/2": {
+            "superNodeId": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/all-of-compound",
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/null-type/properties/type": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "string",
+                    "options": ["null"]
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/any-type/properties/type": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "string",
+                    "options": ["any"]
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/never-type/properties/type": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "string",
+                    "options": ["never"]
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/boolean-type/properties/type": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "string",
+                    "options": ["boolean"]
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/boolean-type/properties/options": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "array",
+                    "uniqueItems": false,
+                    "itemTypeNodeId": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/boolean-type/properties/options/items"
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/number-type/properties/type": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "string",
+                    "options": ["number"]
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/number-type/properties/numberType": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "string",
+                    "options": ["integer", "float"]
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/number-type/properties/options": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "array",
+                    "uniqueItems": false,
+                    "itemTypeNodeId": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/number-type/properties/options/items"
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/number-type/properties/minimumInclusive": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "number",
+                    "numberType": "float"
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/number-type/properties/minimumExclusive": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "number",
+                    "numberType": "float"
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/number-type/properties/maximumInclusive": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "number",
+                    "numberType": "float"
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/number-type/properties/maximumExclusive": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "number",
+                    "numberType": "float"
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/number-type/properties/multipleOf": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "number",
+                    "numberType": "float"
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/string-type/properties/type": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "string",
+                    "options": ["string"]
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/string-type/properties/options": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "array",
+                    "uniqueItems": false,
+                    "itemTypeNodeId": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/string-type/properties/options/items"
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/string-type/properties/minimumLength": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "number",
+                    "numberType": "float"
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/string-type/properties/maximumLength": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "number",
+                    "numberType": "float"
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/string-type/properties/valuePattern": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "string"
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/tuple-type/properties/type": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "string",
+                    "options": ["tuple"]
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/tuple-type/properties/itemTypeNodeIds": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "array",
+                    "uniqueItems": false,
+                    "itemTypeNodeId": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/tuple-type/properties/itemTypeNodeIds/items"
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/array-type/properties/type": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "string",
+                    "options": ["array"]
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/array-type/properties/minimumItems": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "number",
+                    "numberType": "float"
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/array-type/properties/maximumItems": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "number",
+                    "numberType": "float"
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/array-type/properties/uniqueItems": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "boolean"
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/array-type/properties/itemTypeNodeId": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "string"
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/interface-type/properties/type": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "string",
+                    "options": ["interface"]
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/interface-type/properties/requiredProperties": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "array",
+                    "uniqueItems": false,
+                    "itemTypeNodeId": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/interface-type/properties/requiredProperties/items"
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/interface-type/properties/propertyTypeNodeIds": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "record",
+                    "requiredProperties": [],
+                    "propertyTypeNodeId": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/interface-type/properties/propertyTypeNodeIds/additionalProperties"
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/record-type/properties/type": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "string",
+                    "options": ["record"]
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/record-type/properties/requiredProperties": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "array",
+                    "uniqueItems": false,
+                    "itemTypeNodeId": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/record-type/properties/requiredProperties/items"
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/record-type/properties/minimumProperties": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "number",
+                    "numberType": "float"
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/record-type/properties/maximumProperties": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "number",
+                    "numberType": "float"
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/record-type/properties/propertyTypeNodeId": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "string"
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/one-of-compound/properties/type": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "string",
+                    "options": ["one-of"]
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/one-of-compound/properties/typeNodeIds": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "array",
+                    "uniqueItems": false,
+                    "itemTypeNodeId": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/one-of-compound/properties/typeNodeIds/items"
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/any-of-compound/properties/type": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "string",
+                    "options": ["any-of"]
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/any-of-compound/properties/typeNodeIds": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "array",
+                    "uniqueItems": false,
+                    "itemTypeNodeId": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/any-of-compound/properties/typeNodeIds/items"
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/all-of-compound/properties/type": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "string",
+                    "options": ["all-of"]
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/all-of-compound/properties/typeNodeIds": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "array",
+                    "uniqueItems": false,
+                    "itemTypeNodeId": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/all-of-compound/properties/typeNodeIds/items"
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/properties/nodes/additionalProperties": {
+            "superNodeId": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/node",
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/node/properties/examples/items": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "any"
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/node/properties/types/items": {
+            "superNodeId": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/type-union",
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/node/properties/compounds/items": {
+            "superNodeId": "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/compound-union",
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/boolean-type/properties/options/items": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "boolean"
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/number-type/properties/options/items": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "number",
+                    "numberType": "float"
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/string-type/properties/options/items": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "string"
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/tuple-type/properties/itemTypeNodeIds/items": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "string"
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/interface-type/properties/requiredProperties/items": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "string"
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/interface-type/properties/propertyTypeNodeIds/additionalProperties": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "string"
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/record-type/properties/requiredProperties/items": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "string"
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/one-of-compound/properties/typeNodeIds/items": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "string"
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/any-of-compound/properties/typeNodeIds/items": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "string"
+                }
+            ],
+            "compounds": []
+        },
+        "https://schema.jsonschema42.org/jns42-intermediate-a/schema.json#/$defs/all-of-compound/properties/typeNodeIds/items": {
+            "deprecated": false,
+            "title": "",
+            "description": "",
+            "examples": [],
+            "types": [
+                {
+                    "type": "string"
+                }
+            ],
+            "compounds": []
+        }
+    }
+}

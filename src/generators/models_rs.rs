@@ -99,7 +99,7 @@ impl<'a> ModelsRsGenerator<'a> {
                     }
                     TypeEnum::Any(_) => {
                         tokens.append_all(quote! {
-                            pub type #model_type_identifier = std::any::Any;
+                            pub type #model_type_identifier = Box<dyn std::any::Any>;
                         });
                     }
                     TypeEnum::Never(_) => todo!(),
@@ -178,7 +178,7 @@ impl<'a> ModelsRsGenerator<'a> {
                             self.get_model_name(&type_node.property_type_node_id)?;
                         let property_type_identifier = format_ident!("r#{}", property_type_name);
                         tokens.append_all(quote! {
-                            pub type #model_type_identifier = HashMap<String, #property_type_identifier>;
+                            pub type #model_type_identifier = std::collections::HashMap<String, #property_type_identifier>;
                         });
                     }
                 }
