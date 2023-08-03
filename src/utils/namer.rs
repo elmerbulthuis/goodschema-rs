@@ -50,7 +50,9 @@ where
     K: Default + Ord + Hash + Clone,
 {
     pub fn new(root_name_part: &str) -> Self {
-        let root_name_node = NameNode::new(root_name_part.to_string());
+        let root_name_part = root_name_part.to_snake_case();
+
+        let root_name_node = NameNode::new(root_name_part);
         let root_name_node = RefCell::new(root_name_node);
         let root_name_node = Rc::new(root_name_node);
 
@@ -233,26 +235,26 @@ mod test {
         namer.register_path("/A", "/A");
         assert_eq!(
             namer.get_names(),
-            HashMap::from([("/A", "A")].map(to_string_map))
+            HashMap::from([("/A", "a")].map(to_string_map))
         );
 
         namer.register_path("/B", "/B");
         assert_eq!(
             namer.get_names(),
-            HashMap::from([("/A", "A"), ("/B", "B"),].map(to_string_map))
+            HashMap::from([("/A", "a"), ("/B", "b"),].map(to_string_map))
         );
 
         namer.register_path("/B/C", "/B/C");
         assert_eq!(
             namer.get_names(),
-            HashMap::from([("/A", "A"), ("/B", "B"), ("/B/C", "C"),].map(to_string_map))
+            HashMap::from([("/A", "a"), ("/B", "b"), ("/B/C", "c"),].map(to_string_map))
         );
 
         namer.register_path("/A/C", "/A/C");
         assert_eq!(
             namer.get_names(),
             HashMap::from(
-                [("/A", "A"), ("/B", "B"), ("/B/C", "BC"), ("/A/C", "AC"),].map(to_string_map)
+                [("/A", "a"), ("/B", "b"), ("/B/C", "b_c"), ("/A/C", "a_c"),].map(to_string_map)
             )
         );
 
@@ -261,11 +263,11 @@ mod test {
             namer.get_names(),
             HashMap::from(
                 [
-                    ("/A", "OA"),
-                    ("/B", "B"),
-                    ("/B/C", "BC"),
-                    ("/A/C", "AC"),
-                    ("/C/A", "CA"),
+                    ("/A", "o_a"),
+                    ("/B", "b"),
+                    ("/B/C", "b_c"),
+                    ("/A/C", "a_c"),
+                    ("/C/A", "c_a"),
                 ]
                 .map(to_string_map)
             )
@@ -276,12 +278,12 @@ mod test {
             namer.get_names(),
             HashMap::from(
                 [
-                    ("/A", "OA"),
-                    ("/B", "B"),
-                    ("/B/C", "OBC"),
-                    ("/A/C", "AC"),
-                    ("/C/A", "CA"),
-                    ("/A/B/C", "ABC"),
+                    ("/A", "o_a"),
+                    ("/B", "b"),
+                    ("/B/C", "o_b_c"),
+                    ("/A/C", "a_c"),
+                    ("/C/A", "c_a"),
+                    ("/A/B/C", "a_b_c"),
                 ]
                 .map(to_string_map)
             )
@@ -292,13 +294,13 @@ mod test {
             namer.get_names(),
             HashMap::from(
                 [
-                    ("/A", "OA"),
-                    ("/B", "B"),
-                    ("/B/C", "OBC"),
-                    ("/A/C", "AC"),
-                    ("/C/A", "CA"),
-                    ("/A/B/C", "ABC"),
-                    ("/A/B/C/D/E/F", "F"),
+                    ("/A", "o_a"),
+                    ("/B", "b"),
+                    ("/B/C", "o_b_c"),
+                    ("/A/C", "a_c"),
+                    ("/C/A", "c_a"),
+                    ("/A/B/C", "a_b_c"),
+                    ("/A/B/C/D/E/F", "f"),
                 ]
                 .map(to_string_map)
             )
@@ -309,14 +311,14 @@ mod test {
             namer.get_names(),
             HashMap::from(
                 [
-                    ("/A", "OA"),
-                    ("/B", "B"),
-                    ("/B/C", "OBC"),
-                    ("/A/C", "AC"),
-                    ("/C/A", "CA"),
-                    ("/A/B/C", "ABC"),
-                    ("/A/B/C/D/E/F", "CF"),
-                    ("/X/Y/Z/D/E/F", "ZF"),
+                    ("/A", "o_a"),
+                    ("/B", "b"),
+                    ("/B/C", "o_b_c"),
+                    ("/A/C", "a_c"),
+                    ("/C/A", "c_a"),
+                    ("/A/B/C", "a_b_c"),
+                    ("/A/B/C/D/E/F", "c_f"),
+                    ("/X/Y/Z/D/E/F", "z_f"),
                 ]
                 .map(to_string_map)
             )
@@ -326,15 +328,15 @@ mod test {
             namer.get_names(),
             HashMap::from(
                 [
-                    ("/A", "OA"),
-                    ("/B", "B"),
-                    ("/B/C", "OBC"),
-                    ("/A/C", "AC"),
-                    ("/C/A", "CA"),
-                    ("/A/B/C", "ABC"),
-                    ("/A/B/C/D/E/F", "CF"),
-                    ("/X/Y/Z/D/E/F", "ZF"),
-                    ("/X/Y/Z/D/E/1", "E1"),
+                    ("/A", "o_a"),
+                    ("/B", "b"),
+                    ("/B/C", "o_b_c"),
+                    ("/A/C", "a_c"),
+                    ("/C/A", "c_a"),
+                    ("/A/B/C", "a_b_c"),
+                    ("/A/B/C/D/E/F", "c_f"),
+                    ("/X/Y/Z/D/E/F", "z_f"),
+                    ("/X/Y/Z/D/E/1", "e_1"),
                 ]
                 .map(to_string_map)
             )
@@ -348,13 +350,13 @@ mod test {
         namer.register_path("/", "/");
         assert_eq!(
             namer.get_names(),
-            HashMap::from([("/", "O"),].map(to_string_map))
+            HashMap::from([("/", "o"),].map(to_string_map))
         );
 
-        namer.register_path("/A", "/A");
+        namer.register_path("/A", "/a");
         assert_eq!(
             namer.get_names(),
-            HashMap::from([("/", "O"), ("/A", "A"),].map(to_string_map))
+            HashMap::from([("/", "o"), ("/A", "a"),].map(to_string_map))
         );
     }
 
@@ -365,13 +367,13 @@ mod test {
         namer.register_path("/", "/");
         assert_eq!(
             namer.get_names(),
-            HashMap::from([("/", "O"),].map(to_string_map))
+            HashMap::from([("/", "o"),].map(to_string_map))
         );
 
         namer.register_path("/1", "/1");
         assert_eq!(
             namer.get_names(),
-            HashMap::from([("/", "O"), ("/1", "O1"),].map(to_string_map))
+            HashMap::from([("/", "o"), ("/1", "o_1"),].map(to_string_map))
         );
     }
 }
