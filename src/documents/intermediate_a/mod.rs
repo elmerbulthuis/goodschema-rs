@@ -3,7 +3,7 @@ use serde_json::Value;
 use url::Url;
 
 pub struct Document {
-    document_node: schemas::intermediate_a::Schema,
+    document_node: schemas::intermediate_a::SchemaJson,
     document_url: Url,
 }
 
@@ -32,7 +32,7 @@ impl super::Document for Document {
 
     fn get_intermediate_node_pairs(
         &self,
-    ) -> Box<dyn Iterator<Item = (&str, &crate::schemas::intermediate_a::SchemaNode)> + '_> {
+    ) -> Box<dyn Iterator<Item = (&str, &crate::schemas::intermediate_a::Node)> + '_> {
         Box::new(
             self.document_node
                 .nodes

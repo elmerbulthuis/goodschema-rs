@@ -5,13 +5,13 @@ use quote::{format_ident, quote, TokenStreamExt};
 use std::collections::HashMap;
 
 pub struct ModelsRsGenerator<'a> {
-    intermediate_data: &'a schemas::intermediate_a::Schema,
+    intermediate_data: &'a schemas::intermediate_a::SchemaJson,
     names: &'a HashMap<String, String>,
 }
 
 impl<'a> ModelsRsGenerator<'a> {
     pub fn new(
-        intermediate_data: &'a schemas::intermediate_a::Schema,
+        intermediate_data: &'a schemas::intermediate_a::SchemaJson,
         names: &'a HashMap<String, String>,
     ) -> Self {
         Self {
@@ -33,7 +33,7 @@ impl<'a> ModelsRsGenerator<'a> {
     fn generate_model_token_stream(
         &self,
         node_id: &str,
-        node: &schemas::intermediate_a::SchemaNode,
+        node: &schemas::intermediate_a::Node,
     ) -> Result<TokenStream, &'static str> {
         let model_name = self.get_model_name(node_id)?;
         let model_identifier = format_ident!("r#{}", model_name);
@@ -91,36 +91,43 @@ impl<'a> ModelsRsGenerator<'a> {
                 let model_type_identifier = format_ident!("r#{}", model_type_name);
 
                 match node_type {
-                    schemas::intermediate_a::TypeEnum::Null(_) => {
+                    // null
+                    schemas::intermediate_a::TypeUnion::TypeUnionOneOf0(_) => {
                         tokens.append_all(quote! {
                             pub type #model_type_identifier = ();
                         });
                     }
-                    schemas::intermediate_a::TypeEnum::Any(_) => {
+                    // any
+                    schemas::intermediate_a::TypeUnion::TypeUnionOneOf1(_) => {
                         tokens.append_all(quote! {
-                            pub type #model_type_identifier = Box<dyn std::any::Any>;
+                            pub type #model_type_identifier = serde_json::Value;
                         });
                     }
-                    schemas::intermediate_a::TypeEnum::Never(_) => todo!(),
-                    schemas::intermediate_a::TypeEnum::Boolean(_) => {
+                    // never
+                    schemas::intermediate_a::TypeUnion::TypeUnionOneOf2(_) => todo!(),
+                    // boolean
+                    schemas::intermediate_a::TypeUnion::OneOf3(_) => {
                         tokens.append_all(quote! {
                             pub type #model_type_identifier = bool;
                         });
                     }
-                    schemas::intermediate_a::TypeEnum::Number(_) => {
+                    // number
+                    schemas::intermediate_a::TypeUnion::OneOf4(_) => {
                         tokens.append_all(quote! {
                             pub type #model_type_identifier = i64;
                         });
                     }
-                    schemas::intermediate_a::TypeEnum::String(_) => {
+                    // string
+                    schemas::intermediate_a::TypeUnion::OneOf5(_) => {
                         tokens.append_all(quote! {
                             pub type #model_type_identifier = String;
                         });
                     }
-                    schemas::intermediate_a::TypeEnum::Tuple(type_node) => {
+                    // tuple
+                    schemas::intermediate_a::TypeUnion::OneOf6(type_node) => {
                         let mut tuple_tokens = quote! {};
 
-                        for item_type_node_id in &type_node.item_type_node_ids {
+                        for item_type_node_id in type_node.item_type_node_ids.as_ref().unwrap() {
                             let item_type_name = self.get_model_name(item_type_node_id)?;
                             let item_type_identifier = format_ident!("r#{}", item_type_name);
                             tuple_tokens.append_all(quote! {
@@ -132,18 +139,21 @@ impl<'a> ModelsRsGenerator<'a> {
                             pub type #model_type_identifier = (#tuple_tokens);
                         });
                     }
-                    schemas::intermediate_a::TypeEnum::Array(type_node) => {
-                        let item_type_name = self.get_model_name(&type_node.item_type_node_id)?;
+                    // array
+                    schemas::intermediate_a::TypeUnion::OneOf7(type_node) => {
+                        let item_type_name =
+                            self.get_model_name(type_node.item_type_node_id.as_ref().unwrap())?;
                         let item_type_identifier = format_ident!("r#{}", item_type_name);
                         tokens.append_all(quote! {
                             pub type #model_type_identifier = Vec<#item_type_identifier>;
                         });
                     }
-                    schemas::intermediate_a::TypeEnum::Interface(type_node) => {
+                    // interface
+                    schemas::intermediate_a::TypeUnion::OneOf8(type_node) => {
                         let mut property_tokens = quote! {};
 
                         for (property_name, property_type_node_id) in
-                            &type_node.property_type_node_ids
+                            type_node.property_type_node_ids.as_ref().unwrap()
                         {
                             let member_name = self.to_member_name(property_name);
                             let member_identifier = format_ident!("r#{}", member_name);
@@ -152,7 +162,12 @@ impl<'a> ModelsRsGenerator<'a> {
                             let property_type_identifier =
                                 format_ident!("r#{}", property_type_name);
 
-                            if type_node.required_properties.contains(&member_name) {
+                            if type_node
+                                .required_properties
+                                .as_ref()
+                                .unwrap()
+                                .contains(&member_name)
+                            {
                                 property_tokens.append_all(quote! {
                                     #[serde(rename = #property_name)]
                                     pub #member_identifier: #property_type_identifier,
@@ -172,9 +187,10 @@ impl<'a> ModelsRsGenerator<'a> {
                             }
                         });
                     }
-                    schemas::intermediate_a::TypeEnum::Record(type_node) => {
+                    // record
+                    schemas::intermediate_a::TypeUnion::OneOf9(type_node) => {
                         let property_type_name =
-                            self.get_model_name(&type_node.property_type_node_id)?;
+                            self.get_model_name(type_node.property_type_node_id.as_ref().unwrap())?;
                         let property_type_identifier = format_ident!("r#{}", property_type_name);
                         tokens.append_all(quote! {
                             pub type #model_type_identifier = std::collections::HashMap<String, #property_type_identifier>;
@@ -188,10 +204,11 @@ impl<'a> ModelsRsGenerator<'a> {
                 let model_compound_identifier = format_ident!("r#{}", model_compound_name);
 
                 match node_compound {
-                    schemas::intermediate_a::CompoundEnum::OneOf(compound_node) => {
+                    schemas::intermediate_a::CompoundUnion::CompoundUnionOneOf0(compound_node) => {
+                        // one-of
                         let mut enum_tokens = quote! {};
 
-                        for type_node_id in &compound_node.type_node_ids {
+                        for type_node_id in compound_node.type_node_ids.as_ref().unwrap() {
                             let type_name = self.get_model_name(type_node_id)?;
                             let type_identifier = format_ident!("r#{}", type_name);
                             enum_tokens.append_all(quote! {
@@ -207,10 +224,11 @@ impl<'a> ModelsRsGenerator<'a> {
                             }
                         });
                     }
-                    schemas::intermediate_a::CompoundEnum::AnyOf(compound_node) => {
+                    schemas::intermediate_a::CompoundUnion::CompoundUnionOneOf1(compound_node) => {
+                        // any-of
                         let mut property_tokens = quote! {};
 
-                        for type_node_id in &compound_node.type_node_ids {
+                        for type_node_id in compound_node.type_node_ids.as_ref().unwrap() {
                             let type_name = self.get_model_name(type_node_id)?;
                             let type_identifier = format_ident!("r#{}", type_name);
 
@@ -230,7 +248,7 @@ impl<'a> ModelsRsGenerator<'a> {
                             }
                         });
 
-                        for type_node_id in &compound_node.type_node_ids {
+                        for type_node_id in compound_node.type_node_ids.as_ref().unwrap() {
                             let type_name = self.get_model_name(type_node_id)?;
                             let type_identifier = format_ident!("r#{}", type_name);
 
@@ -248,7 +266,8 @@ impl<'a> ModelsRsGenerator<'a> {
                             });
                         }
                     }
-                    schemas::intermediate_a::CompoundEnum::AllOf(compound_node) => {
+                    // all-of
+                    schemas::intermediate_a::CompoundUnion::CompoundUnionOneOf2(compound_node) => {
                         tokens.append_all(quote! {
                             #[derive(serde::Serialize, serde::Deserialize, Debug, PartialEq, Eq)]
                             pub struct #model_compound_identifier{
@@ -256,7 +275,7 @@ impl<'a> ModelsRsGenerator<'a> {
                             }
                         });
 
-                        for type_node_id in &compound_node.type_node_ids {
+                        for type_node_id in compound_node.type_node_ids.as_ref().unwrap() {
                             let type_name = self.get_model_name(type_node_id)?;
                             let type_identifier = format_ident!("r#{}", type_name);
 
@@ -285,10 +304,7 @@ impl<'a> ModelsRsGenerator<'a> {
             .ok_or("name not found")
     }
 
-    fn get_node(
-        &self,
-        node_id: &str,
-    ) -> Result<&schemas::intermediate_a::SchemaNode, &'static str> {
+    fn get_node(&self, node_id: &str) -> Result<&schemas::intermediate_a::Node, &'static str> {
         self.intermediate_data
             .nodes
             .get(node_id)
@@ -298,7 +314,7 @@ impl<'a> ModelsRsGenerator<'a> {
     fn get_nodes_recursive(
         &self,
         node_id: &str,
-    ) -> Result<Vec<&schemas::intermediate_a::SchemaNode>, &'static str> {
+    ) -> Result<Vec<&schemas::intermediate_a::Node>, &'static str> {
         let mut queue = Vec::new();
         let mut result = Vec::new();
 
@@ -326,7 +342,7 @@ impl<'a> ModelsRsGenerator<'a> {
     fn get_model_type_name(
         &self,
         node_id: &str,
-        node_type: &schemas::intermediate_a::TypeEnum,
+        node_type: &schemas::intermediate_a::TypeUnion,
     ) -> Result<String, &'static str> {
         let model_name = self.get_model_name(node_id)?;
         let type_name = self.to_type_name(node_type);
@@ -339,7 +355,7 @@ impl<'a> ModelsRsGenerator<'a> {
     fn get_model_compound_name(
         &self,
         node_id: &str,
-        node_compound: &schemas::intermediate_a::CompoundEnum,
+        node_compound: &schemas::intermediate_a::CompoundUnion,
     ) -> Result<String, &'static str> {
         let model_name = self.get_model_name(node_id)?;
         let compound_name = self.to_compound_name(node_compound);
@@ -349,29 +365,39 @@ impl<'a> ModelsRsGenerator<'a> {
         Ok(model_compound_name)
     }
 
-    fn to_type_name(&self, node_type: &schemas::intermediate_a::TypeEnum) -> &'static str {
+    fn to_type_name(&self, node_type: &schemas::intermediate_a::TypeUnion) -> &'static str {
         match node_type {
-            schemas::intermediate_a::TypeEnum::Null(_) => "Null",
-            schemas::intermediate_a::TypeEnum::Any(_) => "Any",
-            schemas::intermediate_a::TypeEnum::Never(_) => "Never",
-            schemas::intermediate_a::TypeEnum::Boolean(_) => "Boolean",
-            schemas::intermediate_a::TypeEnum::Number(_) => "Number",
-            schemas::intermediate_a::TypeEnum::String(_) => "String",
-            schemas::intermediate_a::TypeEnum::Tuple(_) => "Tuple",
-            schemas::intermediate_a::TypeEnum::Array(_) => "Array",
-            schemas::intermediate_a::TypeEnum::Interface(_) => "Interface",
-            schemas::intermediate_a::TypeEnum::Record(_) => "Record",
+            // null
+            schemas::intermediate_a::TypeUnion::TypeUnionOneOf0(_) => "Null",
+            // any
+            schemas::intermediate_a::TypeUnion::TypeUnionOneOf1(_) => "Any",
+            // never
+            schemas::intermediate_a::TypeUnion::TypeUnionOneOf2(_) => "Never",
+            // boolean
+            schemas::intermediate_a::TypeUnion::OneOf3(_) => "Boolean",
+            // number
+            schemas::intermediate_a::TypeUnion::OneOf4(_) => "Number",
+            // string
+            schemas::intermediate_a::TypeUnion::OneOf5(_) => "String",
+            // tuple
+            schemas::intermediate_a::TypeUnion::OneOf6(_) => "Tuple",
+            // array
+            schemas::intermediate_a::TypeUnion::OneOf7(_) => "Array",
+            // interface
+            schemas::intermediate_a::TypeUnion::OneOf8(_) => "Interface",
+            // record
+            schemas::intermediate_a::TypeUnion::OneOf9(_) => "Record",
         }
     }
 
     fn to_compound_name(
         &self,
-        node_compound: &schemas::intermediate_a::CompoundEnum,
+        node_compound: &schemas::intermediate_a::CompoundUnion,
     ) -> &'static str {
         match node_compound {
-            schemas::intermediate_a::CompoundEnum::OneOf(_) => "OneOf",
-            schemas::intermediate_a::CompoundEnum::AnyOf(_) => "AnyOf",
-            schemas::intermediate_a::CompoundEnum::AllOf(_) => "AllOf",
+            schemas::intermediate_a::CompoundUnion::CompoundUnionOneOf0(_) => "OneOf",
+            schemas::intermediate_a::CompoundUnion::CompoundUnionOneOf1(_) => "AnyOf",
+            schemas::intermediate_a::CompoundUnion::CompoundUnionOneOf2(_) => "AllOf",
         }
     }
 

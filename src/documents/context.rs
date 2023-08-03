@@ -108,20 +108,20 @@ impl Context {
         Ok(())
     }
 
-    pub fn get_intermediate_data(&self) -> schemas::intermediate_a::Schema {
-        schemas::intermediate_a::Schema {
-            schema: schemas::intermediate_a::SCHEMA_ID.to_string(),
-            nodes: HashMap::from_iter(
-                self.get_intermediate_node_pairs()
-                    .map(|(k, v)| (k.to_string(), v.clone())),
-            ),
-        }
+    pub fn get_intermediate_data(&self) -> schemas::intermediate_a::SchemaJson {
+        let schema = Some(schemas::intermediate_a::SCHEMA_ID.to_string());
+        let nodes = HashMap::from_iter(
+            self.get_intermediate_node_pairs()
+                .map(|(k, v)| (k.to_string(), v.clone())),
+        );
+
+        schemas::intermediate_a::SchemaJson { schema, nodes }
     }
 
     fn get_intermediate_node_pairs(
         &self,
-    ) -> Box<dyn Iterator<Item = (&str, &schemas::intermediate_a::SchemaNode)> + '_> {
-        let mut iter: Box<dyn Iterator<Item = (&str, &schemas::intermediate_a::SchemaNode)>> =
+    ) -> Box<dyn Iterator<Item = (&str, &schemas::intermediate_a::Node)> + '_> {
+        let mut iter: Box<dyn Iterator<Item = (&str, &schemas::intermediate_a::Node)>> =
             Box::new(empty());
 
         for document in self.documents.values() {

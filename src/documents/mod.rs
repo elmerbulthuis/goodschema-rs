@@ -12,5 +12,5 @@ pub trait Document {
     fn get_node_urls(&self) -> Vec<Url>;
     fn get_intermediate_node_pairs(
         &self,
-    ) -> Box<dyn Iterator<Item = (&str, &schemas::intermediate_a::SchemaNode)> + '_>;
+    ) -> Box<dyn Iterator<Item = (&str, &schemas::intermediate_a::Node)> + '_>;
 }
