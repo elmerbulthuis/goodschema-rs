@@ -8,7 +8,7 @@ pub static SCHEMA_ID: &str = "https://schema.JsonSchema42.org/jns42-intermediate
 //                                 -- www.JsonSchema42.org
 
 pub type r#NeverType = r#NeverTypeInterface;
-#[derive(serde :: Serialize, serde :: Deserialize, Debug, PartialEq, Eq)]
+#[derive(serde :: Serialize, serde :: Deserialize, Debug, PartialEq, Eq, Clone)]
 pub struct r#NeverTypeInterface {
     #[serde(rename = "type")]
     pub r#type: r#NeverTypeType,
@@ -46,7 +46,7 @@ pub type r#PropertyTypeNodeIds = r#PropertyTypeNodeIdsRecord;
 pub type r#PropertyTypeNodeIdsRecord =
     std::collections::HashMap<String, r#PropertyTypeNodeIdsAdditionalProperties>;
 pub type r#DefsNumberType = r#DefsNumberTypeInterface;
-#[derive(serde :: Serialize, serde :: Deserialize, Debug, PartialEq, Eq)]
+#[derive(serde :: Serialize, serde :: Deserialize, Debug, PartialEq, Eq, Clone)]
 pub struct r#DefsNumberTypeInterface {
     #[serde(rename = "options")]
     pub r#options: Option<r#NumberTypeOptions>,
@@ -67,7 +67,7 @@ pub struct r#DefsNumberTypeInterface {
 }
 pub type r#TypeUnionOneOf1 = r#AnyType;
 pub type r#SchemaJson = r#SchemaJsonInterface;
-#[derive(serde :: Serialize, serde :: Deserialize, Debug, PartialEq, Eq)]
+#[derive(serde :: Serialize, serde :: Deserialize, Debug, PartialEq, Eq, Clone)]
 pub struct r#SchemaJsonInterface {
     #[serde(rename = "nodes")]
     pub r#nodes: r#Nodes,
@@ -87,7 +87,7 @@ pub type r#TypeUnionOneOf2 = r#NeverType;
 pub type r#OneOfCompoundTypeNodeIds = r#OneOfCompoundTypeNodeIdsArray;
 pub type r#OneOfCompoundTypeNodeIdsArray = Vec<r#OneOfCompoundTypeNodeIdsItems>;
 pub type r#StringType = r#StringTypeInterface;
-#[derive(serde :: Serialize, serde :: Deserialize, Debug, PartialEq, Eq)]
+#[derive(serde :: Serialize, serde :: Deserialize, Debug, PartialEq, Eq, Clone)]
 pub struct r#StringTypeInterface {
     #[serde(rename = "options")]
     pub r#options: Option<r#StringTypeOptions>,
@@ -115,7 +115,7 @@ pub type r#DescriptionString = String;
 pub type r#MinimumProperties = r#MinimumPropertiesNumber;
 pub type r#MinimumPropertiesNumber = i64;
 pub type r#TupleType = r#TupleTypeInterface;
-#[derive(serde :: Serialize, serde :: Deserialize, Debug, PartialEq, Eq)]
+#[derive(serde :: Serialize, serde :: Deserialize, Debug, PartialEq, Eq, Clone)]
 pub struct r#TupleTypeInterface {
     #[serde(rename = "itemTypeNodeIds")]
     pub r#item_type_node_ids: Option<r#ItemTypeNodeIds>,
@@ -125,7 +125,7 @@ pub struct r#TupleTypeInterface {
 pub type r#MaximumItems = r#MaximumItemsNumber;
 pub type r#MaximumItemsNumber = i64;
 pub type r#AnyType = r#AnyTypeInterface;
-#[derive(serde :: Serialize, serde :: Deserialize, Debug, PartialEq, Eq)]
+#[derive(serde :: Serialize, serde :: Deserialize, Debug, PartialEq, Eq, Clone)]
 pub struct r#AnyTypeInterface {
     #[serde(rename = "type")]
     pub r#type: r#AnyTypeType,
@@ -160,7 +160,7 @@ pub type r#TypesItems = r#TypeUnion;
 pub type r#RecordTypeRequiredProperties = r#RecordTypeRequiredPropertiesArray;
 pub type r#RecordTypeRequiredPropertiesArray = Vec<r#RecordTypeRequiredPropertiesItems>;
 pub type r#Node = r#NodeInterface;
-#[derive(serde :: Serialize, serde :: Deserialize, Debug, PartialEq, Eq)]
+#[derive(serde :: Serialize, serde :: Deserialize, Debug, PartialEq, Eq, Clone)]
 pub struct r#NodeInterface {
     #[serde(rename = "superNodeId")]
     pub r#super_node_id: Option<r#SuperNodeId>,
@@ -180,13 +180,13 @@ pub struct r#NodeInterface {
 pub type r#AllOfCompoundTypeNodeIds = r#AllOfCompoundTypeNodeIdsArray;
 pub type r#AllOfCompoundTypeNodeIdsArray = Vec<r#AllOfCompoundTypeNodeIdsItems>;
 pub type r#NullType = r#NullTypeInterface;
-#[derive(serde :: Serialize, serde :: Deserialize, Debug, PartialEq, Eq)]
+#[derive(serde :: Serialize, serde :: Deserialize, Debug, PartialEq, Eq, Clone)]
 pub struct r#NullTypeInterface {
     #[serde(rename = "type")]
     pub r#type: r#NullTypeType,
 }
 pub type r#OneOfCompound = r#OneOfCompoundInterface;
-#[derive(serde :: Serialize, serde :: Deserialize, Debug, PartialEq, Eq)]
+#[derive(serde :: Serialize, serde :: Deserialize, Debug, PartialEq, Eq, Clone)]
 pub struct r#OneOfCompoundInterface {
     #[serde(rename = "typeNodeIds")]
     pub r#type_node_ids: Option<r#OneOfCompoundTypeNodeIds>,
@@ -194,7 +194,7 @@ pub struct r#OneOfCompoundInterface {
     pub r#type: r#OneOfCompoundType,
 }
 pub type r#BooleanType = r#BooleanTypeInterface;
-#[derive(serde :: Serialize, serde :: Deserialize, Debug, PartialEq, Eq)]
+#[derive(serde :: Serialize, serde :: Deserialize, Debug, PartialEq, Eq, Clone)]
 pub struct r#BooleanTypeInterface {
     #[serde(rename = "options")]
     pub r#options: Option<r#BooleanTypeOptions>,
@@ -210,7 +210,7 @@ pub type r#OneOfCompoundTypeString = String;
 pub type r#Title = r#TitleString;
 pub type r#TitleString = String;
 pub type r#ArrayType = r#ArrayTypeInterface;
-#[derive(serde :: Serialize, serde :: Deserialize, Debug, PartialEq, Eq)]
+#[derive(serde :: Serialize, serde :: Deserialize, Debug, PartialEq, Eq, Clone)]
 pub struct r#ArrayTypeInterface {
     #[serde(rename = "minimumItems")]
     pub r#minimum_items: Option<r#MinimumItems>,
@@ -231,7 +231,7 @@ pub type r#InterfaceTypeRequiredPropertiesArray = Vec<r#InterfaceTypeRequiredPro
 pub type r#Deprecated = r#DeprecatedBoolean;
 pub type r#DeprecatedBoolean = bool;
 pub type r#AnyOfCompound = r#AnyOfCompoundInterface;
-#[derive(serde :: Serialize, serde :: Deserialize, Debug, PartialEq, Eq)]
+#[derive(serde :: Serialize, serde :: Deserialize, Debug, PartialEq, Eq, Clone)]
 pub struct r#AnyOfCompoundInterface {
     #[serde(rename = "type")]
     pub r#type: r#AnyOfCompoundType,
@@ -239,7 +239,7 @@ pub struct r#AnyOfCompoundInterface {
     pub r#type_node_ids: Option<r#AnyOfCompoundTypeNodeIds>,
 }
 pub type r#AllOfCompound = r#AllOfCompoundInterface;
-#[derive(serde :: Serialize, serde :: Deserialize, Debug, PartialEq, Eq)]
+#[derive(serde :: Serialize, serde :: Deserialize, Debug, PartialEq, Eq, Clone)]
 pub struct r#AllOfCompoundInterface {
     #[serde(rename = "type")]
     pub r#type: r#AllOfCompoundType,
@@ -254,7 +254,7 @@ pub type r#CompoundUnionOneOf2 = r#AllOfCompound;
 pub type r#Examples = r#ExamplesArray;
 pub type r#ExamplesArray = Vec<r#ExamplesItems>;
 pub type r#RecordType = r#RecordTypeInterface;
-#[derive(serde :: Serialize, serde :: Deserialize, Debug, PartialEq, Eq)]
+#[derive(serde :: Serialize, serde :: Deserialize, Debug, PartialEq, Eq, Clone)]
 pub struct r#RecordTypeInterface {
     #[serde(rename = "maximumProperties")]
     pub r#maximum_properties: Option<r#MaximumProperties>,
@@ -278,7 +278,7 @@ pub type r#MinimumLengthNumber = i64;
 pub type r#NumberTypeOptionsItems = r#NumberTypeOptionsItemsNumber;
 pub type r#NumberTypeOptionsItemsNumber = i64;
 pub type r#TypeUnion = r#TypeUnionOneOf;
-#[derive(serde :: Serialize, serde :: Deserialize, Debug, PartialEq, Eq)]
+#[derive(serde :: Serialize, serde :: Deserialize, Debug, PartialEq, Eq, Clone)]
 #[serde(untagged)]
 pub enum r#TypeUnionOneOf {
     r#TypeUnionOneOf0(r#TypeUnionOneOf0),
@@ -298,7 +298,7 @@ pub type r#AnyOfCompoundTypeNodeIdsItems = r#AnyOfCompoundTypeNodeIdsItemsString
 pub type r#AnyOfCompoundTypeNodeIdsItemsString = String;
 pub type r#NodesAdditionalProperties = r#Node;
 pub type r#InterfaceType = r#InterfaceTypeInterface;
-#[derive(serde :: Serialize, serde :: Deserialize, Debug, PartialEq, Eq)]
+#[derive(serde :: Serialize, serde :: Deserialize, Debug, PartialEq, Eq, Clone)]
 pub struct r#InterfaceTypeInterface {
     #[serde(rename = "requiredProperties")]
     pub r#required_properties: Option<r#InterfaceTypeRequiredProperties>,
@@ -315,7 +315,7 @@ pub type r#SuperNodeId = r#SuperNodeIdString;
 pub type r#SuperNodeIdString = String;
 pub type r#TypeUnionOneOf0 = r#NullType;
 pub type r#CompoundUnion = r#CompoundUnionOneOf;
-#[derive(serde :: Serialize, serde :: Deserialize, Debug, PartialEq, Eq)]
+#[derive(serde :: Serialize, serde :: Deserialize, Debug, PartialEq, Eq, Clone)]
 #[serde(untagged)]
 pub enum r#CompoundUnionOneOf {
     r#CompoundUnionOneOf0(r#CompoundUnionOneOf0),
