@@ -279,17 +279,27 @@ pub type r#NumberTypeOptionsItems = r#NumberTypeOptionsItemsNumber;
 pub type r#NumberTypeOptionsItemsNumber = i64;
 pub type r#TypeUnion = r#TypeUnionOneOf;
 #[derive(serde :: Serialize, serde :: Deserialize, Debug, PartialEq, Eq, Clone)]
-#[serde(untagged)]
+#[serde(tag = "type")]
 pub enum r#TypeUnionOneOf {
+    #[serde(rename = "null")]
     r#TypeUnionOneOf0(r#TypeUnionOneOf0),
+    #[serde(rename = "any")]
     r#TypeUnionOneOf1(r#TypeUnionOneOf1),
+    #[serde(rename = "never")]
     r#TypeUnionOneOf2(r#TypeUnionOneOf2),
+    #[serde(rename = "boolean")]
     r#OneOf3(r#OneOf3),
+    #[serde(rename = "number")]
     r#OneOf4(r#OneOf4),
+    #[serde(rename = "string")]
     r#OneOf5(r#OneOf5),
+    #[serde(rename = "tuple")]
     r#OneOf6(r#OneOf6),
+    #[serde(rename = "array")]
     r#OneOf7(r#OneOf7),
+    #[serde(rename = "interface")]
     r#OneOf8(r#OneOf8),
+    #[serde(rename = "record")]
     r#OneOf9(r#OneOf9),
 }
 pub type r#RecordTypeType = r#RecordTypeTypeString;
@@ -316,9 +326,12 @@ pub type r#SuperNodeIdString = String;
 pub type r#TypeUnionOneOf0 = r#NullType;
 pub type r#CompoundUnion = r#CompoundUnionOneOf;
 #[derive(serde :: Serialize, serde :: Deserialize, Debug, PartialEq, Eq, Clone)]
-#[serde(untagged)]
+#[serde(tag = "type")]
 pub enum r#CompoundUnionOneOf {
+    #[serde(rename = "one-of")]
     r#CompoundUnionOneOf0(r#CompoundUnionOneOf0),
+    #[serde(rename = "any-of")]
     r#CompoundUnionOneOf1(r#CompoundUnionOneOf1),
+    #[serde(rename = "one-of")]
     r#CompoundUnionOneOf2(r#CompoundUnionOneOf2),
 }
