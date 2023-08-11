@@ -23,6 +23,30 @@ impl<'a> ModelsRsGenerator<'a> {
     pub fn generate_file_token_stream(&self) -> Result<TokenStream, &'static str> {
         let mut tokens = quote! {};
 
+        tokens.append_all(quote! {
+            #[derive(Debug)]
+            pub struct ValidationError {
+                r#type: &'static str,
+            }
+        });
+
+        tokens.append_all(quote! {
+            impl ValidationError {
+                pub fn new(r#type: &'static str) -> Self {
+                    Self { r#type }
+                }
+            }
+        });
+
+        tokens.append_all(quote! {
+            impl std::fmt::Display for ValidationError {
+                fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+                    write!(f, "validation error for type {}", self.r#type)
+                }
+            }
+
+        });
+
         for (node_id, node) in &self.intermediate_data.nodes {
             tokens.append_all(self.generate_model_token_stream(node_id, node));
         }
@@ -204,8 +228,68 @@ impl<'a> ModelsRsGenerator<'a> {
 
         let model_type_identifier = format_ident!("r#{}", model_type_name);
 
+        tokens.append_all(quote!{
+            #[derive(Debug, Serialize, Deserialize, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
+            #[serde(try_from = "bool")]
+            pub struct #model_type_identifier(bool);
+        });
+
         tokens.append_all(quote! {
-            pub type #model_type_identifier = bool;
+            impl #model_type_identifier {
+                fn new(value: bool) -> Result<Self, ValidationError> {
+                    let instance = Self(value);
+                    if instance.validate() {
+                        Ok(instance)
+                    } else {
+                        Err(ValidationError::new(#model_type_name))
+                    }
+                }
+
+                pub fn validate(&self) -> bool {
+                    if self.0 == 0 {
+                        return false;
+                    }
+
+                    true
+                }
+            }
+        });
+
+        tokens.append_all(quote! {
+            impl TryFrom<bool> for #model_type_identifier {
+                type Error = ValidationError;
+
+                fn try_from(value: bool) -> Result<Self, Self::Error> {
+                    Self::new(value)
+                }
+            }
+        });
+
+        tokens.append_all(quote! {
+            impl From<#model_type_identifier> for bool {
+                fn from(value: #model_type_identifier) -> Self {
+                    value.0
+                }
+            }
+        });
+
+        tokens.append_all(quote! {
+            impl AsRef<bool> for #model_type_identifier {
+                fn as_ref(&self) -> &bool {
+                    &self.0
+                }
+            }
+        });
+
+        tokens.append_all(quote! {
+            #[cfg(feature = "deref")]
+            impl std::ops::Deref for #model_type_identifier {
+                type Target = bool;
+
+                fn deref(&self) -> &Self::Target {
+                    &self.0
+                }
+            }
         });
 
         tokens
@@ -318,12 +402,12 @@ impl<'a> ModelsRsGenerator<'a> {
         tokens.append_all(quote! {
 
             impl #model_type_identifier {
-                fn new(value: String) -> Result<Self, &'static str> {
+                fn new(value: String) -> Result<Self, ValidationError> {
                     let instance = Self(value);
                     if instance.validate() {
                         Ok(instance)
                     } else {
-                        Err(#model_type_name)
+                        Err(ValidationError::new(#model_type_name))
                     }
                 }
 
