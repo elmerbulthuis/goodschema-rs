@@ -88,210 +88,372 @@ impl<'a> ModelsRsGenerator<'a> {
 
             for node_type in &node.types {
                 let model_type_name = self.get_model_type_name(node_id, node_type)?;
-                let model_type_identifier = format_ident!("r#{}", model_type_name);
 
                 match node_type {
                     // null
                     schemas::intermediate_a::TypeUnion::TypeUnionOneOf0(_) => {
-                        tokens.append_all(quote! {
-                            pub type #model_type_identifier = ();
-                        });
+                        tokens.append_all(self.generate_null_token_stream(&model_type_name))
                     }
+
                     // any
                     schemas::intermediate_a::TypeUnion::TypeUnionOneOf1(_) => {
-                        tokens.append_all(quote! {
-                            pub type #model_type_identifier = serde_json::Value;
-                        });
+                        tokens.append_all(self.generate_any_token_stream(&model_type_name))
                     }
                     // never
-                    schemas::intermediate_a::TypeUnion::TypeUnionOneOf2(_) => todo!(),
+                    schemas::intermediate_a::TypeUnion::TypeUnionOneOf2(_) => {
+                        tokens.append_all(self.generate_never_token_stream(&model_type_name))
+                    }
                     // boolean
                     schemas::intermediate_a::TypeUnion::OneOf3(_) => {
-                        tokens.append_all(quote! {
-                            pub type #model_type_identifier = bool;
-                        });
+                        tokens.append_all(self.generate_boolean_token_stream(&model_type_name));
                     }
                     // number
                     schemas::intermediate_a::TypeUnion::OneOf4(_) => {
-                        tokens.append_all(quote! {
-                            pub type #model_type_identifier = i64;
-                        });
+                        tokens.append_all(self.generate_number_token_stream(&model_type_name));
                     }
                     // string
                     schemas::intermediate_a::TypeUnion::OneOf5(_) => {
-                        tokens.append_all(quote! {
-                            pub type #model_type_identifier = String;
-                        });
+                        tokens.append_all(self.generate_string_token_stream(&model_type_name));
                     }
                     // tuple
                     schemas::intermediate_a::TypeUnion::OneOf6(type_node) => {
-                        let mut tuple_tokens = quote! {};
-
-                        for item_type_node_id in type_node.item_type_node_ids.as_ref().unwrap() {
-                            let item_type_name = self.get_model_name(item_type_node_id)?;
-                            let item_type_identifier = format_ident!("r#{}", item_type_name);
-                            tuple_tokens.append_all(quote! {
-                                #item_type_identifier,
-                            });
-                        }
-
-                        tokens.append_all(quote! {
-                            pub type #model_type_identifier = (#tuple_tokens);
-                        });
+                        tokens.append_all(
+                            self.generate_tuple_token_stream(&model_type_name, type_node)?,
+                        );
                     }
                     // array
                     schemas::intermediate_a::TypeUnion::OneOf7(type_node) => {
-                        let item_type_name =
-                            self.get_model_name(type_node.item_type_node_id.as_ref().unwrap())?;
-                        let item_type_identifier = format_ident!("r#{}", item_type_name);
-                        tokens.append_all(quote! {
-                            pub type #model_type_identifier = Vec<#item_type_identifier>;
-                        });
+                        tokens.append_all(
+                            self.generate_array_token_stream(&model_type_name, type_node)?,
+                        );
                     }
                     // interface
                     schemas::intermediate_a::TypeUnion::OneOf8(type_node) => {
-                        let mut property_tokens = quote! {};
-
-                        for (property_name, property_type_node_id) in
-                            type_node.property_type_node_ids.as_ref().unwrap()
-                        {
-                            let member_name = self.to_member_name(property_name);
-                            let member_identifier = format_ident!("r#{}", member_name);
-
-                            let property_type_name = self.get_model_name(property_type_node_id)?;
-                            let property_type_identifier =
-                                format_ident!("r#{}", property_type_name);
-
-                            if type_node
-                                .required_properties
-                                .as_ref()
-                                .unwrap()
-                                .contains(&member_name)
-                            {
-                                property_tokens.append_all(quote! {
-                                    #[serde(rename = #property_name)]
-                                    pub #member_identifier: #property_type_identifier,
-                                })
-                            } else {
-                                property_tokens.append_all(quote! {
-                                    #[serde(rename = #property_name)]
-                                    pub #member_identifier: Option<#property_type_identifier>,
-                                })
-                            }
-                        }
-
-                        tokens.append_all(quote! {
-                            #[derive(serde::Serialize, serde::Deserialize,Clone, Debug, PartialEq, Eq)]
-                            pub struct #model_type_identifier {
-                                #property_tokens
-                            }
-                        });
+                        tokens.append_all(
+                            self.generate_interface_token_stream(&model_type_name, type_node)?,
+                        );
                     }
                     // record
                     schemas::intermediate_a::TypeUnion::OneOf9(type_node) => {
-                        let property_type_name =
-                            self.get_model_name(type_node.property_type_node_id.as_ref().unwrap())?;
-                        let property_type_identifier = format_ident!("r#{}", property_type_name);
-                        tokens.append_all(quote! {
-                            pub type #model_type_identifier = std::collections::HashMap<String, #property_type_identifier>;
-                        });
+                        tokens.append_all(
+                            self.generate_record_token_stream(&model_type_name, type_node)?,
+                        );
                     }
                 }
             }
 
             for node_compound in &node.compounds {
                 let model_compound_name = self.get_model_compound_name(node_id, node_compound)?;
-                let model_compound_identifier = format_ident!("r#{}", model_compound_name);
 
                 match node_compound {
+                    // one-of
                     schemas::intermediate_a::CompoundUnion::CompoundUnionOneOf0(compound_node) => {
-                        // one-of
-                        let mut enum_tokens = quote! {};
-
-                        for type_node_id in compound_node.type_node_ids.as_ref().unwrap() {
-                            let type_name = self.get_model_name(type_node_id)?;
-                            let type_identifier = format_ident!("r#{}", type_name);
-                            enum_tokens.append_all(quote! {
-                                #type_identifier(#type_identifier),
-                            });
-                        }
-
-                        tokens.append_all(quote! {
-                            #[derive(serde::Serialize, serde::Deserialize,Clone, Debug, PartialEq, Eq)]
-                            #[serde(untagged)]
-                            pub enum #model_compound_identifier {
-                                #enum_tokens
-                            }
-                        });
+                        tokens.append_all(
+                            self.generate_one_of_token_stream(&model_compound_name, compound_node)?,
+                        );
                     }
+                    // any-of
                     schemas::intermediate_a::CompoundUnion::CompoundUnionOneOf1(compound_node) => {
-                        // any-of
-                        let mut property_tokens = quote! {};
-
-                        for type_node_id in compound_node.type_node_ids.as_ref().unwrap() {
-                            let type_name = self.get_model_name(type_node_id)?;
-                            let type_identifier = format_ident!("r#{}", type_name);
-
-                            let member_name = self.to_member_name(&type_name);
-                            let member_identifier = format_ident!("r#{}", member_name);
-
-                            property_tokens.append_all(quote! {
-                                #[serde(flatten)]
-                                #member_identifier: Option<#type_identifier>,
-                            });
-                        }
-
-                        tokens.append_all(quote! {
-                            #[derive(serde::Serialize, serde::Deserialize,Clone, Debug, PartialEq, Eq)]
-                            pub struct #model_compound_identifier{
-                                #property_tokens
-                            }
-                        });
-
-                        for type_node_id in compound_node.type_node_ids.as_ref().unwrap() {
-                            let type_name = self.get_model_name(type_node_id)?;
-                            let type_identifier = format_ident!("r#{}", type_name);
-
-                            let member_name = self.to_member_name(&type_name);
-                            let member_identifier = format_ident!("r#{}", member_name);
-
-                            tokens.append_all(quote!{
-                                impl TryFrom<#model_compound_identifier> for #type_identifier {
-                                    type Error = ();
-
-                                    fn try_from(value: #model_compound_identifier) -> Result<Self, Self::Error> {
-                                        value.#member_identifier.ok_or(())
-                                    }
-                                }
-                            });
-                        }
+                        tokens.append_all(
+                            self.generate_any_of_token_stream(&model_compound_name, compound_node)?,
+                        );
                     }
                     // all-of
                     schemas::intermediate_a::CompoundUnion::CompoundUnionOneOf2(compound_node) => {
-                        tokens.append_all(quote! {
-                            #[derive(serde::Serialize, serde::Deserialize,Clone, Debug, PartialEq, Eq)]
-                            pub struct #model_compound_identifier{
-                                //
-                            }
-                        });
-
-                        for type_node_id in compound_node.type_node_ids.as_ref().unwrap() {
-                            let type_name = self.get_model_name(type_node_id)?;
-                            let type_identifier = format_ident!("r#{}", type_name);
-
-                            tokens.append_all(quote!{
-                                impl TryFrom<#model_compound_identifier> for #type_identifier {
-                                    type Error = ();
-
-                                    fn try_from(value: #model_compound_identifier) -> Result<Self, Self::Error> {
-                                        todo!();
-                                    }
-                                }
-                            });
-                        }
+                        tokens.append_all(
+                            self.generate_all_of_token_stream(&model_compound_name, compound_node)?,
+                        );
                     }
                 }
             }
+        }
+
+        Ok(tokens)
+    }
+
+    fn generate_null_token_stream(&self, model_type_name: &str) -> TokenStream {
+        let mut tokens = quote! {};
+
+        let model_type_identifier = format_ident!("r#{}", model_type_name);
+
+        tokens.append_all(quote! {
+            pub type #model_type_identifier = ();
+        });
+
+        tokens
+    }
+
+    fn generate_any_token_stream(&self, model_type_name: &str) -> TokenStream {
+        let mut tokens = quote! {};
+
+        let model_type_identifier = format_ident!("r#{}", model_type_name);
+
+        tokens.append_all(quote! {
+            pub type #model_type_identifier = serde_json::Value;
+        });
+
+        tokens
+    }
+
+    fn generate_never_token_stream(&self, _model_type_name: &str) -> TokenStream {
+        todo!()
+    }
+
+    fn generate_boolean_token_stream(&self, model_type_name: &str) -> TokenStream {
+        let mut tokens = quote! {};
+
+        let model_type_identifier = format_ident!("r#{}", model_type_name);
+
+        tokens.append_all(quote! {
+            pub type #model_type_identifier = bool;
+        });
+
+        tokens
+    }
+
+    fn generate_number_token_stream(&self, model_type_name: &str) -> TokenStream {
+        let mut tokens = quote! {};
+
+        let model_type_identifier = format_ident!("r#{}", model_type_name);
+
+        tokens.append_all(quote! {
+            pub type #model_type_identifier = i64;
+        });
+
+        tokens
+    }
+
+    fn generate_string_token_stream(&self, model_type_name: &str) -> TokenStream {
+        let mut tokens = quote! {};
+
+        let model_type_identifier = format_ident!("r#{}", model_type_name);
+
+        tokens.append_all(quote! {
+            pub type #model_type_identifier = String;
+        });
+
+        tokens
+    }
+
+    fn generate_tuple_token_stream(
+        &self,
+        model_type_name: &str,
+        type_node: &schemas::intermediate_a::TupleTypeInterface,
+    ) -> Result<TokenStream, &'static str> {
+        let mut tokens = quote! {};
+
+        let model_type_identifier = format_ident!("r#{}", model_type_name);
+
+        let mut tuple_tokens = quote! {};
+
+        for item_type_node_id in type_node.item_type_node_ids.as_ref().unwrap() {
+            let item_type_name = self.get_model_name(item_type_node_id)?;
+            let item_type_identifier = format_ident!("r#{}", item_type_name);
+            tuple_tokens.append_all(quote! {
+                #item_type_identifier,
+            });
+        }
+
+        tokens.append_all(quote! {
+            pub type #model_type_identifier = (#tuple_tokens);
+        });
+
+        Ok(tokens)
+    }
+
+    fn generate_array_token_stream(
+        &self,
+        model_type_name: &str,
+        type_node: &schemas::intermediate_a::ArrayTypeInterface,
+    ) -> Result<TokenStream, &'static str> {
+        let mut tokens = quote! {};
+
+        let model_type_identifier = format_ident!("r#{}", model_type_name);
+
+        let item_type_name = self.get_model_name(type_node.item_type_node_id.as_ref().unwrap())?;
+        let item_type_identifier = format_ident!("r#{}", item_type_name);
+        tokens.append_all(quote! {
+            pub type #model_type_identifier = Vec<#item_type_identifier>;
+        });
+
+        Ok(tokens)
+    }
+
+    fn generate_interface_token_stream(
+        &self,
+        model_type_name: &str,
+        type_node: &schemas::intermediate_a::InterfaceTypeInterface,
+    ) -> Result<TokenStream, &'static str> {
+        let mut tokens = quote! {};
+
+        let model_type_identifier = format_ident!("r#{}", model_type_name);
+
+        let mut property_tokens = quote! {};
+
+        for (property_name, property_type_node_id) in
+            type_node.property_type_node_ids.as_ref().unwrap()
+        {
+            let member_name = self.to_member_name(property_name);
+            let member_identifier = format_ident!("r#{}", member_name);
+
+            let property_type_name = self.get_model_name(property_type_node_id)?;
+            let property_type_identifier = format_ident!("r#{}", property_type_name);
+
+            if type_node
+                .required_properties
+                .as_ref()
+                .unwrap()
+                .contains(&member_name)
+            {
+                property_tokens.append_all(quote! {
+                    #[serde(rename = #property_name)]
+                    pub #member_identifier: #property_type_identifier,
+                })
+            } else {
+                property_tokens.append_all(quote! {
+                    #[serde(rename = #property_name)]
+                    pub #member_identifier: Option<#property_type_identifier>,
+                })
+            }
+        }
+
+        tokens.append_all(quote! {
+            #[derive(serde::Serialize, serde::Deserialize,Clone, Debug, PartialEq, Eq)]
+            pub struct #model_type_identifier {
+                #property_tokens
+            }
+        });
+
+        Ok(tokens)
+    }
+
+    fn generate_record_token_stream(
+        &self,
+        model_type_name: &str,
+        type_node: &schemas::intermediate_a::RecordTypeInterface,
+    ) -> Result<TokenStream, &'static str> {
+        let model_type_identifier = format_ident!("r#{}", model_type_name);
+
+        let property_type_name =
+            self.get_model_name(type_node.property_type_node_id.as_ref().unwrap())?;
+        let property_type_identifier = format_ident!("r#{}", property_type_name);
+        let tokens = quote! {
+            pub type #model_type_identifier = std::collections::HashMap<String, #property_type_identifier>;
+        };
+
+        Ok(tokens)
+    }
+
+    fn generate_one_of_token_stream(
+        &self,
+        model_compound_name: &str,
+        compound_node: &schemas::intermediate_a::OneOfCompoundInterface,
+    ) -> Result<TokenStream, &'static str> {
+        let mut tokens = quote! {};
+
+        let model_compound_identifier = format_ident!("r#{}", model_compound_name);
+
+        let mut enum_tokens = quote! {};
+
+        for type_node_id in compound_node.type_node_ids.as_ref().unwrap() {
+            let type_name = self.get_model_name(type_node_id)?;
+            let type_identifier = format_ident!("r#{}", type_name);
+            enum_tokens.append_all(quote! {
+                #type_identifier(#type_identifier),
+            });
+        }
+
+        tokens.append_all(quote! {
+            #[derive(serde::Serialize, serde::Deserialize,Clone, Debug, PartialEq, Eq)]
+            #[serde(untagged)]
+            pub enum #model_compound_identifier {
+                #enum_tokens
+            }
+        });
+
+        Ok(tokens)
+    }
+
+    fn generate_any_of_token_stream(
+        &self,
+        model_compound_name: &str,
+        compound_node: &schemas::intermediate_a::AnyOfCompoundInterface,
+    ) -> Result<TokenStream, &'static str> {
+        let mut tokens = quote! {};
+        let model_compound_identifier = format_ident!("r#{}", model_compound_name);
+
+        let mut property_tokens = quote! {};
+
+        for type_node_id in compound_node.type_node_ids.as_ref().unwrap() {
+            let type_name = self.get_model_name(type_node_id)?;
+            let type_identifier = format_ident!("r#{}", type_name);
+
+            let member_name = self.to_member_name(&type_name);
+            let member_identifier = format_ident!("r#{}", member_name);
+
+            property_tokens.append_all(quote! {
+                #[serde(flatten)]
+                #member_identifier: Option<#type_identifier>,
+            });
+        }
+
+        tokens.append_all(quote! {
+            #[derive(serde::Serialize, serde::Deserialize,Clone, Debug, PartialEq, Eq)]
+            pub struct #model_compound_identifier{
+                #property_tokens
+            }
+        });
+
+        for type_node_id in compound_node.type_node_ids.as_ref().unwrap() {
+            let type_name = self.get_model_name(type_node_id)?;
+            let type_identifier = format_ident!("r#{}", type_name);
+
+            let member_name = self.to_member_name(&type_name);
+            let member_identifier = format_ident!("r#{}", member_name);
+
+            tokens.append_all(quote! {
+                impl TryFrom<#model_compound_identifier> for #type_identifier {
+                    type Error = ();
+
+                    fn try_from(value: #model_compound_identifier) -> Result<Self, Self::Error> {
+                        value.#member_identifier.ok_or(())
+                    }
+                }
+            });
+        }
+
+        Ok(tokens)
+    }
+
+    fn generate_all_of_token_stream(
+        &self,
+        model_compound_name: &str,
+        compound_node: &schemas::intermediate_a::AllOfCompoundInterface,
+    ) -> Result<TokenStream, &'static str> {
+        let mut tokens = quote! {};
+
+        let model_compound_identifier = format_ident!("r#{}", model_compound_name);
+
+        tokens.append_all(quote! {
+            #[derive(serde::Serialize, serde::Deserialize,Clone, Debug, PartialEq, Eq)]
+            pub struct #model_compound_identifier{
+                //
+            }
+        });
+
+        for type_node_id in compound_node.type_node_ids.as_ref().unwrap() {
+            let type_name = self.get_model_name(type_node_id)?;
+            let type_identifier = format_ident!("r#{}", type_name);
+
+            tokens.append_all(quote! {
+                impl TryFrom<#model_compound_identifier> for #type_identifier {
+                    type Error = ();
+
+                    fn try_from(value: #model_compound_identifier) -> Result<Self, Self::Error> {
+                        todo!();
+                    }
+                }
+            });
         }
 
         Ok(tokens)
