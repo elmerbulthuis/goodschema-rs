@@ -216,8 +216,89 @@ impl<'a> ModelsRsGenerator<'a> {
 
         let model_type_identifier = format_ident!("r#{}", model_type_name);
 
+        tokens.append_all(quote!{
+            #[derive(Debug, Serialize, Deserialize, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
+            #[serde(try_from = "usize")]
+            pub struct #model_type_identifier(usize);
+        });
+
         tokens.append_all(quote! {
-            pub type #model_type_identifier = i64;
+            impl #model_type_identifier {
+                fn new(value: usize) -> Result<Self, ValidationError> {
+                    let instance = Self(value);
+                    if instance.validate() {
+                        Ok(instance)
+                    } else {
+                        Err(ValidationError::new(#model_type_name))
+                    }
+                }
+
+                pub fn validate(&self) -> bool {
+                    if self.0 == 0 {
+                        return false;
+                    }
+
+                    true
+                }
+            }
+        });
+
+        tokens.append_all(quote! {
+            impl TryFrom<usize> for #model_type_identifier {
+                type Error = ValidationError;
+
+                fn try_from(value: usize) -> Result<Self, Self::Error> {
+                    Self::new(value)
+                }
+            }
+        });
+
+        tokens.append_all(quote! {
+            impl From<#model_type_identifier> for usize {
+                fn from(value: #model_type_identifier) -> Self {
+                    value.0
+                }
+            }
+        });
+
+        tokens.append_all(quote! {
+            impl FromStr for #model_type_identifier {
+                type Err = ValidationError;
+
+                fn from_str(s: &str) -> Result<Self, Self::Err> {
+                    let value = s
+                        .parse()
+                        .map_err(|_error| ValidationError::new(#model_type_name))?;
+                    Self::new(value)
+                }
+            }
+        });
+
+        tokens.append_all(quote! {
+            impl ToString for #model_type_identifier {
+                fn to_string(&self) -> String {
+                    self.0.to_string()
+                }
+            }
+        });
+
+        tokens.append_all(quote! {
+            impl AsRef<usize> for #model_type_identifier {
+                fn as_ref(&self) -> &usize {
+                    &self.0
+                }
+            }
+        });
+
+        tokens.append_all(quote! {
+            #[cfg(feature = "deref")]
+            impl std::ops::Deref for #model_type_identifier {
+                type Target = usize;
+
+                fn deref(&self) -> &Self::Target {
+                    &self.0
+                }
+            }
         });
 
         tokens
@@ -229,7 +310,83 @@ impl<'a> ModelsRsGenerator<'a> {
         let model_type_identifier = format_ident!("r#{}", model_type_name);
 
         tokens.append_all(quote! {
-            pub type #model_type_identifier = String;
+            #[derive(Debug, serde::Serialize, serde::Deserialize, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
+            #[serde(try_from = "String")]
+            pub struct #model_type_identifier(String);
+        });
+
+        tokens.append_all(quote! {
+
+            impl #model_type_identifier {
+                fn new(value: String) -> Result<Self, &'static str> {
+                    let instance = Self(value);
+                    if instance.validate() {
+                        Ok(instance)
+                    } else {
+                        Err(#model_type_name)
+                    }
+                }
+
+                fn validate(&self) -> bool {
+                    true
+                }
+            }
+
+        });
+
+        tokens.append_all(quote! {
+            impl TryFrom<String> for #model_type_identifier {
+                type Error = ValidationError;
+
+                fn try_from(value: String) -> Result<Self, Self::Error> {
+                    Self::new(value)
+                }
+            }
+        });
+
+        tokens.append_all(quote! {
+            impl From<#model_type_identifier> for String {
+                fn from(value: #model_type_identifier) -> Self {
+                    value.0
+                }
+            }
+        });
+
+        tokens.append_all(quote! {
+            impl std::str::FromStr for #model_type_identifier {
+                type Err = ValidationError;
+
+                fn from_str(s: &str) -> Result<Self, Self::Err> {
+                    Self::new(s.to_string())
+                }
+            }
+        });
+
+        tokens.append_all(quote! {
+            impl ToString for #model_type_identifier {
+                fn to_string(&self) -> String {
+                    self.0.to_string()
+                }
+            }
+        });
+
+        tokens.append_all(quote! {
+            impl AsRef<str> for #model_type_identifier {
+                fn as_ref(&self) -> &str {
+                    self.0.as_str()
+                }
+            }
+        });
+
+        tokens.append_all(quote! {
+            #[cfg(feature = "deref")]
+            impl std::ops::Deref for #model_type_identifier {
+                type Target = str;
+
+                fn deref(&self) -> &Self::Target {
+                    self.0.as_str()
+                }
+            }
         });
 
         tokens
