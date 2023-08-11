@@ -559,7 +559,7 @@ impl<'a> ModelsRsGenerator<'a> {
         }
 
         tokens.append_all(quote! {
-            #[derive(serde::Serialize, serde::Deserialize,Clone, Debug, PartialEq, Eq)]
+            #[derive(serde::Serialize, serde::Deserialize, Clone, PartialEq, Eq, Hash)]
             pub struct #model_type_identifier {
                 #property_tokens
             }
