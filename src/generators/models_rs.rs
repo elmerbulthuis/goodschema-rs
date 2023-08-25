@@ -1,4 +1,4 @@
-use crate::schemas;
+use crate::{schemas, utils::TypeArena};
 use inflector::Inflector;
 use proc_macro2::TokenStream;
 use quote::{format_ident, quote, TokenStreamExt};
@@ -7,6 +7,7 @@ use std::collections::HashMap;
 pub struct ModelsRsGenerator<'a> {
     intermediate_data: &'a schemas::intermediate_a::SchemaJson,
     names: &'a HashMap<String, String>,
+    type_arena: TypeArena,
 }
 
 impl<'a> ModelsRsGenerator<'a> {
@@ -14,10 +15,37 @@ impl<'a> ModelsRsGenerator<'a> {
         intermediate_data: &'a schemas::intermediate_a::SchemaJson,
         names: &'a HashMap<String, String>,
     ) -> Self {
+        let type_arena = Self::new_type_arena(intermediate_data);
+
         Self {
             intermediate_data,
             names,
+            type_arena,
         }
+    }
+
+    fn new_type_arena(intermediate_data: &'a schemas::intermediate_a::SchemaJson) -> TypeArena {
+        let mut type_arena = TypeArena::new();
+
+        for (node_id, node) in intermediate_data.nodes.iter() {
+            for t in node.types.iter() {
+                //
+                match t {
+                    schemas::intermediate_a::TypeUnionOneOf::TypeUnionOneOf0(_) => todo!(),
+                    schemas::intermediate_a::TypeUnionOneOf::TypeUnionOneOf1(_) => todo!(),
+                    schemas::intermediate_a::TypeUnionOneOf::TypeUnionOneOf2(_) => todo!(),
+                    schemas::intermediate_a::TypeUnionOneOf::OneOf3(_) => todo!(),
+                    schemas::intermediate_a::TypeUnionOneOf::OneOf4(_) => todo!(),
+                    schemas::intermediate_a::TypeUnionOneOf::OneOf5(_) => todo!(),
+                    schemas::intermediate_a::TypeUnionOneOf::OneOf6(_) => todo!(),
+                    schemas::intermediate_a::TypeUnionOneOf::OneOf7(_) => todo!(),
+                    schemas::intermediate_a::TypeUnionOneOf::OneOf8(_) => todo!(),
+                    schemas::intermediate_a::TypeUnionOneOf::OneOf9(_) => todo!(),
+                }
+            }
+        }
+
+        type_arena
     }
 
     pub fn generate_file_token_stream(&self) -> Result<TokenStream, &'static str> {

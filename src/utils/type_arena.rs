@@ -297,11 +297,56 @@ impl TypeArena {
 pub enum TypeEnum<K> {
     Never,
     Any,
+    Null,
     Boolean,
-    Integer,
+    Number,
     String,
+    Tuple(TupleType<K>),
+    Array(ArrayType<K>),
     Object(ObjectType<K>),
+    Record(RecordType<K>),
     Union(UnionType<K>),
+}
+
+#[derive(Debug, Clone, Default, PartialEq, Eq)]
+pub struct TupleType<K> {
+    items: Vec<K>,
+}
+impl<K> TupleType<K> {
+    pub fn new(items: Vec<K>) -> Self {
+        Self { items }
+    }
+
+    pub fn get_items(&self) -> &Vec<K> {
+        &self.items
+    }
+}
+impl<K, T> From<T> for TupleType<K>
+where
+    T: IntoIterator<Item = K>,
+{
+    fn from(value: T) -> Self {
+        Self::new(value.into_iter().collect())
+    }
+}
+
+#[derive(Debug, Clone, Default, PartialEq, Eq)]
+pub struct ArrayType<K> {
+    item: K,
+}
+impl<K> ArrayType<K> {
+    pub fn new(item: K) -> Self {
+        Self { item }
+    }
+
+    pub fn get_item(&self) -> &K {
+        &self.item
+    }
+}
+impl<K> From<K> for ArrayType<K> {
+    fn from(value: K) -> Self {
+        Self::new(value)
+    }
 }
 
 #[derive(Debug, Clone, Default, PartialEq, Eq)]
@@ -323,6 +368,25 @@ where
 {
     fn from(value: T) -> Self {
         Self::new(value.into_iter().collect())
+    }
+}
+
+#[derive(Debug, Clone, Default, PartialEq, Eq)]
+pub struct RecordType<K> {
+    property: K,
+}
+impl<K> RecordType<K> {
+    pub fn new(property: K) -> Self {
+        Self { property }
+    }
+
+    pub fn get_property(&self) -> &K {
+        &self.property
+    }
+}
+impl<K> From<K> for RecordType<K> {
+    fn from(value: K) -> Self {
+        Self::new(value)
     }
 }
 
