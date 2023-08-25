@@ -11,6 +11,7 @@ pub struct ModelsRsGenerator<'a> {
     intermediate_data: &'a schemas::intermediate_a::SchemaJson,
     names: &'a HashMap<String, String>,
     type_arena: TypeArena,
+    type_map: HashMap<String, usize>,
 }
 
 impl<'a> ModelsRsGenerator<'a> {
@@ -18,12 +19,60 @@ impl<'a> ModelsRsGenerator<'a> {
         intermediate_data: &'a schemas::intermediate_a::SchemaJson,
         names: &'a HashMap<String, String>,
     ) -> Self {
-        let type_arena = intermediate_data.into();
+        let (type_arena, type_map) = Self::new_arena_and_map(intermediate_data);
         Self {
             intermediate_data,
             names,
             type_arena,
+            type_map,
         }
+    }
+
+    fn new_arena_and_map(
+        intermediate_data: &schemas::intermediate_a::SchemaJson,
+    ) -> (TypeArena, HashMap<String, usize>) {
+        let mut type_arena = TypeArena::new();
+        let mut type_map = HashMap::new();
+
+        for (node_id, node) in intermediate_data.nodes.iter() {
+            let type_key = type_arena.register_type_enum(TypeEnum::Any).unwrap();
+            assert!(type_map.insert(node_id.clone(), type_key).is_none());
+
+            for node_type in node.types.iter() {
+                let type_enum = match node_type {
+                    // null
+                    schemas::intermediate_a::TypeUnion::TypeUnionOneOf0(_) => TypeEnum::Null,
+                    // any
+                    schemas::intermediate_a::TypeUnion::TypeUnionOneOf1(_) => TypeEnum::Any,
+                    // never
+                    schemas::intermediate_a::TypeUnion::TypeUnionOneOf2(_) => TypeEnum::Never,
+                    // boolean
+                    schemas::intermediate_a::TypeUnion::OneOf3(_) => TypeEnum::Boolean,
+                    // number
+                    schemas::intermediate_a::TypeUnion::OneOf4(_) => TypeEnum::Number,
+                    // string
+                    schemas::intermediate_a::TypeUnion::OneOf5(_) => TypeEnum::String,
+                    // tuple
+                    schemas::intermediate_a::TypeUnion::OneOf6(type_node) => {
+                        TypeEnum::Tuple([].into())
+                    }
+                    // array
+                    schemas::intermediate_a::TypeUnion::OneOf7(type_node) => {
+                        TypeEnum::Array(0.into())
+                    }
+                    // interface
+                    schemas::intermediate_a::TypeUnion::OneOf8(type_node) => {
+                        TypeEnum::Object([].into())
+                    }
+                    // record
+                    schemas::intermediate_a::TypeUnion::OneOf9(type_node) => {
+                        TypeEnum::Record(0.into())
+                    }
+                };
+            }
+        }
+
+        (type_arena, type_map)
     }
 
     pub fn generate_file_token_stream(&self) -> Result<TokenStream, &'static str> {
