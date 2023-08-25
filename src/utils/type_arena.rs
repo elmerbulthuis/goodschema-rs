@@ -34,14 +34,22 @@ impl TypeArena {
             .ok_or(TypeArenaError::TypeNotFound)
     }
 
-    pub fn register_type_enum(&mut self, type_enum: TypeEnum<usize>) -> TypeArenaResult<usize> {
-        let type_key = self.get_next_key();
-
+    pub fn set_type_enum(
+        &mut self,
+        type_key: usize,
+        type_enum: TypeEnum<usize>,
+    ) -> TypeArenaResult<usize> {
         if self.type_enums.insert(type_key, type_enum).is_some() {
             return Err(TypeArenaError::DuplicateTypeKey);
         }
 
         Ok(type_key)
+    }
+
+    pub fn register_type_enum(&mut self, type_enum: TypeEnum<usize>) -> TypeArenaResult<usize> {
+        let type_key = self.get_next_key();
+
+        self.set_type_enum(type_key, type_enum)
     }
 
     pub fn register_type_union(
