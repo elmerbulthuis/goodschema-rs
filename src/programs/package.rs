@@ -7,7 +7,7 @@ use crate::documents::context::Context;
 use crate::documents::factory::Initializer;
 use crate::generators::PackageGenerator;
 use crate::schemas;
-use crate::utils::namer::Namer;
+use crate::utils::Namer;
 
 #[derive(Parser, Debug)]
 pub struct CommandOptions {

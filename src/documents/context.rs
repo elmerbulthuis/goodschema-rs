@@ -4,7 +4,7 @@ use super::{
 };
 use crate::{
     schemas,
-    utils::{load::load_json, schema::discover_schema_id},
+    utils::{discover_schema_id, load_json},
 };
 use serde_json::Value;
 use std::{
