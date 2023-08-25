@@ -12,13 +12,13 @@ pub enum TypeArenaError {
 pub type TypeArenaResult<T> = Result<T, TypeArenaError>;
 
 /**
- * In the `TypeArena` we store `TypeModel`s. They can have relations with other types in the
+ * In the `TypeArena` we store `TypeEnum`s. They can have relations with other types in the
  * arena. The eventual goal is to transform `Union` and `Intersection` types to something rust
  * understands.
  */
 #[derive(Debug, Default)]
 pub struct TypeArena {
-    type_models: HashMap<usize, TypeModel<usize>>,
+    type_enums: HashMap<usize, TypeEnum<usize>>,
     last_key: usize,
 }
 impl TypeArena {
@@ -26,16 +26,16 @@ impl TypeArena {
         Default::default()
     }
 
-    pub fn get_type_model(&self, type_key: usize) -> TypeArenaResult<&TypeModel<usize>> {
-        self.type_models
+    pub fn get_type_enum(&self, type_key: usize) -> TypeArenaResult<&TypeEnum<usize>> {
+        self.type_enums
             .get(&type_key)
             .ok_or(TypeArenaError::TypeNotFound)
     }
 
-    pub fn register_type_model(&mut self, type_model: TypeModel<usize>) -> TypeArenaResult<usize> {
+    pub fn register_type_enum(&mut self, type_enum: TypeEnum<usize>) -> TypeArenaResult<usize> {
         let type_key = self.get_next_key();
 
-        if self.type_models.insert(type_key, type_model).is_some() {
+        if self.type_enums.insert(type_key, type_enum).is_some() {
             return Err(TypeArenaError::DuplicateTypeKey);
         }
 
@@ -47,11 +47,8 @@ impl TypeArena {
         left_type_key: usize,
         right_type_key: usize,
     ) -> TypeArenaResult<usize> {
-        let left_type_model = self.get_type_model(left_type_key)?;
-        let right_type_model = self.get_type_model(right_type_key)?;
-
-        let left_type_enum = left_type_model.get_type_enum();
-        let right_type_enum = right_type_model.get_type_enum();
+        let left_type_enum = self.get_type_enum(left_type_key)?;
+        let right_type_enum = self.get_type_enum(right_type_key)?;
 
         /*
          * if both types are the same return left
@@ -95,8 +92,7 @@ impl TypeArena {
                         .collect(),
                 ));
 
-                let union_type_model = union_type_enum.into();
-                return self.register_type_model(union_type_model);
+                return self.register_type_enum(union_type_enum);
             } else {
                 /*
                  * if one of them is a union then create a new union
@@ -109,8 +105,7 @@ impl TypeArena {
                         .collect(),
                 ));
 
-                let union_type_model = union_type_enum.into();
-                return self.register_type_model(union_type_model);
+                return self.register_type_enum(union_type_enum);
             }
         } else if let TypeEnum::Union(right_union_type) = right_type_enum {
             /*
@@ -124,8 +119,7 @@ impl TypeArena {
                     .collect(),
             ));
 
-            let union_type_model = union_type_enum.into();
-            return self.register_type_model(union_type_model);
+            return self.register_type_enum(union_type_enum);
         }
 
         /*
@@ -133,8 +127,7 @@ impl TypeArena {
          */
         let union_type_enum = TypeEnum::Union([left_type_key, right_type_key].into());
 
-        let union_type_model = union_type_enum.into();
-        self.register_type_model(union_type_model)
+        self.register_type_enum(union_type_enum)
     }
 
     pub fn register_type_intersection(
@@ -142,11 +135,8 @@ impl TypeArena {
         left_type_key: usize,
         right_type_key: usize,
     ) -> TypeArenaResult<usize> {
-        let left_type_model = self.get_type_model(left_type_key)?;
-        let right_type_model = self.get_type_model(right_type_key)?;
-
-        let left_type_enum = left_type_model.get_type_enum();
-        let right_type_enum = right_type_model.get_type_enum();
+        let left_type_enum = self.get_type_enum(left_type_key)?;
+        let right_type_enum = self.get_type_enum(right_type_key)?;
 
         /*
          * if both types are the same return left
@@ -242,8 +232,7 @@ impl TypeArena {
                 let intersection_type_enum =
                     TypeEnum::Object(ObjectType::new(intersection_properties));
 
-                let intersection_type_model = intersection_type_enum.into();
-                return self.register_type_model(intersection_type_model);
+                return self.register_type_enum(intersection_type_enum);
             }
         }
 
@@ -260,8 +249,7 @@ impl TypeArena {
 
             let intersection_type_enum = TypeEnum::Union(types.into());
 
-            let intersection_type_model = intersection_type_enum.into();
-            return self.register_type_model(intersection_type_model);
+            return self.register_type_enum(intersection_type_enum);
         }
         if let TypeEnum::Union(right_union_type) = right_type_enum {
             let right_union_type = right_union_type.clone();
@@ -273,8 +261,7 @@ impl TypeArena {
 
             let intersection_type_enum = TypeEnum::Union(types.into());
 
-            let intersection_type_model = intersection_type_enum.into();
-            return self.register_type_model(intersection_type_model);
+            return self.register_type_enum(intersection_type_enum);
         }
 
         /*
@@ -282,8 +269,7 @@ impl TypeArena {
          */
         let intersection_type_enum = TypeEnum::Never;
 
-        let intersection_type_model = intersection_type_enum.into();
-        self.register_type_model(intersection_type_model)
+        self.register_type_enum(intersection_type_enum)
     }
 
     fn get_next_key(&mut self) -> usize {
@@ -414,30 +400,6 @@ where
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct TypeModel<K> {
-    name: Option<String>,
-    type_enum: TypeEnum<K>,
-}
-impl<K> TypeModel<K> {
-    pub fn new(name: Option<String>, type_enum: TypeEnum<K>) -> Self {
-        Self { name, type_enum }
-    }
-
-    pub fn get_name(&self) -> Option<&String> {
-        self.name.as_ref()
-    }
-
-    pub fn get_type_enum(&self) -> &TypeEnum<K> {
-        &self.type_enum
-    }
-}
-impl<K> From<TypeEnum<K>> for TypeModel<K> {
-    fn from(type_enum: TypeEnum<K>) -> Self {
-        Self::new(None, type_enum)
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -446,69 +408,60 @@ mod tests {
     fn test_union() {
         let mut arena = TypeArena::new();
 
-        let property_type_a_key = arena.register_type_model(TypeEnum::String.into()).unwrap();
+        let property_type_a_key = arena.register_type_enum(TypeEnum::String).unwrap();
         let object_type_a: ObjectType<_> = [("a".into(), property_type_a_key)].into();
         let object_type_a_key = arena
-            .register_type_model(TypeEnum::Object(object_type_a).into())
+            .register_type_enum(TypeEnum::Object(object_type_a))
             .unwrap();
 
-        let property_type_b_key = arena.register_type_model(TypeEnum::String.into()).unwrap();
+        let property_type_b_key = arena.register_type_enum(TypeEnum::String).unwrap();
         let object_type_b: ObjectType<_> = [("b".into(), property_type_b_key)].into();
         let object_type_b_key = arena
-            .register_type_model(TypeEnum::Object(object_type_b).into())
+            .register_type_enum(TypeEnum::Object(object_type_b))
             .unwrap();
 
         let union_type_ab_key = arena
             .register_type_union(object_type_a_key, object_type_b_key)
             .unwrap();
-        let union_type_ab_enum = arena
-            .get_type_model(union_type_ab_key)
-            .unwrap()
-            .get_type_enum();
+        let union_type_ab_enum = arena.get_type_enum(union_type_ab_key).unwrap();
 
         assert_eq!(
             union_type_ab_enum,
             &TypeEnum::Union([object_type_a_key, object_type_b_key].into())
         );
 
-        let property_type_c_key = arena.register_type_model(TypeEnum::String.into()).unwrap();
+        let property_type_c_key = arena.register_type_enum(TypeEnum::String).unwrap();
         let object_type_c: ObjectType<_> = [("c".into(), property_type_c_key)].into();
         let object_type_c_key = arena
-            .register_type_model(TypeEnum::Object(object_type_c).into())
+            .register_type_enum(TypeEnum::Object(object_type_c))
             .unwrap();
 
         let union_type_abc_key = arena
             .register_type_union(union_type_ab_key, object_type_c_key)
             .unwrap();
-        let union_type_abc_enum = arena
-            .get_type_model(union_type_abc_key)
-            .unwrap()
-            .get_type_enum();
+        let union_type_abc_enum = arena.get_type_enum(union_type_abc_key).unwrap();
 
         assert_eq!(
             union_type_abc_enum,
             &TypeEnum::Union([object_type_a_key, object_type_b_key, object_type_c_key].into())
         );
 
-        let property_type_d_key = arena.register_type_model(TypeEnum::String.into()).unwrap();
+        let property_type_d_key = arena.register_type_enum(TypeEnum::String).unwrap();
         let object_type_d: ObjectType<_> = [("c".into(), property_type_d_key)].into();
         let object_type_d_key = arena
-            .register_type_model(TypeEnum::Object(object_type_d).into())
+            .register_type_enum(TypeEnum::Object(object_type_d))
             .unwrap();
 
-        let property_type_e_key = arena.register_type_model(TypeEnum::String.into()).unwrap();
+        let property_type_e_key = arena.register_type_enum(TypeEnum::String).unwrap();
         let object_type_e: ObjectType<_> = [("c".into(), property_type_e_key)].into();
         let object_type_e_key = arena
-            .register_type_model(TypeEnum::Object(object_type_e).into())
+            .register_type_enum(TypeEnum::Object(object_type_e))
             .unwrap();
 
         let union_type_de_key = arena
             .register_type_union(object_type_d_key, object_type_e_key)
             .unwrap();
-        let union_type_de_enum = arena
-            .get_type_model(union_type_de_key)
-            .unwrap()
-            .get_type_enum();
+        let union_type_de_enum = arena.get_type_enum(union_type_de_key).unwrap();
 
         assert_eq!(
             union_type_de_enum,
@@ -518,10 +471,7 @@ mod tests {
         let union_type_abcde_key = arena
             .register_type_union(union_type_abc_key, union_type_de_key)
             .unwrap();
-        let union_type_abcde_enum = arena
-            .get_type_model(union_type_abcde_key)
-            .unwrap()
-            .get_type_enum();
+        let union_type_abcde_enum = arena.get_type_enum(union_type_abcde_key).unwrap();
 
         assert_eq!(
             union_type_abcde_enum,
@@ -542,22 +492,22 @@ mod tests {
     fn test_complicated() {
         let mut arena = TypeArena::new();
 
-        let property_type_a_key = arena.register_type_model(TypeEnum::String.into()).unwrap();
+        let property_type_a_key = arena.register_type_enum(TypeEnum::String).unwrap();
         let object_type_a: ObjectType<_> = [("a".into(), property_type_a_key)].into();
         let object_type_a_key = arena
-            .register_type_model(TypeEnum::Object(object_type_a).into())
+            .register_type_enum(TypeEnum::Object(object_type_a))
             .unwrap();
 
-        let property_type_b_key = arena.register_type_model(TypeEnum::String.into()).unwrap();
+        let property_type_b_key = arena.register_type_enum(TypeEnum::String).unwrap();
         let object_type_b: ObjectType<_> = [("b".into(), property_type_b_key)].into();
         let object_type_b_key = arena
-            .register_type_model(TypeEnum::Object(object_type_b).into())
+            .register_type_enum(TypeEnum::Object(object_type_b))
             .unwrap();
 
-        let property_type_c_key = arena.register_type_model(TypeEnum::String.into()).unwrap();
+        let property_type_c_key = arena.register_type_enum(TypeEnum::String).unwrap();
         let object_type_c: ObjectType<_> = [("c".into(), property_type_c_key)].into();
         let object_type_c_key = arena
-            .register_type_model(TypeEnum::Object(object_type_c).into())
+            .register_type_enum(TypeEnum::Object(object_type_c))
             .unwrap();
 
         let union_type_key = arena
@@ -567,10 +517,7 @@ mod tests {
         let intersection_type_key = arena
             .register_type_intersection(union_type_key, object_type_c_key)
             .unwrap();
-        let intersection_type_enum = arena
-            .get_type_model(intersection_type_key)
-            .unwrap()
-            .get_type_enum();
+        let intersection_type_enum = arena.get_type_enum(intersection_type_key).unwrap();
 
         if let TypeEnum::Union(intersection_object_type) = intersection_type_enum {
             let intersection_types = intersection_object_type.get_types();
@@ -578,16 +525,10 @@ mod tests {
             assert_eq!(intersection_types.len(), 2);
 
             let object_type_ac_key = *intersection_types.first().unwrap();
-            let object_type_ac_enum = arena
-                .get_type_model(object_type_ac_key)
-                .unwrap()
-                .get_type_enum();
+            let object_type_ac_enum = arena.get_type_enum(object_type_ac_key).unwrap();
 
             let object_type_bc_key = *intersection_types.get(1).unwrap();
-            let object_type_bc_enum = arena
-                .get_type_model(object_type_bc_key)
-                .unwrap()
-                .get_type_enum();
+            let object_type_bc_enum = arena.get_type_enum(object_type_bc_key).unwrap();
 
             assert_eq!(
                 [object_type_ac_enum, object_type_bc_enum],
