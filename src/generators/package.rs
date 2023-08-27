@@ -1,9 +1,9 @@
-use super::{cargo_toml, file::generate_file_content, lib_rs, models_rs::ModelsRsGenerator};
+use super::{cargo_toml, file::generate_file_content, lib_rs, types_rs::TypesRsGenerator};
 use crate::schemas;
 use std::{collections::HashMap, fs, path::PathBuf};
 
 pub struct PackageGenerator<'a> {
-    models_rs_generator: ModelsRsGenerator<'a>,
+    types_rs_generator: TypesRsGenerator<'a>,
 }
 
 impl<'a> PackageGenerator<'a> {
@@ -12,7 +12,7 @@ impl<'a> PackageGenerator<'a> {
         names: &'a HashMap<String, String>,
     ) -> Self {
         Self {
-            models_rs_generator: ModelsRsGenerator::new(intermediate_data, names),
+            types_rs_generator: TypesRsGenerator::new(intermediate_data, names),
         }
     }
 
@@ -38,11 +38,11 @@ impl<'a> PackageGenerator<'a> {
         }
 
         {
-            let tokens = self.models_rs_generator.generate_file_token_stream()?;
+            let tokens = self.types_rs_generator.generate_file_token_stream()?;
             let content = generate_file_content(tokens)?;
 
-            fs::write(package_directory.join("models.rs"), content)
-                .or(Err("write models.rs fails"))?;
+            fs::write(package_directory.join("types.rs"), content)
+                .or(Err("write types.rs fails"))?;
         }
 
         Ok(())

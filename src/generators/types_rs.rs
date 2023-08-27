@@ -5,14 +5,14 @@ use proc_macro2::TokenStream;
 use quote::{format_ident, quote, TokenStreamExt};
 use std::collections::HashMap;
 
-pub struct ModelsRsGenerator<'a> {
+pub struct TypesRsGenerator<'a> {
     intermediate_data: &'a schemas::intermediate_a::SchemaJson,
     names: &'a HashMap<String, String>,
     type_arena: type_model::TypeArena,
     type_map: HashMap<String, type_model::TypeKey>,
 }
 
-impl<'a> ModelsRsGenerator<'a> {
+impl<'a> TypesRsGenerator<'a> {
     pub fn new(
         intermediate_data: &'a schemas::intermediate_a::SchemaJson,
         names: &'a HashMap<String, String>,
@@ -32,6 +32,9 @@ impl<'a> ModelsRsGenerator<'a> {
         let mut type_arena = type_model::TypeArena::new();
         let mut type_map = HashMap::new();
 
+        /*
+         * first create all `type_key`s for all `node_id`s
+         */
         for node_id in intermediate_data.nodes.keys() {
             let type_key = type_model::TypeKey::new();
             assert!(type_map.insert(node_id.clone(), type_key).is_none());
