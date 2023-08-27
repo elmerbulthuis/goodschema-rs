@@ -43,6 +43,14 @@ impl<'a> TypesRsGenerator<'a> {
         for (node_id, node) in intermediate_data.nodes.iter() {
             let type_key = *type_map.get(node_id).unwrap();
 
+            if let Some(super_node_id) = &node.super_node_id {
+                let super_type_key = *type_map.get(super_node_id).unwrap();
+                type_arena.add_type_by_intersection(
+                    type_key,
+                    type_model::TypeEnum::Alias(super_type_key),
+                );
+            }
+
             for node_type in node.types.iter() {
                 match node_type {
                     // null
@@ -118,6 +126,47 @@ impl<'a> TypesRsGenerator<'a> {
                         }
                     }
                 };
+            }
+
+            for node_compound in node.compounds.iter() {
+                match node_compound {
+                    // one-of
+                    schemas::intermediate_a::CompoundUnion::CompoundUnionOneOf0(compound_node) => {
+                        if let Some(node_ids) = &compound_node.type_node_ids {
+                            let types = node_ids
+                                .iter()
+                                .map(|node_id| *type_map.get(node_id).unwrap());
+                            type_arena.add_type_by_union(
+                                type_key,
+                                type_model::TypeEnum::Union(types.into()),
+                            )
+                        }
+                    }
+                    // any-of
+                    schemas::intermediate_a::CompoundUnion::CompoundUnionOneOf1(compound_node) => {
+                        if let Some(node_ids) = &compound_node.type_node_ids {
+                            let types = node_ids
+                                .iter()
+                                .map(|node_id| *type_map.get(node_id).unwrap());
+                            type_arena.add_type_by_union(
+                                type_key,
+                                type_model::TypeEnum::Union(types.into()),
+                            )
+                        }
+                    }
+                    // all-of
+                    schemas::intermediate_a::CompoundUnion::CompoundUnionOneOf2(compound_node) => {
+                        if let Some(node_ids) = &compound_node.type_node_ids {
+                            let types = node_ids
+                                .iter()
+                                .map(|node_id| *type_map.get(node_id).unwrap());
+                            type_arena.add_type_by_union(
+                                type_key,
+                                type_model::TypeEnum::Intersection(types.into()),
+                            )
+                        }
+                    }
+                }
             }
         }
 
