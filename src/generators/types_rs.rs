@@ -2,7 +2,7 @@ use crate::schemas;
 use inflector::Inflector;
 use proc_macro2::TokenStream;
 use quote::{format_ident, quote, TokenStreamExt};
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 
 pub struct ModelsRsGenerator<'a> {
     intermediate_data: &'a schemas::intermediate_a::SchemaJson,
@@ -65,7 +65,7 @@ impl<'a> ModelsRsGenerator<'a> {
         let mut tokens = quote! {};
 
         if let Some(super_node_id) = &node.super_node_id {
-            let super_model_name = self.get_model_name(super_node_id)?;
+            let super_model_name = self.get_model_name(super_node_id.as_ref())?;
             let super_model_identifier = format_ident!("r#{}", super_model_name);
             tokens.append_all(quote! {
                 pub type #model_identifier = #super_model_identifier;
@@ -229,7 +229,7 @@ impl<'a> ModelsRsGenerator<'a> {
         let model_type_identifier = format_ident!("r#{}", model_type_name);
 
         tokens.append_all(quote!{
-            #[derive(Debug, Serialize, Deserialize, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
+            #[derive(Debug, serde::Serialize, serde::Deserialize, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
             #[serde(try_from = "bool")]
             pub struct #model_type_identifier(bool);
         });
@@ -246,10 +246,6 @@ impl<'a> ModelsRsGenerator<'a> {
                 }
 
                 pub fn validate(&self) -> bool {
-                    if self.0 == 0 {
-                        return false;
-                    }
-
                     true
                 }
             }
@@ -301,7 +297,7 @@ impl<'a> ModelsRsGenerator<'a> {
         let model_type_identifier = format_ident!("r#{}", model_type_name);
 
         tokens.append_all(quote!{
-            #[derive(Debug, Serialize, Deserialize, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
+            #[derive(Debug, serde::Serialize, serde::Deserialize, Clone, Copy, PartialEq, Eq,  PartialOrd, Ord)]
             #[serde(try_from = "usize")]
             pub struct #model_type_identifier(usize);
         });
@@ -346,7 +342,7 @@ impl<'a> ModelsRsGenerator<'a> {
         });
 
         tokens.append_all(quote! {
-            impl FromStr for #model_type_identifier {
+            impl std::str::FromStr for #model_type_identifier {
                 type Err = ValidationError;
 
                 fn from_str(s: &str) -> Result<Self, Self::Err> {
@@ -394,7 +390,7 @@ impl<'a> ModelsRsGenerator<'a> {
         let model_type_identifier = format_ident!("r#{}", model_type_name);
 
         tokens.append_all(quote! {
-            #[derive(Debug, serde::Serialize, serde::Deserialize, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
+            #[derive(Debug, serde::Serialize, serde::Deserialize, Clone, PartialEq, Eq,  PartialOrd, Ord)]
             #[serde(try_from = "String")]
             pub struct #model_type_identifier(String);
         });
@@ -488,7 +484,7 @@ impl<'a> ModelsRsGenerator<'a> {
         let mut tuple_tokens = quote! {};
 
         for item_type_node_id in type_node.item_type_node_ids.as_ref().unwrap() {
-            let item_type_name = self.get_model_name(item_type_node_id)?;
+            let item_type_name = self.get_model_name(item_type_node_id.as_ref())?;
             let item_type_identifier = format_ident!("r#{}", item_type_name);
             tuple_tokens.append_all(quote! {
                 #item_type_identifier,
@@ -511,7 +507,8 @@ impl<'a> ModelsRsGenerator<'a> {
 
         let model_type_identifier = format_ident!("r#{}", model_type_name);
 
-        let item_type_name = self.get_model_name(type_node.item_type_node_id.as_ref().unwrap())?;
+        let item_type_name =
+            self.get_model_name(type_node.item_type_node_id.as_ref().unwrap().as_ref())?;
         let item_type_identifier = format_ident!("r#{}", item_type_name);
         tokens.append_all(quote! {
             pub type #model_type_identifier = Vec<#item_type_identifier>;
@@ -537,15 +534,18 @@ impl<'a> ModelsRsGenerator<'a> {
             let member_name = self.to_member_name(property_name);
             let member_identifier = format_ident!("r#{}", member_name);
 
-            let property_type_name = self.get_model_name(property_type_node_id)?;
+            let property_type_name = self.get_model_name(property_type_node_id.as_ref())?;
             let property_type_identifier = format_ident!("r#{}", property_type_name);
 
-            if type_node
+            let required_properties: HashSet<_> = type_node
                 .required_properties
                 .as_ref()
                 .unwrap()
-                .contains(&member_name)
-            {
+                .iter()
+                .map(|v| v.as_ref())
+                .collect();
+
+            if required_properties.contains(member_name.as_str()) {
                 property_tokens.append_all(quote! {
                     #[serde(rename = #property_name)]
                     pub #member_identifier: #property_type_identifier,
@@ -559,7 +559,7 @@ impl<'a> ModelsRsGenerator<'a> {
         }
 
         tokens.append_all(quote! {
-            #[derive(Debug, serde::Serialize, serde::Deserialize, Clone, PartialEq, Eq, Hash)]
+            #[derive(Debug, serde::Serialize, serde::Deserialize, Clone, PartialEq, Eq)]
             pub struct #model_type_identifier {
                 #property_tokens
             }
@@ -576,7 +576,7 @@ impl<'a> ModelsRsGenerator<'a> {
         let model_type_identifier = format_ident!("r#{}", model_type_name);
 
         let property_type_name =
-            self.get_model_name(type_node.property_type_node_id.as_ref().unwrap())?;
+            self.get_model_name(type_node.property_type_node_id.as_ref().unwrap().as_ref())?;
         let property_type_identifier = format_ident!("r#{}", property_type_name);
         let tokens = quote! {
             pub type #model_type_identifier = std::collections::HashMap<String, #property_type_identifier>;
@@ -597,7 +597,7 @@ impl<'a> ModelsRsGenerator<'a> {
         let mut enum_tokens = quote! {};
 
         for type_node_id in compound_node.type_node_ids.as_ref().unwrap() {
-            let type_name = self.get_model_name(type_node_id)?;
+            let type_name = self.get_model_name(type_node_id.as_ref())?;
             let type_identifier = format_ident!("r#{}", type_name);
             enum_tokens.append_all(quote! {
                 #type_identifier(#type_identifier),
@@ -613,7 +613,7 @@ impl<'a> ModelsRsGenerator<'a> {
         });
 
         for type_node_id in compound_node.type_node_ids.as_ref().unwrap() {
-            let type_name = self.get_model_name(type_node_id)?;
+            let type_name = self.get_model_name(type_node_id.as_ref())?;
             let type_identifier = format_ident!("r#{}", type_name);
 
             tokens.append_all(quote! {
@@ -644,7 +644,7 @@ impl<'a> ModelsRsGenerator<'a> {
         let mut property_tokens = quote! {};
 
         for type_node_id in compound_node.type_node_ids.as_ref().unwrap() {
-            let type_name = self.get_model_name(type_node_id)?;
+            let type_name = self.get_model_name(type_node_id.as_ref())?;
             let type_identifier = format_ident!("r#{}", type_name);
 
             let member_name = self.to_member_name(&type_name);
@@ -664,7 +664,7 @@ impl<'a> ModelsRsGenerator<'a> {
         });
 
         for type_node_id in compound_node.type_node_ids.as_ref().unwrap() {
-            let type_name = self.get_model_name(type_node_id)?;
+            let type_name = self.get_model_name(type_node_id.as_ref())?;
             let type_identifier = format_ident!("r#{}", type_name);
 
             let member_name = self.to_member_name(&type_name);
@@ -682,7 +682,7 @@ impl<'a> ModelsRsGenerator<'a> {
         }
 
         for type_node_id in compound_node.type_node_ids.as_ref().unwrap() {
-            let type_name = self.get_model_name(type_node_id)?;
+            let type_name = self.get_model_name(type_node_id.as_ref())?;
             let type_identifier = format_ident!("r#{}", type_name);
 
             let member_name = self.to_member_name(&type_name);
@@ -706,26 +706,57 @@ impl<'a> ModelsRsGenerator<'a> {
         compound_node: &schemas::intermediate_a::AllOfCompoundInterface,
     ) -> Result<TokenStream, &'static str> {
         let mut tokens = quote! {};
-
         let model_compound_identifier = format_ident!("r#{}", model_compound_name);
+
+        let mut property_tokens = quote! {};
+
+        for type_node_id in compound_node.type_node_ids.as_ref().unwrap() {
+            let type_name = self.get_model_name(type_node_id.as_ref())?;
+            let type_identifier = format_ident!("r#{}", type_name);
+
+            let member_name = self.to_member_name(&type_name);
+            let member_identifier = format_ident!("r#{}", member_name);
+
+            property_tokens.append_all(quote! {
+                #[serde(flatten)]
+                #member_identifier: #type_identifier,
+            });
+        }
 
         tokens.append_all(quote! {
             #[derive(serde::Serialize, serde::Deserialize,Clone, Debug, PartialEq, Eq)]
             pub struct #model_compound_identifier{
-                //
+                #property_tokens
             }
         });
 
         for type_node_id in compound_node.type_node_ids.as_ref().unwrap() {
-            let type_name = self.get_model_name(type_node_id)?;
+            let type_name = self.get_model_name(type_node_id.as_ref())?;
             let type_identifier = format_ident!("r#{}", type_name);
 
-            tokens.append_all(quote! {
-                impl TryFrom<#model_compound_identifier> for #type_identifier {
-                    type Error = ();
+            let member_name = self.to_member_name(&type_name);
+            let member_identifier = format_ident!("r#{}", member_name);
 
-                    fn try_from(value: #model_compound_identifier) -> Result<Self, Self::Error> {
-                        todo!();
+            tokens.append_all(quote! {
+                impl From<#model_compound_identifier> for #type_identifier {
+                    fn try_from(value: #model_compound_identifier) -> Self {
+                        value.#member_identifier
+                    }
+                }
+            });
+        }
+
+        for type_node_id in compound_node.type_node_ids.as_ref().unwrap() {
+            let type_name = self.get_model_name(type_node_id.as_ref())?;
+            let type_identifier = format_ident!("r#{}", type_name);
+
+            let member_name = self.to_member_name(&type_name);
+            let member_identifier = format_ident!("r#{}", member_name);
+
+            tokens.append_all(quote! {
+                impl AsRef<#type_identifier> for #model_compound_identifier {
+                    fn as_ref(&self) -> &#type_identifier {
+                        &self.#member_identifier
                     }
                 }
             });
@@ -760,7 +791,7 @@ impl<'a> ModelsRsGenerator<'a> {
 
         while let Some(node) = queue.pop() {
             if let Some(node_id) = &node.super_node_id {
-                let node = self.get_node(node_id)?;
+                let node = self.get_node(node_id.as_ref())?;
                 queue.push(node);
             }
             result.push(node);
