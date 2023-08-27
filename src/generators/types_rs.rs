@@ -857,34 +857,6 @@ impl<'a> ModelsRsGenerator<'a> {
             .ok_or("name not found")
     }
 
-    fn get_node(&self, node_id: &str) -> Result<&schemas::intermediate_a::Node, &'static str> {
-        self.intermediate_data
-            .nodes
-            .get(node_id)
-            .ok_or("node not found")
-    }
-
-    fn get_nodes_recursive(
-        &self,
-        node_id: &str,
-    ) -> Result<Vec<&schemas::intermediate_a::Node>, &'static str> {
-        let mut queue = Vec::new();
-        let mut result = Vec::new();
-
-        let node = self.get_node(node_id)?;
-        queue.push(node);
-
-        while let Some(node) = queue.pop() {
-            if let Some(node_id) = &node.super_node_id {
-                let node = self.get_node(node_id)?;
-                queue.push(node);
-            }
-            result.push(node);
-        }
-
-        Ok(result)
-    }
-
     fn get_model_name(&self, node_id: &str) -> Result<String, &'static str> {
         let model_name = self.get_name(node_id)?;
         let model_name = model_name.to_pascal_case();
