@@ -279,16 +279,15 @@ impl<'a> ModelsRsGenerator<'a> {
             }
         });
 
-        tokens.append_all(quote! {
-            #[cfg(feature = "deref")]
-            impl std::ops::Deref for #model_type_identifier {
-                type Target = bool;
+        // tokens.append_all(quote! {
+        //     impl std::ops::Deref for #model_type_identifier {
+        //         type Target = bool;
 
-                fn deref(&self) -> &Self::Target {
-                    &self.0
-                }
-            }
-        });
+        //         fn deref(&self) -> &Self::Target {
+        //             &self.0
+        //         }
+        //     }
+        // });
 
         tokens
     }
@@ -299,7 +298,7 @@ impl<'a> ModelsRsGenerator<'a> {
         let model_type_identifier = format_ident!("r#{}", model_type_name);
 
         tokens.append_all(quote!{
-            #[derive(Debug, serde::Serialize, serde::Deserialize, Clone, Copy, PartialEq, Eq,  PartialOrd, Ord)]
+            #[derive(Debug, serde::Serialize, serde::Deserialize, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
             #[serde(try_from = "usize")]
             pub struct #model_type_identifier(usize);
         });
@@ -372,16 +371,15 @@ impl<'a> ModelsRsGenerator<'a> {
             }
         });
 
-        tokens.append_all(quote! {
-            #[cfg(feature = "deref")]
-            impl std::ops::Deref for #model_type_identifier {
-                type Target = usize;
+        // tokens.append_all(quote! {
+        //     impl std::ops::Deref for #model_type_identifier {
+        //         type Target = usize;
 
-                fn deref(&self) -> &Self::Target {
-                    &self.0
-                }
-            }
-        });
+        //         fn deref(&self) -> &Self::Target {
+        //             &self.0
+        //         }
+        //     }
+        // });
 
         tokens
     }
@@ -398,10 +396,11 @@ impl<'a> ModelsRsGenerator<'a> {
         if let Some(options) = options {
             let mut test_tokens = quote! {};
             for (index, option) in options.iter().enumerate() {
+                let option = option.as_ref();
                 if index > 0 {
                     test_tokens.append_all(quote! { && })
                 }
-                test_tokens.append_all(quote! {self != #option})
+                test_tokens.append_all(quote! {self.as_ref() != #option})
             }
 
             validation_tokens.append_all(quote! {
@@ -414,7 +413,7 @@ impl<'a> ModelsRsGenerator<'a> {
         let model_type_identifier = format_ident!("r#{}", model_type_name);
 
         tokens.append_all(quote! {
-            #[derive(Debug, serde::Serialize, serde::Deserialize, Clone, PartialEq, Eq,  PartialOrd, Ord)]
+            #[derive(Debug, serde::Serialize, serde::Deserialize, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
             #[serde(try_from = "String")]
             pub struct #model_type_identifier(String);
         });
@@ -484,16 +483,15 @@ impl<'a> ModelsRsGenerator<'a> {
             }
         });
 
-        tokens.append_all(quote! {
-            #[cfg(feature = "deref")]
-            impl std::ops::Deref for #model_type_identifier {
-                type Target = str;
+        // tokens.append_all(quote! {
+        //     impl std::ops::Deref for #model_type_identifier {
+        //         type Target = str;
 
-                fn deref(&self) -> &Self::Target {
-                    self.0.as_str()
-                }
-            }
-        });
+        //         fn deref(&self) -> &Self::Target {
+        //             self.0.as_str()
+        //         }
+        //     }
+        // });
 
         tokens
     }
@@ -594,8 +592,8 @@ impl<'a> ModelsRsGenerator<'a> {
             }
         });
 
-        tokens.append_all(quote!{
-            #[derive(Debug, serde::Serialize, serde::Deserialize, Clone, Copy, PartialEq, Eq,  PartialOrd, Ord)]
+        tokens.append_all(quote! {
+            #[derive(Debug, serde::Serialize, serde::Deserialize, Clone, PartialEq, Eq)]
             #[serde(try_from = #model_interior_name)]
             pub struct #model_type_identifier(#model_interior_identifier);
         });
@@ -644,7 +642,6 @@ impl<'a> ModelsRsGenerator<'a> {
         });
 
         tokens.append_all(quote! {
-            #[cfg(feature = "deref")]
             impl std::ops::Deref for #model_type_identifier {
                 type Target = #model_interior_identifier;
 

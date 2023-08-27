@@ -120,7 +120,9 @@ impl Context {
                 .map(|(k, v)| (k.to_string(), v.clone())),
         );
 
-        schemas::intermediate_a::SchemaJson { schema, nodes }
+        schemas::intermediate_a::SchemaJsonInterfaceInterior { schema, nodes }
+            .try_into()
+            .unwrap()
     }
 
     fn get_intermediate_node_pairs(
