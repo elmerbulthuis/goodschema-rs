@@ -2,6 +2,7 @@ use super::{ArrayType, ObjectType, RecordType, TupleType, UnionType};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum TypeEnum {
+    Unknown,
     Never,
     Any,
     Null,

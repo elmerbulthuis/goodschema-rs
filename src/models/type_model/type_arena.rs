@@ -16,15 +16,11 @@ impl TypeArena {
         self.type_enums.get(&type_key)
     }
 
-    pub fn insert_type(&mut self, type_key: TypeKey, type_enum: TypeEnum) {
-        assert!(self.type_enums.insert(type_key, type_enum).is_none());
-    }
-
-    pub fn merge_type_by_union(&mut self, type_key: TypeKey, other_type_enum: TypeEnum) {
+    pub fn add_type_by_union(&mut self, type_key: TypeKey, other_type_enum: TypeEnum) {
         /*
          * remove the enum so we can work with it
          */
-        let type_enum = self.type_enums.remove(&type_key).unwrap();
+        let type_enum = self.type_enums.remove(&type_key).unwrap_or(TypeEnum::Never);
 
         /*
          * if both types are the same re-insert
@@ -80,11 +76,11 @@ impl TypeArena {
         }
     }
 
-    pub fn merge_type_by_intersection(&mut self, type_key: TypeKey, other_type_enum: TypeEnum) {
+    pub fn add_type_by_intersection(&mut self, type_key: TypeKey, other_type_enum: TypeEnum) {
         /*
          * remove the enum so we can work with it
          */
-        let type_enum = self.type_enums.remove(&type_key).unwrap();
+        let type_enum = self.type_enums.remove(&type_key).unwrap_or(TypeEnum::Any);
 
         /*
          * if both types are the same then re-insert

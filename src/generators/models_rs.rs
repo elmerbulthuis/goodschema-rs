@@ -32,61 +32,88 @@ impl<'a> ModelsRsGenerator<'a> {
         let mut type_arena = type_model::TypeArena::new();
         let mut type_map = HashMap::new();
 
-        for (node_id, node) in intermediate_data.nodes.iter() {
+        for node_id in intermediate_data.nodes.keys() {
             let type_key = type_model::TypeKey::new();
-            let type_enum = if node.types.is_empty() {
-                type_model::TypeEnum::Any
-            } else {
-                type_model::TypeEnum::Never
-            };
-
-            type_arena.insert_type(type_key, type_enum);
             assert!(type_map.insert(node_id.clone(), type_key).is_none());
+        }
+
+        for (node_id, node) in intermediate_data.nodes.iter() {
+            let type_key = *type_map.get(node_id).unwrap();
 
             for node_type in node.types.iter() {
                 match node_type {
                     // null
                     schemas::intermediate_a::TypeUnion::TypeUnionOneOf0(_) => {
-                        type_arena.merge_type_by_union(type_key, type_model::TypeEnum::Null)
+                        type_arena.add_type_by_union(type_key, type_model::TypeEnum::Null)
                     }
                     // any
                     schemas::intermediate_a::TypeUnion::TypeUnionOneOf1(_) => {
-                        type_arena.merge_type_by_union(type_key, type_model::TypeEnum::Any)
+                        type_arena.add_type_by_union(type_key, type_model::TypeEnum::Any)
                     }
                     // never
                     schemas::intermediate_a::TypeUnion::TypeUnionOneOf2(_) => {
-                        type_arena.merge_type_by_union(type_key, type_model::TypeEnum::Never)
+                        type_arena.add_type_by_union(type_key, type_model::TypeEnum::Never)
                     }
                     // boolean
                     schemas::intermediate_a::TypeUnion::OneOf3(_) => {
-                        type_arena.merge_type_by_union(type_key, type_model::TypeEnum::Boolean)
+                        type_arena.add_type_by_union(type_key, type_model::TypeEnum::Boolean)
                     }
                     // number
                     schemas::intermediate_a::TypeUnion::OneOf4(_) => {
-                        type_arena.merge_type_by_union(type_key, type_model::TypeEnum::Number)
+                        type_arena.add_type_by_union(type_key, type_model::TypeEnum::Number)
                     }
                     // string
                     schemas::intermediate_a::TypeUnion::OneOf5(_) => {
-                        type_arena.merge_type_by_union(type_key, type_model::TypeEnum::String)
+                        type_arena.add_type_by_union(type_key, type_model::TypeEnum::String)
                     }
                     // tuple
-                    schemas::intermediate_a::TypeUnion::OneOf6(type_node) => type_arena
-                        .merge_type_by_union(type_key, type_model::TypeEnum::Tuple([].into())),
+                    schemas::intermediate_a::TypeUnion::OneOf6(type_node) => {
+                        if let Some(node_ids) = &type_node.item_type_node_ids {
+                            let items = node_ids
+                                .iter()
+                                .map(|node_id| *type_map.get(node_id).unwrap());
+
+                            type_arena.add_type_by_union(
+                                type_key,
+                                type_model::TypeEnum::Tuple(items.into()),
+                            );
+                        }
+                    }
                     // array
-                    schemas::intermediate_a::TypeUnion::OneOf7(type_node) => type_arena
-                        .merge_type_by_union(
-                            type_key,
-                            type_model::TypeEnum::Array(type_model::TypeKey::new().into()),
-                        ),
+                    schemas::intermediate_a::TypeUnion::OneOf7(type_node) => {
+                        if let Some(node_id) = &type_node.item_type_node_id {
+                            let item = *type_map.get(node_id).unwrap();
+
+                            type_arena.add_type_by_union(
+                                type_key,
+                                type_model::TypeEnum::Array(item.into()),
+                            );
+                        }
+                    }
                     // interface
-                    schemas::intermediate_a::TypeUnion::OneOf8(type_node) => type_arena
-                        .merge_type_by_union(type_key, type_model::TypeEnum::Object([].into())),
+                    schemas::intermediate_a::TypeUnion::OneOf8(type_node) => {
+                        if let Some(node_ids) = &type_node.property_type_node_ids {
+                            let properties = node_ids.iter().map(|(name, node_id)| {
+                                (name.clone(), *type_map.get(node_id).unwrap())
+                            });
+
+                            type_arena.add_type_by_union(
+                                type_key,
+                                type_model::TypeEnum::Object(properties.into()),
+                            );
+                        }
+                    }
                     // record
-                    schemas::intermediate_a::TypeUnion::OneOf9(type_node) => type_arena
-                        .merge_type_by_union(
-                            type_key,
-                            type_model::TypeEnum::Record(type_model::TypeKey::new().into()),
-                        ),
+                    schemas::intermediate_a::TypeUnion::OneOf9(type_node) => {
+                        if let Some(node_id) = &type_node.property_type_node_id {
+                            let property = *type_map.get(node_id).unwrap();
+
+                            type_arena.add_type_by_union(
+                                type_key,
+                                type_model::TypeEnum::Record(property.into()),
+                            );
+                        }
+                    }
                 };
             }
         }
