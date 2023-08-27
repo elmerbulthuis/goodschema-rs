@@ -65,7 +65,7 @@ impl<'a> ModelsRsGenerator<'a> {
         let mut tokens = quote! {};
 
         if let Some(super_node_id) = &node.super_node_id {
-            let super_model_name = self.get_model_name(super_node_id.as_ref())?;
+            let super_model_name = self.get_model_name(super_node_id)?;
             let super_model_identifier = format_ident!("r#{}", super_model_name);
             tokens.append_all(quote! {
                 pub type #model_identifier = #super_model_identifier;
@@ -279,15 +279,15 @@ impl<'a> ModelsRsGenerator<'a> {
             }
         });
 
-        // tokens.append_all(quote! {
-        //     impl std::ops::Deref for #model_type_identifier {
-        //         type Target = bool;
+        tokens.append_all(quote! {
+            impl std::ops::Deref for #model_type_identifier {
+                type Target = bool;
 
-        //         fn deref(&self) -> &Self::Target {
-        //             &self.0
-        //         }
-        //     }
-        // });
+                fn deref(&self) -> &Self::Target {
+                    &self.0
+                }
+            }
+        });
 
         tokens
     }
@@ -371,15 +371,15 @@ impl<'a> ModelsRsGenerator<'a> {
             }
         });
 
-        // tokens.append_all(quote! {
-        //     impl std::ops::Deref for #model_type_identifier {
-        //         type Target = usize;
+        tokens.append_all(quote! {
+            impl std::ops::Deref for #model_type_identifier {
+                type Target = usize;
 
-        //         fn deref(&self) -> &Self::Target {
-        //             &self.0
-        //         }
-        //     }
-        // });
+                fn deref(&self) -> &Self::Target {
+                    &self.0
+                }
+            }
+        });
 
         tokens
     }
@@ -483,15 +483,15 @@ impl<'a> ModelsRsGenerator<'a> {
             }
         });
 
-        // tokens.append_all(quote! {
-        //     impl std::ops::Deref for #model_type_identifier {
-        //         type Target = str;
+        tokens.append_all(quote! {
+            impl std::ops::Deref for #model_type_identifier {
+                type Target = str;
 
-        //         fn deref(&self) -> &Self::Target {
-        //             self.0.as_str()
-        //         }
-        //     }
-        // });
+                fn deref(&self) -> &Self::Target {
+                    self.0.as_str()
+                }
+            }
+        });
 
         tokens
     }
@@ -508,7 +508,7 @@ impl<'a> ModelsRsGenerator<'a> {
         let mut tuple_tokens = quote! {};
 
         for item_type_node_id in type_node.item_type_node_ids.as_ref().unwrap() {
-            let item_type_name = self.get_model_name(item_type_node_id.as_ref())?;
+            let item_type_name = self.get_model_name(item_type_node_id)?;
             let item_type_identifier = format_ident!("r#{}", item_type_name);
             tuple_tokens.append_all(quote! {
                 #item_type_identifier,
@@ -531,8 +531,7 @@ impl<'a> ModelsRsGenerator<'a> {
 
         let model_type_identifier = format_ident!("r#{}", model_type_name);
 
-        let item_type_name =
-            self.get_model_name(type_node.item_type_node_id.as_ref().unwrap().as_ref())?;
+        let item_type_name = self.get_model_name(type_node.item_type_node_id.as_ref().unwrap())?;
         let item_type_identifier = format_ident!("r#{}", item_type_name);
         tokens.append_all(quote! {
             pub type #model_type_identifier = Vec<#item_type_identifier>;
@@ -561,7 +560,7 @@ impl<'a> ModelsRsGenerator<'a> {
             let member_name = self.to_member_name(property_name);
             let member_identifier = format_ident!("r#{}", member_name);
 
-            let property_type_name = self.get_model_name(property_type_node_id.as_ref())?;
+            let property_type_name = self.get_model_name(property_type_node_id)?;
             let property_type_identifier = format_ident!("r#{}", property_type_name);
 
             let required_properties: HashSet<_> = type_node
@@ -595,13 +594,13 @@ impl<'a> ModelsRsGenerator<'a> {
         tokens.append_all(quote! {
             #[derive(Debug, serde::Serialize, serde::Deserialize, Clone, PartialEq, Eq)]
             #[serde(try_from = #model_interior_name)]
-            pub struct #model_type_identifier(#model_interior_identifier);
+            pub struct #model_type_identifier(Box<#model_interior_identifier>);
         });
 
         tokens.append_all(quote! {
             impl #model_type_identifier {
                 fn new(value: #model_interior_identifier) -> Result<Self, ValidationError> {
-                    let instance = Self(value);
+                    let instance = Self(Box::new(value));
                     if instance.validate() {
                         Ok(instance)
                     } else {
@@ -628,7 +627,7 @@ impl<'a> ModelsRsGenerator<'a> {
         tokens.append_all(quote! {
             impl From<#model_type_identifier> for #model_interior_identifier {
                 fn from(value: #model_type_identifier) -> Self {
-                    value.0
+                    *value.0
                 }
             }
         });
@@ -662,7 +661,7 @@ impl<'a> ModelsRsGenerator<'a> {
         let model_type_identifier = format_ident!("r#{}", model_type_name);
 
         let property_type_name =
-            self.get_model_name(type_node.property_type_node_id.as_ref().unwrap().as_ref())?;
+            self.get_model_name(type_node.property_type_node_id.as_ref().unwrap())?;
         let property_type_identifier = format_ident!("r#{}", property_type_name);
         let tokens = quote! {
             pub type #model_type_identifier = std::collections::HashMap<String, #property_type_identifier>;
@@ -683,7 +682,7 @@ impl<'a> ModelsRsGenerator<'a> {
         let mut enum_tokens = quote! {};
 
         for type_node_id in compound_node.type_node_ids.as_ref().unwrap() {
-            let type_name = self.get_model_name(type_node_id.as_ref())?;
+            let type_name = self.get_model_name(type_node_id)?;
             let type_identifier = format_ident!("r#{}", type_name);
             enum_tokens.append_all(quote! {
                 #type_identifier(#type_identifier),
@@ -699,7 +698,7 @@ impl<'a> ModelsRsGenerator<'a> {
         });
 
         for type_node_id in compound_node.type_node_ids.as_ref().unwrap() {
-            let type_name = self.get_model_name(type_node_id.as_ref())?;
+            let type_name = self.get_model_name(type_node_id)?;
             let type_identifier = format_ident!("r#{}", type_name);
 
             tokens.append_all(quote! {
@@ -730,7 +729,7 @@ impl<'a> ModelsRsGenerator<'a> {
         let mut property_tokens = quote! {};
 
         for type_node_id in compound_node.type_node_ids.as_ref().unwrap() {
-            let type_name = self.get_model_name(type_node_id.as_ref())?;
+            let type_name = self.get_model_name(type_node_id)?;
             let type_identifier = format_ident!("r#{}", type_name);
 
             let member_name = self.to_member_name(&type_name);
@@ -750,7 +749,7 @@ impl<'a> ModelsRsGenerator<'a> {
         });
 
         for type_node_id in compound_node.type_node_ids.as_ref().unwrap() {
-            let type_name = self.get_model_name(type_node_id.as_ref())?;
+            let type_name = self.get_model_name(type_node_id)?;
             let type_identifier = format_ident!("r#{}", type_name);
 
             let member_name = self.to_member_name(&type_name);
@@ -768,7 +767,7 @@ impl<'a> ModelsRsGenerator<'a> {
         }
 
         for type_node_id in compound_node.type_node_ids.as_ref().unwrap() {
-            let type_name = self.get_model_name(type_node_id.as_ref())?;
+            let type_name = self.get_model_name(type_node_id)?;
             let type_identifier = format_ident!("r#{}", type_name);
 
             let member_name = self.to_member_name(&type_name);
@@ -797,7 +796,7 @@ impl<'a> ModelsRsGenerator<'a> {
         let mut property_tokens = quote! {};
 
         for type_node_id in compound_node.type_node_ids.as_ref().unwrap() {
-            let type_name = self.get_model_name(type_node_id.as_ref())?;
+            let type_name = self.get_model_name(type_node_id)?;
             let type_identifier = format_ident!("r#{}", type_name);
 
             let member_name = self.to_member_name(&type_name);
@@ -817,7 +816,7 @@ impl<'a> ModelsRsGenerator<'a> {
         });
 
         for type_node_id in compound_node.type_node_ids.as_ref().unwrap() {
-            let type_name = self.get_model_name(type_node_id.as_ref())?;
+            let type_name = self.get_model_name(type_node_id)?;
             let type_identifier = format_ident!("r#{}", type_name);
 
             let member_name = self.to_member_name(&type_name);
@@ -825,7 +824,7 @@ impl<'a> ModelsRsGenerator<'a> {
 
             tokens.append_all(quote! {
                 impl From<#model_compound_identifier> for #type_identifier {
-                    fn try_from(value: #model_compound_identifier) -> Self {
+                    fn from(value: #model_compound_identifier) -> Self {
                         value.#member_identifier
                     }
                 }
@@ -833,7 +832,7 @@ impl<'a> ModelsRsGenerator<'a> {
         }
 
         for type_node_id in compound_node.type_node_ids.as_ref().unwrap() {
-            let type_name = self.get_model_name(type_node_id.as_ref())?;
+            let type_name = self.get_model_name(type_node_id)?;
             let type_identifier = format_ident!("r#{}", type_name);
 
             let member_name = self.to_member_name(&type_name);
@@ -877,7 +876,7 @@ impl<'a> ModelsRsGenerator<'a> {
 
         while let Some(node) = queue.pop() {
             if let Some(node_id) = &node.super_node_id {
-                let node = self.get_node(node_id.as_ref())?;
+                let node = self.get_node(node_id)?;
                 queue.push(node);
             }
             result.push(node);
