@@ -3,10 +3,7 @@ use crate::schemas;
 use inflector::Inflector;
 use proc_macro2::TokenStream;
 use quote::{format_ident, quote, TokenStreamExt};
-use std::{
-    collections::{HashMap, HashSet},
-    ops::Deref,
-};
+use std::collections::{HashMap, HashSet};
 
 pub struct TypesRsGenerator<'a> {
     intermediate_data: &'a schemas::intermediate_a::SchemaJson,
