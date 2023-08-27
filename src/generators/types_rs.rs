@@ -136,8 +136,10 @@ impl<'a> ModelsRsGenerator<'a> {
                         tokens.append_all(self.generate_number_token_stream(&model_type_name));
                     }
                     // string
-                    schemas::intermediate_a::TypeUnion::OneOf5(_) => {
-                        tokens.append_all(self.generate_string_token_stream(&model_type_name));
+                    schemas::intermediate_a::TypeUnion::OneOf5(node_type) => {
+                        tokens.append_all(
+                            self.generate_string_token_stream(&model_type_name, &node_type.options),
+                        );
                     }
                     // tuple
                     schemas::intermediate_a::TypeUnion::OneOf6(type_node) => {
@@ -384,8 +386,30 @@ impl<'a> ModelsRsGenerator<'a> {
         tokens
     }
 
-    fn generate_string_token_stream(&self, model_type_name: &str) -> TokenStream {
+    fn generate_string_token_stream(
+        &self,
+        model_type_name: &str,
+        options: &Option<schemas::intermediate_a::StringTypeOptions>,
+    ) -> TokenStream {
         let mut tokens = quote! {};
+
+        let mut validation_tokens = quote! {};
+
+        if let Some(options) = options {
+            let mut test_tokens = quote! {};
+            for (index, option) in options.iter().enumerate() {
+                if index > 0 {
+                    test_tokens.append_all(quote! { && })
+                }
+                test_tokens.append_all(quote! {self != #option})
+            }
+
+            validation_tokens.append_all(quote! {
+                if #test_tokens {
+                    return false;
+                }
+            })
+        }
 
         let model_type_identifier = format_ident!("r#{}", model_type_name);
 
@@ -408,6 +432,8 @@ impl<'a> ModelsRsGenerator<'a> {
                 }
 
                 fn validate(&self) -> bool {
+                    #validation_tokens
+
                     true
                 }
             }
@@ -524,7 +550,10 @@ impl<'a> ModelsRsGenerator<'a> {
     ) -> Result<TokenStream, &'static str> {
         let mut tokens = quote! {};
 
+        let model_interior_name = format!("{}Interior", model_type_name);
+
         let model_type_identifier = format_ident!("r#{}", model_type_name);
+        let model_interior_identifier = format_ident!("r#{}", model_interior_name);
 
         let mut property_tokens = quote! {};
 
@@ -560,8 +589,68 @@ impl<'a> ModelsRsGenerator<'a> {
 
         tokens.append_all(quote! {
             #[derive(Debug, serde::Serialize, serde::Deserialize, Clone, PartialEq, Eq)]
-            pub struct #model_type_identifier {
+            pub struct #model_interior_identifier {
                 #property_tokens
+            }
+        });
+
+        tokens.append_all(quote!{
+            #[derive(Debug, serde::Serialize, serde::Deserialize, Clone, Copy, PartialEq, Eq,  PartialOrd, Ord)]
+            #[serde(try_from = #model_interior_name)]
+            pub struct #model_type_identifier(#model_interior_identifier);
+        });
+
+        tokens.append_all(quote! {
+            impl #model_type_identifier {
+                fn new(value: #model_interior_identifier) -> Result<Self, ValidationError> {
+                    let instance = Self(value);
+                    if instance.validate() {
+                        Ok(instance)
+                    } else {
+                        Err(ValidationError::new(#model_type_name))
+                    }
+                }
+
+                pub fn validate(&self) -> bool {
+                    true
+                }
+            }
+        });
+
+        tokens.append_all(quote! {
+            impl TryFrom<#model_interior_identifier> for #model_type_identifier {
+                type Error = ValidationError;
+
+                fn try_from(value: #model_interior_identifier) -> Result<Self, Self::Error> {
+                    Self::new(value)
+                }
+            }
+        });
+
+        tokens.append_all(quote! {
+            impl From<#model_type_identifier> for #model_interior_identifier {
+                fn from(value: #model_type_identifier) -> Self {
+                    value.0
+                }
+            }
+        });
+
+        tokens.append_all(quote! {
+            impl AsRef<#model_interior_identifier> for #model_type_identifier {
+                fn as_ref(&self) -> &#model_interior_identifier {
+                    &self.0
+                }
+            }
+        });
+
+        tokens.append_all(quote! {
+            #[cfg(feature = "deref")]
+            impl std::ops::Deref for #model_type_identifier {
+                type Target = #model_interior_identifier;
+
+                fn deref(&self) -> &Self::Target {
+                    &self.0
+                }
             }
         });
 
