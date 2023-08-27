@@ -3,7 +3,10 @@ use crate::schemas;
 use inflector::Inflector;
 use proc_macro2::TokenStream;
 use quote::{format_ident, quote, TokenStreamExt};
-use std::collections::HashMap;
+use std::{
+    collections::{HashMap, HashSet},
+    ops::Deref,
+};
 
 pub struct TypesRsGenerator<'a> {
     intermediate_data: &'a schemas::intermediate_a::SchemaJson,
@@ -44,7 +47,7 @@ impl<'a> TypesRsGenerator<'a> {
             let type_key = *type_map.get(node_id).unwrap();
 
             if let Some(super_node_id) = &node.super_node_id {
-                let super_type_key = *type_map.get(super_node_id).unwrap();
+                let super_type_key = *type_map.get(super_node_id.as_ref()).unwrap();
                 type_arena.add_type_by_intersection(
                     type_key,
                     type_model::TypeEnum::Alias(super_type_key),
@@ -82,7 +85,7 @@ impl<'a> TypesRsGenerator<'a> {
                         if let Some(node_ids) = &type_node.item_type_node_ids {
                             let items = node_ids
                                 .iter()
-                                .map(|node_id| *type_map.get(node_id).unwrap());
+                                .map(|node_id| *type_map.get(node_id.as_ref()).unwrap());
 
                             type_arena.add_type_by_union(
                                 type_key,
@@ -93,7 +96,7 @@ impl<'a> TypesRsGenerator<'a> {
                     // array
                     schemas::intermediate_a::TypeUnion::OneOf7(type_node) => {
                         if let Some(node_id) = &type_node.item_type_node_id {
-                            let item = *type_map.get(node_id).unwrap();
+                            let item = *type_map.get(node_id.as_ref()).unwrap();
 
                             type_arena.add_type_by_union(
                                 type_key,
@@ -105,7 +108,7 @@ impl<'a> TypesRsGenerator<'a> {
                     schemas::intermediate_a::TypeUnion::OneOf8(type_node) => {
                         if let Some(node_ids) = &type_node.property_type_node_ids {
                             let properties = node_ids.iter().map(|(name, node_id)| {
-                                (name.clone(), *type_map.get(node_id).unwrap())
+                                (name.clone(), *type_map.get(node_id.as_ref()).unwrap())
                             });
 
                             type_arena.add_type_by_union(
@@ -117,7 +120,7 @@ impl<'a> TypesRsGenerator<'a> {
                     // record
                     schemas::intermediate_a::TypeUnion::OneOf9(type_node) => {
                         if let Some(node_id) = &type_node.property_type_node_id {
-                            let property = *type_map.get(node_id).unwrap();
+                            let property = *type_map.get(node_id.as_ref()).unwrap();
 
                             type_arena.add_type_by_union(
                                 type_key,
@@ -135,7 +138,7 @@ impl<'a> TypesRsGenerator<'a> {
                         if let Some(node_ids) = &compound_node.type_node_ids {
                             let types = node_ids
                                 .iter()
-                                .map(|node_id| *type_map.get(node_id).unwrap());
+                                .map(|node_id| *type_map.get(node_id.as_ref()).unwrap());
                             type_arena.add_type_by_union(
                                 type_key,
                                 type_model::TypeEnum::Union(types.into()),
@@ -147,7 +150,7 @@ impl<'a> TypesRsGenerator<'a> {
                         if let Some(node_ids) = &compound_node.type_node_ids {
                             let types = node_ids
                                 .iter()
-                                .map(|node_id| *type_map.get(node_id).unwrap());
+                                .map(|node_id| *type_map.get(node_id.as_ref()).unwrap());
                             type_arena.add_type_by_union(
                                 type_key,
                                 type_model::TypeEnum::Union(types.into()),
@@ -159,7 +162,7 @@ impl<'a> TypesRsGenerator<'a> {
                         if let Some(node_ids) = &compound_node.type_node_ids {
                             let types = node_ids
                                 .iter()
-                                .map(|node_id| *type_map.get(node_id).unwrap());
+                                .map(|node_id| *type_map.get(node_id.as_ref()).unwrap());
                             type_arena.add_type_by_union(
                                 type_key,
                                 type_model::TypeEnum::Intersection(types.into()),
@@ -289,8 +292,10 @@ impl<'a> TypesRsGenerator<'a> {
                         tokens.append_all(self.generate_number_token_stream(&model_type_name));
                     }
                     // string
-                    schemas::intermediate_a::TypeUnion::OneOf5(_) => {
-                        tokens.append_all(self.generate_string_token_stream(&model_type_name));
+                    schemas::intermediate_a::TypeUnion::OneOf5(node_type) => {
+                        tokens.append_all(
+                            self.generate_string_token_stream(&model_type_name, &node_type.options),
+                        );
                     }
                     // tuple
                     schemas::intermediate_a::TypeUnion::OneOf6(type_node) => {
@@ -382,7 +387,7 @@ impl<'a> TypesRsGenerator<'a> {
         let model_type_identifier = format_ident!("r#{}", model_type_name);
 
         tokens.append_all(quote!{
-            #[derive(Debug, Serialize, Deserialize, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
+            #[derive(Debug, serde::Serialize, serde::Deserialize, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
             #[serde(try_from = "bool")]
             pub struct #model_type_identifier(bool);
         });
@@ -399,10 +404,6 @@ impl<'a> TypesRsGenerator<'a> {
                 }
 
                 pub fn validate(&self) -> bool {
-                    if self.0 == 0 {
-                        return false;
-                    }
-
                     true
                 }
             }
@@ -435,7 +436,6 @@ impl<'a> TypesRsGenerator<'a> {
         });
 
         tokens.append_all(quote! {
-            #[cfg(feature = "deref")]
             impl std::ops::Deref for #model_type_identifier {
                 type Target = bool;
 
@@ -454,7 +454,7 @@ impl<'a> TypesRsGenerator<'a> {
         let model_type_identifier = format_ident!("r#{}", model_type_name);
 
         tokens.append_all(quote!{
-            #[derive(Debug, Serialize, Deserialize, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
+            #[derive(Debug, serde::Serialize, serde::Deserialize, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
             #[serde(try_from = "usize")]
             pub struct #model_type_identifier(usize);
         });
@@ -499,7 +499,7 @@ impl<'a> TypesRsGenerator<'a> {
         });
 
         tokens.append_all(quote! {
-            impl FromStr for #model_type_identifier {
+            impl std::str::FromStr for #model_type_identifier {
                 type Err = ValidationError;
 
                 fn from_str(s: &str) -> Result<Self, Self::Err> {
@@ -528,7 +528,6 @@ impl<'a> TypesRsGenerator<'a> {
         });
 
         tokens.append_all(quote! {
-            #[cfg(feature = "deref")]
             impl std::ops::Deref for #model_type_identifier {
                 type Target = usize;
 
@@ -541,8 +540,31 @@ impl<'a> TypesRsGenerator<'a> {
         tokens
     }
 
-    fn generate_string_token_stream(&self, model_type_name: &str) -> TokenStream {
+    fn generate_string_token_stream(
+        &self,
+        model_type_name: &str,
+        options: &Option<schemas::intermediate_a::StringTypeOptions>,
+    ) -> TokenStream {
         let mut tokens = quote! {};
+
+        let mut validation_tokens = quote! {};
+
+        if let Some(options) = options {
+            let mut test_tokens = quote! {};
+            for (index, option) in options.iter().enumerate() {
+                let option = option.as_ref();
+                if index > 0 {
+                    test_tokens.append_all(quote! { && })
+                }
+                test_tokens.append_all(quote! {self.as_ref() != #option})
+            }
+
+            validation_tokens.append_all(quote! {
+                if #test_tokens {
+                    return false;
+                }
+            })
+        }
 
         let model_type_identifier = format_ident!("r#{}", model_type_name);
 
@@ -565,6 +587,8 @@ impl<'a> TypesRsGenerator<'a> {
                 }
 
                 fn validate(&self) -> bool {
+                    #validation_tokens
+
                     true
                 }
             }
@@ -616,7 +640,6 @@ impl<'a> TypesRsGenerator<'a> {
         });
 
         tokens.append_all(quote! {
-            #[cfg(feature = "deref")]
             impl std::ops::Deref for #model_type_identifier {
                 type Target = str;
 
@@ -680,7 +703,10 @@ impl<'a> TypesRsGenerator<'a> {
     ) -> Result<TokenStream, &'static str> {
         let mut tokens = quote! {};
 
+        let model_interior_name = format!("{}Interior", model_type_name);
+
         let model_type_identifier = format_ident!("r#{}", model_type_name);
+        let model_interior_identifier = format_ident!("r#{}", model_interior_name);
 
         let mut property_tokens = quote! {};
 
@@ -693,12 +719,15 @@ impl<'a> TypesRsGenerator<'a> {
             let property_type_name = self.get_model_name(property_type_node_id)?;
             let property_type_identifier = format_ident!("r#{}", property_type_name);
 
-            if type_node
+            let required_properties: HashSet<_> = type_node
                 .required_properties
                 .as_ref()
                 .unwrap()
-                .contains(&member_name)
-            {
+                .iter()
+                .map(|v| v.as_ref())
+                .collect();
+
+            if required_properties.contains(member_name.as_str()) {
                 property_tokens.append_all(quote! {
                     #[serde(rename = #property_name)]
                     pub #member_identifier: #property_type_identifier,
@@ -712,9 +741,68 @@ impl<'a> TypesRsGenerator<'a> {
         }
 
         tokens.append_all(quote! {
-            #[derive(serde::Serialize, serde::Deserialize, Clone, PartialEq, Eq, Hash)]
-            pub struct #model_type_identifier {
+            #[derive(Debug, serde::Serialize, serde::Deserialize, Clone, PartialEq, Eq)]
+            pub struct #model_interior_identifier {
                 #property_tokens
+            }
+        });
+
+        tokens.append_all(quote! {
+            #[derive(Debug, serde::Serialize, serde::Deserialize, Clone, PartialEq, Eq)]
+            #[serde(try_from = #model_interior_name)]
+            pub struct #model_type_identifier(Box<#model_interior_identifier>);
+        });
+
+        tokens.append_all(quote! {
+            impl #model_type_identifier {
+                fn new(value: #model_interior_identifier) -> Result<Self, ValidationError> {
+                    let instance = Self(Box::new(value));
+                    if instance.validate() {
+                        Ok(instance)
+                    } else {
+                        Err(ValidationError::new(#model_type_name))
+                    }
+                }
+
+                pub fn validate(&self) -> bool {
+                    true
+                }
+            }
+        });
+
+        tokens.append_all(quote! {
+            impl TryFrom<#model_interior_identifier> for #model_type_identifier {
+                type Error = ValidationError;
+
+                fn try_from(value: #model_interior_identifier) -> Result<Self, Self::Error> {
+                    Self::new(value)
+                }
+            }
+        });
+
+        tokens.append_all(quote! {
+            impl From<#model_type_identifier> for #model_interior_identifier {
+                fn from(value: #model_type_identifier) -> Self {
+                    *value.0
+                }
+            }
+        });
+
+        tokens.append_all(quote! {
+            impl AsRef<#model_interior_identifier> for #model_type_identifier {
+                fn as_ref(&self) -> &#model_interior_identifier {
+                    &self.0
+                }
+            }
+        });
+
+        tokens.append_all(quote! {
+            impl std::ops::Deref for #model_type_identifier {
+                type Target = #model_interior_identifier;
+
+                fn deref(&self) -> &Self::Target {
+                    &self.0
+                }
             }
         });
 
@@ -764,6 +852,24 @@ impl<'a> TypesRsGenerator<'a> {
                 #enum_tokens
             }
         });
+
+        for type_node_id in compound_node.type_node_ids.as_ref().unwrap() {
+            let type_name = self.get_model_name(type_node_id)?;
+            let type_identifier = format_ident!("r#{}", type_name);
+
+            tokens.append_all(quote! {
+                impl TryFrom<#model_compound_identifier> for #type_identifier {
+                    type Error = ();
+
+                    fn try_from(value: #model_compound_identifier) -> Result<Self, Self::Error> {
+                        match value {
+                            #model_compound_identifier::#type_identifier(value) => Ok(value),
+                            _ => Err(()),
+                        }
+                    }
+                }
+            });
+        }
 
         Ok(tokens)
     }
@@ -816,6 +922,22 @@ impl<'a> TypesRsGenerator<'a> {
             });
         }
 
+        for type_node_id in compound_node.type_node_ids.as_ref().unwrap() {
+            let type_name = self.get_model_name(type_node_id)?;
+            let type_identifier = format_ident!("r#{}", type_name);
+
+            let member_name = self.to_member_name(&type_name);
+            let member_identifier = format_ident!("r#{}", member_name);
+
+            tokens.append_all(quote! {
+                impl AsRef<Option<#type_identifier>> for #model_compound_identifier {
+                    fn as_ref(&self) -> &Option<#type_identifier> {
+                        &self.#member_identifier
+                    }
+                }
+            });
+        }
+
         Ok(tokens)
     }
 
@@ -825,13 +947,27 @@ impl<'a> TypesRsGenerator<'a> {
         compound_node: &schemas::intermediate_a::AllOfCompoundInterface,
     ) -> Result<TokenStream, &'static str> {
         let mut tokens = quote! {};
-
         let model_compound_identifier = format_ident!("r#{}", model_compound_name);
+
+        let mut property_tokens = quote! {};
+
+        for type_node_id in compound_node.type_node_ids.as_ref().unwrap() {
+            let type_name = self.get_model_name(type_node_id)?;
+            let type_identifier = format_ident!("r#{}", type_name);
+
+            let member_name = self.to_member_name(&type_name);
+            let member_identifier = format_ident!("r#{}", member_name);
+
+            property_tokens.append_all(quote! {
+                #[serde(flatten)]
+                #member_identifier: #type_identifier,
+            });
+        }
 
         tokens.append_all(quote! {
             #[derive(serde::Serialize, serde::Deserialize,Clone, Debug, PartialEq, Eq)]
             pub struct #model_compound_identifier{
-                //
+                #property_tokens
             }
         });
 
@@ -839,12 +975,29 @@ impl<'a> TypesRsGenerator<'a> {
             let type_name = self.get_model_name(type_node_id)?;
             let type_identifier = format_ident!("r#{}", type_name);
 
-            tokens.append_all(quote! {
-                impl TryFrom<#model_compound_identifier> for #type_identifier {
-                    type Error = ();
+            let member_name = self.to_member_name(&type_name);
+            let member_identifier = format_ident!("r#{}", member_name);
 
-                    fn try_from(value: #model_compound_identifier) -> Result<Self, Self::Error> {
-                        todo!();
+            tokens.append_all(quote! {
+                impl From<#model_compound_identifier> for #type_identifier {
+                    fn from(value: #model_compound_identifier) -> Self {
+                        value.#member_identifier
+                    }
+                }
+            });
+        }
+
+        for type_node_id in compound_node.type_node_ids.as_ref().unwrap() {
+            let type_name = self.get_model_name(type_node_id)?;
+            let type_identifier = format_ident!("r#{}", type_name);
+
+            let member_name = self.to_member_name(&type_name);
+            let member_identifier = format_ident!("r#{}", member_name);
+
+            tokens.append_all(quote! {
+                impl AsRef<#type_identifier> for #model_compound_identifier {
+                    fn as_ref(&self) -> &#type_identifier {
+                        &self.#member_identifier
                     }
                 }
             });
@@ -858,34 +1011,6 @@ impl<'a> TypesRsGenerator<'a> {
             .get(node_id)
             .map(|v| v.as_str())
             .ok_or("name not found")
-    }
-
-    fn get_node(&self, node_id: &str) -> Result<&schemas::intermediate_a::Node, &'static str> {
-        self.intermediate_data
-            .nodes
-            .get(node_id)
-            .ok_or("node not found")
-    }
-
-    fn get_nodes_recursive(
-        &self,
-        node_id: &str,
-    ) -> Result<Vec<&schemas::intermediate_a::Node>, &'static str> {
-        let mut queue = Vec::new();
-        let mut result = Vec::new();
-
-        let node = self.get_node(node_id)?;
-        queue.push(node);
-
-        while let Some(node) = queue.pop() {
-            if let Some(node_id) = &node.super_node_id {
-                let node = self.get_node(node_id)?;
-                queue.push(node);
-            }
-            result.push(node);
-        }
-
-        Ok(result)
     }
 
     fn get_model_name(&self, node_id: &str) -> Result<String, &'static str> {

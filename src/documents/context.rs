@@ -109,13 +109,20 @@ impl Context {
     }
 
     pub fn get_intermediate_data(&self) -> schemas::intermediate_a::SchemaJson {
-        let schema = Some(schemas::intermediate_a::SCHEMA_ID.to_string());
+        let schema = Some(
+            schemas::intermediate_a::SCHEMA_ID
+                .to_string()
+                .try_into()
+                .unwrap(),
+        );
         let nodes = HashMap::from_iter(
             self.get_intermediate_node_pairs()
                 .map(|(k, v)| (k.to_string(), v.clone())),
         );
 
-        schemas::intermediate_a::SchemaJson { schema, nodes }
+        schemas::intermediate_a::SchemaJsonInterfaceInterior { schema, nodes }
+            .try_into()
+            .unwrap()
     }
 
     fn get_intermediate_node_pairs(
