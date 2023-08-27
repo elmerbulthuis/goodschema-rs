@@ -1,4 +1,4 @@
-use super::{ArrayType, ObjectType, RecordType, TupleType, UnionType};
+use super::{ArrayType, IntersectionType, ObjectType, RecordType, TupleType, UnionType};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum TypeEnum {
@@ -14,4 +14,5 @@ pub enum TypeEnum {
     Object(ObjectType),
     Record(RecordType),
     Union(UnionType),
+    Intersection(IntersectionType),
 }

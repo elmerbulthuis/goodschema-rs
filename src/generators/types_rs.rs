@@ -1,4 +1,4 @@
-use crate::models::type_model;
+use super::type_model;
 use crate::schemas;
 use inflector::Inflector;
 use proc_macro2::TokenStream;

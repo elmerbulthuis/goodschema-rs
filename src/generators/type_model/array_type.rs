@@ -9,8 +9,8 @@ impl ArrayType {
         Self { item }
     }
 
-    pub fn get_item(&self) -> TypeKey {
-        self.item
+    pub fn get_item(&self) -> &TypeKey {
+        &self.item
     }
 }
 impl From<TypeKey> for ArrayType {

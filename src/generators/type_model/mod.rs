@@ -1,4 +1,5 @@
 mod array_type;
+mod intersection_type;
 mod object_type;
 mod record_type;
 mod tuple_type;
@@ -8,6 +9,7 @@ mod type_key;
 mod union_type;
 
 pub use array_type::*;
+pub use intersection_type::*;
 pub use object_type::*;
 pub use record_type::*;
 pub use tuple_type::*;

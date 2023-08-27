@@ -9,8 +9,8 @@ impl RecordType {
         Self { property }
     }
 
-    pub fn get_property(&self) -> TypeKey {
-        self.property
+    pub fn get_property(&self) -> &TypeKey {
+        &self.property
     }
 }
 impl From<TypeKey> for RecordType {
