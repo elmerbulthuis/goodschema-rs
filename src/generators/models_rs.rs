@@ -1,7 +1,5 @@
-use crate::{
-    schemas,
-    utils::{TypeArena, TypeEnum},
-};
+use crate::models::type_model;
+use crate::schemas;
 use inflector::Inflector;
 use proc_macro2::TokenStream;
 use quote::{format_ident, quote, TokenStreamExt};
@@ -10,8 +8,8 @@ use std::collections::HashMap;
 pub struct ModelsRsGenerator<'a> {
     intermediate_data: &'a schemas::intermediate_a::SchemaJson,
     names: &'a HashMap<String, String>,
-    type_arena: TypeArena,
-    type_map: HashMap<String, usize>,
+    type_arena: type_model::TypeArena,
+    type_map: HashMap<String, type_model::TypeKey>,
 }
 
 impl<'a> ModelsRsGenerator<'a> {
@@ -30,44 +28,65 @@ impl<'a> ModelsRsGenerator<'a> {
 
     fn new_arena_and_map(
         intermediate_data: &schemas::intermediate_a::SchemaJson,
-    ) -> (TypeArena, HashMap<String, usize>) {
-        let mut type_arena = TypeArena::new();
+    ) -> (type_model::TypeArena, HashMap<String, type_model::TypeKey>) {
+        let mut type_arena = type_model::TypeArena::new();
         let mut type_map = HashMap::new();
 
         for (node_id, node) in intermediate_data.nodes.iter() {
-            let type_key = type_arena.register_type_enum(TypeEnum::Any).unwrap();
+            let type_key = type_model::TypeKey::new();
+            let type_enum = if node.types.is_empty() {
+                type_model::TypeEnum::Any
+            } else {
+                type_model::TypeEnum::Never
+            };
+
+            type_arena.insert_type(type_key, type_enum);
             assert!(type_map.insert(node_id.clone(), type_key).is_none());
 
             for node_type in node.types.iter() {
-                let type_enum = match node_type {
+                match node_type {
                     // null
-                    schemas::intermediate_a::TypeUnion::TypeUnionOneOf0(_) => TypeEnum::Null,
+                    schemas::intermediate_a::TypeUnion::TypeUnionOneOf0(_) => {
+                        type_arena.merge_type_by_union(type_key, type_model::TypeEnum::Null)
+                    }
                     // any
-                    schemas::intermediate_a::TypeUnion::TypeUnionOneOf1(_) => TypeEnum::Any,
+                    schemas::intermediate_a::TypeUnion::TypeUnionOneOf1(_) => {
+                        type_arena.merge_type_by_union(type_key, type_model::TypeEnum::Any)
+                    }
                     // never
-                    schemas::intermediate_a::TypeUnion::TypeUnionOneOf2(_) => TypeEnum::Never,
+                    schemas::intermediate_a::TypeUnion::TypeUnionOneOf2(_) => {
+                        type_arena.merge_type_by_union(type_key, type_model::TypeEnum::Never)
+                    }
                     // boolean
-                    schemas::intermediate_a::TypeUnion::OneOf3(_) => TypeEnum::Boolean,
+                    schemas::intermediate_a::TypeUnion::OneOf3(_) => {
+                        type_arena.merge_type_by_union(type_key, type_model::TypeEnum::Boolean)
+                    }
                     // number
-                    schemas::intermediate_a::TypeUnion::OneOf4(_) => TypeEnum::Number,
+                    schemas::intermediate_a::TypeUnion::OneOf4(_) => {
+                        type_arena.merge_type_by_union(type_key, type_model::TypeEnum::Number)
+                    }
                     // string
-                    schemas::intermediate_a::TypeUnion::OneOf5(_) => TypeEnum::String,
+                    schemas::intermediate_a::TypeUnion::OneOf5(_) => {
+                        type_arena.merge_type_by_union(type_key, type_model::TypeEnum::String)
+                    }
                     // tuple
-                    schemas::intermediate_a::TypeUnion::OneOf6(type_node) => {
-                        TypeEnum::Tuple([].into())
-                    }
+                    schemas::intermediate_a::TypeUnion::OneOf6(type_node) => type_arena
+                        .merge_type_by_union(type_key, type_model::TypeEnum::Tuple([].into())),
                     // array
-                    schemas::intermediate_a::TypeUnion::OneOf7(type_node) => {
-                        TypeEnum::Array(0.into())
-                    }
+                    schemas::intermediate_a::TypeUnion::OneOf7(type_node) => type_arena
+                        .merge_type_by_union(
+                            type_key,
+                            type_model::TypeEnum::Array(type_model::TypeKey::new().into()),
+                        ),
                     // interface
-                    schemas::intermediate_a::TypeUnion::OneOf8(type_node) => {
-                        TypeEnum::Object([].into())
-                    }
+                    schemas::intermediate_a::TypeUnion::OneOf8(type_node) => type_arena
+                        .merge_type_by_union(type_key, type_model::TypeEnum::Object([].into())),
                     // record
-                    schemas::intermediate_a::TypeUnion::OneOf9(type_node) => {
-                        TypeEnum::Record(0.into())
-                    }
+                    schemas::intermediate_a::TypeUnion::OneOf9(type_node) => type_arena
+                        .merge_type_by_union(
+                            type_key,
+                            type_model::TypeEnum::Record(type_model::TypeKey::new().into()),
+                        ),
                 };
             }
         }
