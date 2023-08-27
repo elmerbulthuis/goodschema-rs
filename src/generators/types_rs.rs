@@ -559,7 +559,7 @@ impl<'a> ModelsRsGenerator<'a> {
         }
 
         tokens.append_all(quote! {
-            #[derive(serde::Serialize, serde::Deserialize, Clone, PartialEq, Eq, Hash)]
+            #[derive(Debug, serde::Serialize, serde::Deserialize, Clone, PartialEq, Eq, Hash)]
             pub struct #model_type_identifier {
                 #property_tokens
             }
@@ -612,6 +612,24 @@ impl<'a> ModelsRsGenerator<'a> {
             }
         });
 
+        for type_node_id in compound_node.type_node_ids.as_ref().unwrap() {
+            let type_name = self.get_model_name(type_node_id)?;
+            let type_identifier = format_ident!("r#{}", type_name);
+
+            tokens.append_all(quote! {
+                impl TryFrom<#model_compound_identifier> for #type_identifier {
+                    type Error = ();
+
+                    fn try_from(value: #model_compound_identifier) -> Result<Self, Self::Error> {
+                        match value {
+                            #model_compound_identifier::#type_identifier(value) => Ok(value),
+                            _ => Err(()),
+                        }
+                    }
+                }
+            });
+        }
+
         Ok(tokens)
     }
 
@@ -658,6 +676,22 @@ impl<'a> ModelsRsGenerator<'a> {
 
                     fn try_from(value: #model_compound_identifier) -> Result<Self, Self::Error> {
                         value.#member_identifier.ok_or(())
+                    }
+                }
+            });
+        }
+
+        for type_node_id in compound_node.type_node_ids.as_ref().unwrap() {
+            let type_name = self.get_model_name(type_node_id)?;
+            let type_identifier = format_ident!("r#{}", type_name);
+
+            let member_name = self.to_member_name(&type_name);
+            let member_identifier = format_ident!("r#{}", member_name);
+
+            tokens.append_all(quote! {
+                impl AsRef<Option<#type_identifier>> for #model_compound_identifier {
+                    fn as_ref(&self) -> &Option<#type_identifier> {
+                        &self.#member_identifier
                     }
                 }
             });
