@@ -1,9 +1,9 @@
-use crate::selectors::{intermediate_a, TypeEnum};
+use crate::selectors::TypeEnum;
 use crate::{schemas, selectors::Selectors};
 use inflector::Inflector;
 use proc_macro2::TokenStream;
 use quote::{format_ident, quote, TokenStreamExt};
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
 
 pub struct ModelsRsGenerator<'a> {
     intermediate_data: &'a schemas::intermediate_a::SchemaJson,
@@ -65,143 +65,121 @@ impl<'a> ModelsRsGenerator<'a> {
 
         let mut tokens = quote! {};
 
-        let types = self.intermediate_data.select_types(node_id);
+        let type_enums = self.intermediate_data.select_type_enums(node_id);
 
-        if let Some(super_node_id) = &node.super_node_id {
-            let super_model_name = self.get_model_name(super_node_id)?;
-            let super_model_identifier = format_ident!("r#{}", super_model_name);
-            tokens.append_all(quote! {
-                pub type #model_identifier = #super_model_identifier;
-            });
-        } else {
-            if types.len() + node.compounds.len() == 1 {
-                for type_enum in &types {
-                    let model_type_name = self.get_model_type_name(node_id, type_enum)?;
-                    let model_type_identifier = format_ident!("r#{}", model_type_name);
-                    tokens.append_all(quote! {
-                        pub type #model_identifier = #model_type_identifier;
-                    });
-                }
-
-                for node_compound in &node.compounds {
-                    let model_compound_name =
-                        self.get_model_compound_name(node_id, node_compound)?;
-                    let model_compound_identifier = format_ident!("r#{}", model_compound_name);
-                    tokens.append_all(quote! {
-                        pub type #model_identifier = #model_compound_identifier;
-                    });
-                }
-            } else {
-                let mut enum_tokens = quote! {};
-
-                for node_type in &types {
-                    let type_name = self.to_type_name(node_type);
-                    let type_identifier = format_ident!("r#{}", type_name);
-                    let model_type_name = self.get_model_type_name(node_id, node_type)?;
-                    let model_type_identifier = format_ident!("r#{}", model_type_name);
-                    enum_tokens.append_all(quote! {
-                        #type_identifier(#model_type_identifier),
-                    });
-                }
-
-                tokens.append_all(quote! {
-                    #[derive(serde::Serialize, serde::Deserialize, Clone, Debug, PartialEq, Eq)]
-                    #[serde(untagged)]
-                    pub enum #model_identifier {
-                        #enum_tokens
-                    }
-                });
-            }
-
-            for type_enum in &types {
+        if type_enums.len() + node.compounds.len() == 1 {
+            for type_enum in &type_enums {
                 let model_type_name = self.get_model_type_name(node_id, type_enum)?;
-
-                match type_enum {
-                    // never
-                    TypeEnum::Never => {
-                        tokens.append_all(self.generate_never_token_stream(&model_type_name))
-                    }
-                    // any
-                    TypeEnum::Any => {
-                        tokens.append_all(self.generate_any_token_stream(&model_type_name))
-                    }
-                    // null
-                    TypeEnum::Null => {
-                        tokens.append_all(self.generate_null_token_stream(&model_type_name))
-                    }
-                    // boolean
-                    TypeEnum::Boolean => {
-                        tokens.append_all(
-                            self.generate_boolean_token_stream(&model_type_name, &node_id),
-                        );
-                    }
-                    // integer
-                    TypeEnum::Integer => {
-                        tokens.append_all(
-                            self.generate_number_token_stream(&model_type_name, &node_id),
-                        );
-                    }
-                    // number
-                    TypeEnum::Number => {
-                        tokens.append_all(
-                            self.generate_number_token_stream(&model_type_name, &node_id),
-                        );
-                    }
-                    // string
-                    TypeEnum::String => {
-                        tokens.append_all(
-                            self.generate_string_token_stream(&model_type_name, &node_id),
-                        );
-                    }
-                    // tuple
-                    TypeEnum::Tuple => {
-                        tokens.append_all(
-                            self.generate_tuple_token_stream(&model_type_name, &node_id)?,
-                        );
-                    }
-                    // array
-                    TypeEnum::Array => {
-                        tokens.append_all(
-                            self.generate_array_token_stream(&model_type_name, &node_id)?,
-                        );
-                    }
-                    // object
-                    TypeEnum::Object => {
-                        tokens.append_all(
-                            self.generate_object_token_stream(&model_type_name, &node_id)?,
-                        );
-                    }
-                    // record
-                    TypeEnum::Record => {
-                        tokens.append_all(
-                            self.generate_record_token_stream(&model_type_name, &node_id)?,
-                        );
-                    }
-                }
+                let model_type_identifier = format_ident!("r#{}", model_type_name);
+                tokens.append_all(quote! {
+                    pub type #model_identifier = #model_type_identifier;
+                });
             }
 
             for node_compound in &node.compounds {
                 let model_compound_name = self.get_model_compound_name(node_id, node_compound)?;
+                let model_compound_identifier = format_ident!("r#{}", model_compound_name);
+                tokens.append_all(quote! {
+                    pub type #model_identifier = #model_compound_identifier;
+                });
+            }
+        } else {
+            let mut enum_tokens = quote! {};
 
-                match node_compound {
-                    // one-of
-                    schemas::intermediate_a::CompoundUnion::CompoundUnionOneOf0(compound_node) => {
-                        tokens.append_all(
-                            self.generate_one_of_token_stream(&model_compound_name, compound_node)?,
-                        );
-                    }
-                    // any-of
-                    schemas::intermediate_a::CompoundUnion::CompoundUnionOneOf1(compound_node) => {
-                        tokens.append_all(
-                            self.generate_any_of_token_stream(&model_compound_name, compound_node)?,
-                        );
-                    }
-                    // all-of
-                    schemas::intermediate_a::CompoundUnion::CompoundUnionOneOf2(compound_node) => {
-                        tokens.append_all(
-                            self.generate_all_of_token_stream(&model_compound_name, compound_node)?,
-                        );
-                    }
+            for node_type in &type_enums {
+                let type_name = self.to_type_name(node_type);
+                let type_identifier = format_ident!("r#{}", type_name);
+                let model_type_name = self.get_model_type_name(node_id, node_type)?;
+                let model_type_identifier = format_ident!("r#{}", model_type_name);
+                enum_tokens.append_all(quote! {
+                    #type_identifier(#model_type_identifier),
+                });
+            }
+
+            tokens.append_all(quote! {
+                #[derive(serde::Serialize, serde::Deserialize, Clone, Debug, PartialEq, Eq)]
+                #[serde(untagged)]
+                pub enum #model_identifier {
+                    #enum_tokens
+                }
+            });
+        }
+
+        for type_enum in &type_enums {
+            let model_type_name = self.get_model_type_name(node_id, type_enum)?;
+
+            match type_enum {
+                // never
+                TypeEnum::Never => {
+                    tokens.append_all(self.generate_never_token_stream(&model_type_name))
+                }
+                // any
+                TypeEnum::Any => {
+                    tokens.append_all(self.generate_any_token_stream(&model_type_name))
+                }
+                // null
+                TypeEnum::Null => {
+                    tokens.append_all(self.generate_null_token_stream(&model_type_name))
+                }
+                // boolean
+                TypeEnum::Boolean => {
+                    tokens
+                        .append_all(self.generate_boolean_token_stream(&model_type_name, node_id));
+                }
+                // integer
+                TypeEnum::Integer => {
+                    tokens.append_all(self.generate_number_token_stream(&model_type_name, node_id));
+                }
+                // number
+                TypeEnum::Number => {
+                    tokens.append_all(self.generate_number_token_stream(&model_type_name, node_id));
+                }
+                // string
+                TypeEnum::String => {
+                    tokens.append_all(self.generate_string_token_stream(&model_type_name, node_id));
+                }
+                // tuple
+                TypeEnum::Tuple => {
+                    tokens.append_all(self.generate_tuple_token_stream(&model_type_name, node_id)?);
+                }
+                // array
+                TypeEnum::Array => {
+                    tokens.append_all(self.generate_array_token_stream(&model_type_name, node_id)?);
+                }
+                // object
+                TypeEnum::Object => {
+                    tokens
+                        .append_all(self.generate_object_token_stream(&model_type_name, node_id)?);
+                }
+                // record
+                TypeEnum::Record => {
+                    tokens
+                        .append_all(self.generate_record_token_stream(&model_type_name, node_id)?);
+                }
+            }
+        }
+
+        for node_compound in &node.compounds {
+            let model_compound_name = self.get_model_compound_name(node_id, node_compound)?;
+
+            match node_compound {
+                // one-of
+                schemas::intermediate_a::CompoundUnion::CompoundUnionOneOf0(compound_node) => {
+                    tokens.append_all(
+                        self.generate_one_of_token_stream(&model_compound_name, compound_node)?,
+                    );
+                }
+                // any-of
+                schemas::intermediate_a::CompoundUnion::CompoundUnionOneOf1(compound_node) => {
+                    tokens.append_all(
+                        self.generate_any_of_token_stream(&model_compound_name, compound_node)?,
+                    );
+                }
+                // all-of
+                schemas::intermediate_a::CompoundUnion::CompoundUnionOneOf2(compound_node) => {
+                    tokens.append_all(
+                        self.generate_all_of_token_stream(&model_compound_name, compound_node)?,
+                    );
                 }
             }
         }
@@ -237,7 +215,7 @@ impl<'a> ModelsRsGenerator<'a> {
         todo!()
     }
 
-    fn generate_boolean_token_stream(&self, model_type_name: &str, node_id: &str) -> TokenStream {
+    fn generate_boolean_token_stream(&self, model_type_name: &str, _node_id: &str) -> TokenStream {
         let mut tokens = quote! {};
 
         let model_type_identifier = format_ident!("r#{}", model_type_name);
@@ -304,7 +282,7 @@ impl<'a> ModelsRsGenerator<'a> {
         tokens
     }
 
-    fn generate_number_token_stream(&self, model_type_name: &str, node_id: &str) -> TokenStream {
+    fn generate_number_token_stream(&self, model_type_name: &str, _node_id: &str) -> TokenStream {
         let mut tokens = quote! {};
 
         let model_type_identifier = format_ident!("r#{}", model_type_name);

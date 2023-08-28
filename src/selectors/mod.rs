@@ -3,7 +3,7 @@ use std::collections::{HashMap, HashSet};
 pub mod intermediate_a;
 
 pub trait Selectors {
-    fn select_types(&self, node_id: &str) -> HashSet<TypeEnum>;
+    fn select_type_enums(&self, node_id: &str) -> HashSet<TypeEnum>;
     fn select_string_options(&self, node_id: &str) -> HashSet<&str>;
     fn select_tuple_item_type_node_ids(&self, node_id: &str) -> Vec<&str>;
     fn select_array_item_type_node_id(&self, node_id: &str) -> Option<&str>;

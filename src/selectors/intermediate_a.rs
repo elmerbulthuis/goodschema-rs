@@ -6,7 +6,7 @@ use std::{
 };
 
 impl Selectors for schemas::intermediate_a::SchemaJson {
-    fn select_types(&self, node_id: &str) -> HashSet<TypeEnum> {
+    fn select_type_enums(&self, node_id: &str) -> HashSet<TypeEnum> {
         let node = self.nodes.get(node_id).unwrap();
 
         let mut type_enums: HashSet<_> = node
@@ -16,7 +16,7 @@ impl Selectors for schemas::intermediate_a::SchemaJson {
             .collect();
 
         if let Some(super_node_id) = &node.super_node_id {
-            let super_type_enums = self.select_types(super_node_id);
+            let super_type_enums = self.select_type_enums(super_node_id);
 
             type_enums = type_enums
                 .intersection(&super_type_enums)
