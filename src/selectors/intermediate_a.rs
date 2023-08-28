@@ -1,6 +1,9 @@
 use super::{Selectors, TypeEnum};
 use crate::schemas;
-use std::collections::HashSet;
+use std::{
+    collections::{HashMap, HashSet},
+    iter::empty,
+};
 
 impl Selectors for schemas::intermediate_a::SchemaJson {
     fn select_types(&self, node_id: &str) -> HashSet<TypeEnum> {
@@ -65,11 +68,13 @@ impl Selectors for schemas::intermediate_a::SchemaJson {
     fn select_string_options(&self, node_id: &str) -> HashSet<&str> {
         let node = self.nodes.get(node_id).unwrap();
 
-        let mut options: HashSet<_> = node
+        let mut options: Vec<_> = node
             .types
             .iter()
-            .flat_map(string_options_from_type_node)
+            .map(string_options_from_type_node)
             .collect();
+        assert!(options.len() <= 1);
+        let mut options = options.pop().unwrap_or_default();
 
         if let Some(super_node_id) = &node.super_node_id {
             let super_type_options = self.select_string_options(super_node_id);
@@ -79,6 +84,128 @@ impl Selectors for schemas::intermediate_a::SchemaJson {
 
         options
     }
+
+    fn select_tuple_item_type_node_ids(&self, node_id: &str) -> Vec<&str> {
+        let node = self.nodes.get(node_id).unwrap();
+
+        let mut item_type_node_ids: Vec<_> = node
+            .types
+            .iter()
+            .map(tuple_item_type_node_ids_from_type_node)
+            .collect();
+        assert!(item_type_node_ids.len() <= 1);
+        let mut item_type_node_ids = item_type_node_ids.pop().unwrap_or_default();
+
+        if let Some(super_node_id) = &node.super_node_id {
+            let super_item_type_node_ids = self.select_tuple_item_type_node_ids(super_node_id);
+
+            assert!(item_type_node_ids.is_empty() || super_item_type_node_ids.is_empty());
+
+            if item_type_node_ids.is_empty() {
+                item_type_node_ids = super_item_type_node_ids
+            }
+        }
+
+        item_type_node_ids
+    }
+
+    fn select_array_item_type_node_id(&self, node_id: &str) -> Option<&str> {
+        let node = self.nodes.get(node_id).unwrap();
+
+        let mut item_type_node_id: Vec<_> = node
+            .types
+            .iter()
+            .map(array_item_type_node_id_from_type_node)
+            .collect();
+        assert!(item_type_node_id.len() <= 1);
+        let mut item_type_node_id = item_type_node_id.pop().unwrap_or_default();
+
+        if let Some(super_node_id) = &node.super_node_id {
+            let super_item_type_node_id = self.select_array_item_type_node_id(super_node_id);
+
+            assert!(item_type_node_id.is_none() || super_item_type_node_id.is_none());
+
+            if item_type_node_id.is_none() {
+                item_type_node_id = super_item_type_node_id
+            }
+        }
+
+        item_type_node_id
+    }
+
+    fn select_object_property_type_node_ids(
+        &self,
+        node_id: &str,
+    ) -> std::collections::HashMap<&str, &str> {
+        let node = self.nodes.get(node_id).unwrap();
+
+        let mut property_type_node_ids: Vec<_> = node
+            .types
+            .iter()
+            .map(object_property_type_node_ids_from_type_node)
+            .collect();
+        assert!(property_type_node_ids.len() <= 1);
+        let mut property_type_node_ids = property_type_node_ids.pop().unwrap_or_default();
+
+        if let Some(super_node_id) = &node.super_node_id {
+            let super_item_type_node_ids = self.select_object_property_type_node_ids(super_node_id);
+
+            property_type_node_ids = empty()
+                .chain(property_type_node_ids)
+                .chain(super_item_type_node_ids)
+                .collect();
+        }
+
+        property_type_node_ids
+    }
+
+    fn select_record_property_type_node_id(&self, node_id: &str) -> Option<&str> {
+        let node = self.nodes.get(node_id).unwrap();
+
+        let mut property_type_node_id: Vec<_> = node
+            .types
+            .iter()
+            .map(array_item_type_node_id_from_type_node)
+            .collect();
+        assert!(property_type_node_id.len() <= 1);
+        let mut property_type_node_id = property_type_node_id.pop().unwrap_or_default();
+
+        if let Some(super_node_id) = &node.super_node_id {
+            let super_property_type_node_id =
+                self.select_record_property_type_node_id(super_node_id);
+
+            assert!(property_type_node_id.is_none() || super_property_type_node_id.is_none());
+
+            if property_type_node_id.is_none() {
+                property_type_node_id = super_property_type_node_id
+            }
+        }
+
+        property_type_node_id
+    }
+
+    fn select_object_required_properties(&self, node_id: &str) -> HashSet<&str> {
+        let node = self.nodes.get(node_id).unwrap();
+
+        let mut required_properties: Vec<_> = node
+            .types
+            .iter()
+            .map(object_required_properties_from_type_node)
+            .collect();
+        assert!(required_properties.len() <= 1);
+        let mut required_properties = required_properties.pop().unwrap_or_default();
+
+        if let Some(super_node_id) = &node.super_node_id {
+            let super_required_properties = self.select_object_required_properties(super_node_id);
+
+            required_properties = empty()
+                .chain(required_properties)
+                .chain(super_required_properties)
+                .collect();
+        }
+
+        required_properties
+    }
 }
 
 fn string_options_from_type_node(
@@ -87,8 +214,91 @@ fn string_options_from_type_node(
     match type_node {
         // string
         schemas::intermediate_a::TypeUnion::OneOf5(type_node) => {
-            if let Some(options) = type_node.options {
+            if let Some(options) = &type_node.options {
                 options.iter().map(|option| option.as_ref()).collect()
+            } else {
+                Default::default()
+            }
+        }
+        _ => Default::default(),
+    }
+}
+
+fn tuple_item_type_node_ids_from_type_node(
+    type_node: &schemas::intermediate_a::TypeUnionOneOf,
+) -> Vec<&str> {
+    match type_node {
+        // tuple
+        schemas::intermediate_a::TypeUnion::OneOf6(type_node) => {
+            if let Some(node_ids) = &type_node.item_type_node_ids {
+                node_ids.iter().map(|node_id| node_id.as_ref()).collect()
+            } else {
+                Default::default()
+            }
+        }
+        _ => Default::default(),
+    }
+}
+
+fn array_item_type_node_id_from_type_node(
+    type_node: &schemas::intermediate_a::TypeUnionOneOf,
+) -> Option<&str> {
+    match type_node {
+        // array
+        schemas::intermediate_a::TypeUnion::OneOf7(type_node) => {
+            if let Some(node_id) = &type_node.item_type_node_id {
+                Some(node_id.as_ref())
+            } else {
+                Default::default()
+            }
+        }
+        _ => Default::default(),
+    }
+}
+
+fn object_property_type_node_ids_from_type_node(
+    type_node: &schemas::intermediate_a::TypeUnionOneOf,
+) -> HashMap<&str, &str> {
+    match type_node {
+        // interface
+        schemas::intermediate_a::TypeUnion::OneOf8(type_node) => {
+            if let Some(node_ids) = &type_node.property_type_node_ids {
+                node_ids
+                    .iter()
+                    .map(|(name, node_id)| (name.as_ref(), node_id.as_ref()))
+                    .collect()
+            } else {
+                Default::default()
+            }
+        }
+        _ => Default::default(),
+    }
+}
+
+fn record_property_type_node_id_from_type_node(
+    type_node: &schemas::intermediate_a::TypeUnionOneOf,
+) -> Option<&str> {
+    match type_node {
+        // record
+        schemas::intermediate_a::TypeUnion::OneOf9(type_node) => {
+            if let Some(node_id) = &type_node.property_type_node_id {
+                Some(node_id.as_ref())
+            } else {
+                Default::default()
+            }
+        }
+        _ => Default::default(),
+    }
+}
+
+fn object_required_properties_from_type_node(
+    type_node: &schemas::intermediate_a::TypeUnionOneOf,
+) -> HashSet<&str> {
+    match type_node {
+        // interface
+        schemas::intermediate_a::TypeUnion::OneOf8(type_node) => {
+            if let Some(properties) = &type_node.required_properties {
+                properties.iter().map(|name| name.as_ref()).collect()
             } else {
                 Default::default()
             }

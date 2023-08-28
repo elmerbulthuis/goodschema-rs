@@ -168,7 +168,7 @@ impl<'a> ModelsRsGenerator<'a> {
                     // object
                     TypeEnum::Object => {
                         tokens.append_all(
-                            self.generate_interface_token_stream(&model_type_name, &node_id)?,
+                            self.generate_object_token_stream(&model_type_name, &node_id)?,
                         );
                     }
                     // record
@@ -515,7 +515,11 @@ impl<'a> ModelsRsGenerator<'a> {
 
         let mut tuple_tokens = quote! {};
 
-        for item_type_node_id in type_node.item_type_node_ids.as_ref().unwrap() {
+        let item_type_node_ids = self
+            .intermediate_data
+            .select_tuple_item_type_node_ids(node_id);
+
+        for item_type_node_id in item_type_node_ids {
             let item_type_name = self.get_model_name(item_type_node_id)?;
             let item_type_identifier = format_ident!("r#{}", item_type_name);
             tuple_tokens.append_all(quote! {
@@ -539,7 +543,11 @@ impl<'a> ModelsRsGenerator<'a> {
 
         let model_type_identifier = format_ident!("r#{}", model_type_name);
 
-        let item_type_name = self.get_model_name(type_node.item_type_node_id.as_ref().unwrap())?;
+        let item_type_node_id = self
+            .intermediate_data
+            .select_array_item_type_node_id(node_id)
+            .ok_or("item type not set")?;
+        let item_type_name = self.get_model_name(item_type_node_id)?;
         let item_type_identifier = format_ident!("r#{}", item_type_name);
         tokens.append_all(quote! {
             pub type #model_type_identifier = Vec<#item_type_identifier>;
@@ -548,7 +556,7 @@ impl<'a> ModelsRsGenerator<'a> {
         Ok(tokens)
     }
 
-    fn generate_interface_token_stream(
+    fn generate_object_token_stream(
         &self,
         model_type_name: &str,
         node_id: &str,
@@ -562,22 +570,20 @@ impl<'a> ModelsRsGenerator<'a> {
 
         let mut property_tokens = quote! {};
 
-        for (property_name, property_type_node_id) in
-            type_node.property_type_node_ids.as_ref().unwrap()
-        {
+        let property_type_node_ids = self
+            .intermediate_data
+            .select_object_property_type_node_ids(node_id);
+
+        let required_properties = self
+            .intermediate_data
+            .select_object_required_properties(node_id);
+
+        for (property_name, property_type_node_id) in property_type_node_ids {
             let member_name = self.to_member_name(property_name);
             let member_identifier = format_ident!("r#{}", member_name);
 
             let property_type_name = self.get_model_name(property_type_node_id)?;
             let property_type_identifier = format_ident!("r#{}", property_type_name);
-
-            let required_properties: HashSet<_> = type_node
-                .required_properties
-                .as_ref()
-                .unwrap()
-                .iter()
-                .map(|v| v.as_ref())
-                .collect();
 
             if required_properties.contains(member_name.as_str()) {
                 property_tokens.append_all(quote! {
@@ -668,8 +674,11 @@ impl<'a> ModelsRsGenerator<'a> {
     ) -> Result<TokenStream, &'static str> {
         let model_type_identifier = format_ident!("r#{}", model_type_name);
 
-        let property_type_name =
-            self.get_model_name(type_node.property_type_node_id.as_ref().unwrap())?;
+        let property_type_node_id = self
+            .intermediate_data
+            .select_record_property_type_node_id(node_id)
+            .ok_or("item type not set")?;
+        let property_type_name = self.get_model_name(property_type_node_id)?;
         let property_type_identifier = format_ident!("r#{}", property_type_name);
         let tokens = quote! {
             pub type #model_type_identifier = std::collections::HashMap<String, #property_type_identifier>;
