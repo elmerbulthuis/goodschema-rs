@@ -318,10 +318,6 @@ impl<'a> ModelsRsGenerator<'a> {
                 }
 
                 pub fn validate(&self) -> bool {
-                    if self.0 == 0 {
-                        return false;
-                    }
-
                     true
                 }
             }
