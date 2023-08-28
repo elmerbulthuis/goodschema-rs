@@ -7,6 +7,7 @@ use crate::documents::context::Context;
 use crate::documents::factory::Initializer;
 use crate::generators::PackageGenerator;
 use crate::schemas;
+use crate::selectors::node::NodeSelectors;
 use crate::utils::namer::Namer;
 
 #[derive(Parser, Debug)]
@@ -62,7 +63,11 @@ pub fn run_command(options: CommandOptions) -> Result<(), &'static str> {
     let intermediate_data = context.get_intermediate_data();
 
     let mut namer = Namer::new(root_name_part.as_str());
-    for key in intermediate_data.nodes.keys() {
+    for (key, node) in &intermediate_data.nodes {
+        if node.select_is_empty() && node.super_node_id.is_some() {
+            continue;
+        }
+
         let url: Url = key.parse().unwrap();
         let path = url.path().to_string() + url.fragment().unwrap_or_default();
         namer.register_path(key.clone(), &path);
