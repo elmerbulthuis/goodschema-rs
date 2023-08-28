@@ -226,8 +226,8 @@ impl DocumentSelectors for schemas::intermediate_a::SchemaJson {
     }
 }
 
-impl From<&schemas::intermediate_a::TypeUnionOneOf> for TypeEnum {
-    fn from(type_node: &schemas::intermediate_a::TypeUnionOneOf) -> Self {
+impl From<&schemas::intermediate_a::TypeUnion> for TypeEnum {
+    fn from(type_node: &schemas::intermediate_a::TypeUnion) -> Self {
         match type_node {
             // null
             schemas::intermediate_a::TypeUnion::NullType(_) => TypeEnum::Null,
@@ -253,9 +253,7 @@ impl From<&schemas::intermediate_a::TypeUnionOneOf> for TypeEnum {
     }
 }
 
-fn string_options_from_type_node(
-    type_node: &schemas::intermediate_a::TypeUnionOneOf,
-) -> HashSet<&str> {
+fn string_options_from_type_node(type_node: &schemas::intermediate_a::TypeUnion) -> HashSet<&str> {
     match type_node {
         // string
         schemas::intermediate_a::TypeUnion::StringType(type_node) => {
@@ -270,7 +268,7 @@ fn string_options_from_type_node(
 }
 
 fn tuple_item_type_node_ids_from_type_node(
-    type_node: &schemas::intermediate_a::TypeUnionOneOf,
+    type_node: &schemas::intermediate_a::TypeUnion,
 ) -> Vec<&str> {
     match type_node {
         // tuple
@@ -286,7 +284,7 @@ fn tuple_item_type_node_ids_from_type_node(
 }
 
 fn array_item_type_node_id_from_type_node(
-    type_node: &schemas::intermediate_a::TypeUnionOneOf,
+    type_node: &schemas::intermediate_a::TypeUnion,
 ) -> Option<&str> {
     match type_node {
         // array
@@ -302,7 +300,7 @@ fn array_item_type_node_id_from_type_node(
 }
 
 fn object_property_type_node_ids_from_type_node(
-    type_node: &schemas::intermediate_a::TypeUnionOneOf,
+    type_node: &schemas::intermediate_a::TypeUnion,
 ) -> HashMap<&str, &str> {
     match type_node {
         // interface
@@ -321,7 +319,7 @@ fn object_property_type_node_ids_from_type_node(
 }
 
 fn record_property_type_node_id_from_type_node(
-    type_node: &schemas::intermediate_a::TypeUnionOneOf,
+    type_node: &schemas::intermediate_a::TypeUnion,
 ) -> Option<&str> {
     match type_node {
         // record
@@ -337,7 +335,7 @@ fn record_property_type_node_id_from_type_node(
 }
 
 fn object_required_properties_from_type_node(
-    type_node: &schemas::intermediate_a::TypeUnionOneOf,
+    type_node: &schemas::intermediate_a::TypeUnion,
 ) -> HashSet<&str> {
     match type_node {
         // interface

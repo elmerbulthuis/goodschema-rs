@@ -74,23 +74,7 @@ impl<'a> ModelsRsGenerator<'a> {
 
         let type_enums = self.intermediate_data.select_type_enums(node_id);
 
-        if type_enums.len() + node.compounds.len() == 1 {
-            for type_enum in &type_enums {
-                let model_type_name = self.get_model_type_name(node_id, type_enum)?;
-                let model_type_identifier = format_ident!("r#{}", model_type_name);
-                tokens.append_all(quote! {
-                    pub type #model_identifier = #model_type_identifier;
-                });
-            }
-
-            for node_compound in &node.compounds {
-                let model_compound_name = self.get_model_compound_name(node_id, node_compound)?;
-                let model_compound_identifier = format_ident!("r#{}", model_compound_name);
-                tokens.append_all(quote! {
-                    pub type #model_identifier = #model_compound_identifier;
-                });
-            }
-        } else {
+        if type_enums.len() + node.compounds.len() > 1 {
             let mut enum_tokens = quote! {};
 
             for node_type in &type_enums {
@@ -113,7 +97,11 @@ impl<'a> ModelsRsGenerator<'a> {
         }
 
         for type_enum in &type_enums {
-            let model_type_name = self.get_model_type_name(node_id, type_enum)?;
+            let model_type_name = if type_enums.len() + node.compounds.len() > 1 {
+                self.get_model_type_name(node_id, type_enum)?
+            } else {
+                model_name.clone()
+            };
 
             match type_enum {
                 // never
@@ -167,7 +155,11 @@ impl<'a> ModelsRsGenerator<'a> {
         }
 
         for node_compound in &node.compounds {
-            let model_compound_name = self.get_model_compound_name(node_id, node_compound)?;
+            let model_compound_name = if type_enums.len() + node.compounds.len() > 1 {
+                self.get_model_compound_name(node_id, node_compound)?
+            } else {
+                model_name.clone()
+            };
 
             match node_compound {
                 // one-of
@@ -679,7 +671,7 @@ impl<'a> ModelsRsGenerator<'a> {
     fn generate_one_of_token_stream(
         &self,
         model_compound_name: &str,
-        compound_node: &schemas::intermediate_a::OneOfCompoundObject,
+        compound_node: &schemas::intermediate_a::OneOfCompound,
     ) -> Result<TokenStream, &'static str> {
         let mut tokens = quote! {};
 
@@ -739,7 +731,7 @@ impl<'a> ModelsRsGenerator<'a> {
     fn generate_any_of_token_stream(
         &self,
         model_compound_name: &str,
-        compound_node: &schemas::intermediate_a::AnyOfCompoundObject,
+        compound_node: &schemas::intermediate_a::AnyOfCompound,
     ) -> Result<TokenStream, &'static str> {
         let mut tokens = quote! {};
         let model_compound_identifier = format_ident!("r#{}", model_compound_name);
@@ -824,7 +816,7 @@ impl<'a> ModelsRsGenerator<'a> {
     fn generate_all_of_token_stream(
         &self,
         model_compound_name: &str,
-        compound_node: &schemas::intermediate_a::AllOfCompoundObject,
+        compound_node: &schemas::intermediate_a::AllOfCompound,
     ) -> Result<TokenStream, &'static str> {
         let mut tokens = quote! {};
         let model_compound_identifier = format_ident!("r#{}", model_compound_name);
