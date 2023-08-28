@@ -1,11 +1,11 @@
-use super::{Selectors, TypeEnum};
+use super::{DocumentSelectors, TypeEnum};
 use crate::schemas;
 use std::{
     collections::{HashMap, HashSet},
     iter::empty,
 };
 
-impl Selectors for schemas::intermediate_a::SchemaJson {
+impl DocumentSelectors for schemas::intermediate_a::SchemaJson {
     fn select_type_enums(&self, node_id: &str) -> HashSet<TypeEnum> {
         let node = self.nodes.get(node_id).unwrap();
 
@@ -208,6 +208,33 @@ impl Selectors for schemas::intermediate_a::SchemaJson {
     }
 }
 
+impl From<&schemas::intermediate_a::TypeUnionOneOf> for TypeEnum {
+    fn from(type_node: &schemas::intermediate_a::TypeUnionOneOf) -> Self {
+        match type_node {
+            // null
+            schemas::intermediate_a::TypeUnion::TypeUnionOneOf0(_) => TypeEnum::Null,
+            // any
+            schemas::intermediate_a::TypeUnion::TypeUnionOneOf1(_) => TypeEnum::Any,
+            // never
+            schemas::intermediate_a::TypeUnion::TypeUnionOneOf2(_) => TypeEnum::Never,
+            // boolean
+            schemas::intermediate_a::TypeUnion::OneOf3(_) => TypeEnum::Boolean,
+            // number
+            schemas::intermediate_a::TypeUnion::OneOf4(_) => TypeEnum::Number,
+            // string
+            schemas::intermediate_a::TypeUnion::OneOf5(_) => TypeEnum::String,
+            // tuple
+            schemas::intermediate_a::TypeUnion::OneOf6(_) => TypeEnum::Tuple,
+            // array
+            schemas::intermediate_a::TypeUnion::OneOf7(_) => TypeEnum::Array,
+            // interface
+            schemas::intermediate_a::TypeUnion::OneOf8(_) => TypeEnum::Object,
+            // record
+            schemas::intermediate_a::TypeUnion::OneOf9(_) => TypeEnum::Record,
+        }
+    }
+}
+
 fn string_options_from_type_node(
     type_node: &schemas::intermediate_a::TypeUnionOneOf,
 ) -> HashSet<&str> {
@@ -304,32 +331,5 @@ fn object_required_properties_from_type_node(
             }
         }
         _ => Default::default(),
-    }
-}
-
-impl From<&schemas::intermediate_a::TypeUnionOneOf> for TypeEnum {
-    fn from(type_node: &schemas::intermediate_a::TypeUnionOneOf) -> Self {
-        match type_node {
-            // null
-            schemas::intermediate_a::TypeUnion::TypeUnionOneOf0(_) => TypeEnum::Null,
-            // any
-            schemas::intermediate_a::TypeUnion::TypeUnionOneOf1(_) => TypeEnum::Any,
-            // never
-            schemas::intermediate_a::TypeUnion::TypeUnionOneOf2(_) => TypeEnum::Never,
-            // boolean
-            schemas::intermediate_a::TypeUnion::OneOf3(_) => TypeEnum::Boolean,
-            // number
-            schemas::intermediate_a::TypeUnion::OneOf4(_) => TypeEnum::Number,
-            // string
-            schemas::intermediate_a::TypeUnion::OneOf5(_) => TypeEnum::String,
-            // tuple
-            schemas::intermediate_a::TypeUnion::OneOf6(_) => TypeEnum::Tuple,
-            // array
-            schemas::intermediate_a::TypeUnion::OneOf7(_) => TypeEnum::Array,
-            // interface
-            schemas::intermediate_a::TypeUnion::OneOf8(_) => TypeEnum::Object,
-            // record
-            schemas::intermediate_a::TypeUnion::OneOf9(_) => TypeEnum::Record,
-        }
     }
 }

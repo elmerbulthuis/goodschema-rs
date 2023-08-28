@@ -1,5 +1,7 @@
-use crate::selectors::TypeEnum;
-use crate::{schemas, selectors::Selectors};
+use crate::{
+    schemas, selectors::document::DocumentSelectors, selectors::document::TypeEnum,
+    selectors::node::NodeSelectors,
+};
 use inflector::Inflector;
 use proc_macro2::TokenStream;
 use quote::{format_ident, quote, TokenStreamExt};
@@ -64,6 +66,10 @@ impl<'a> ModelsRsGenerator<'a> {
         let model_identifier = format_ident!("r#{}", model_name);
 
         let mut tokens = quote! {};
+
+        if node.select_is_empty() {
+            //
+        }
 
         let type_enums = self.intermediate_data.select_type_enums(node_id);
 
