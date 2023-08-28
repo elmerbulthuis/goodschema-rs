@@ -1,4 +1,5 @@
-use crate::schemas;
+use crate::selectors::{intermediate_a, TypeEnum};
+use crate::{schemas, selectors::Selectors};
 use inflector::Inflector;
 use proc_macro2::TokenStream;
 use quote::{format_ident, quote, TokenStreamExt};
@@ -64,6 +65,8 @@ impl<'a> ModelsRsGenerator<'a> {
 
         let mut tokens = quote! {};
 
+        let types = self.intermediate_data.select_types(node_id);
+
         if let Some(super_node_id) = &node.super_node_id {
             let super_model_name = self.get_model_name(super_node_id)?;
             let super_model_identifier = format_ident!("r#{}", super_model_name);
@@ -71,9 +74,9 @@ impl<'a> ModelsRsGenerator<'a> {
                 pub type #model_identifier = #super_model_identifier;
             });
         } else {
-            if node.types.len() + node.compounds.len() == 1 {
-                for node_type in &node.types {
-                    let model_type_name = self.get_model_type_name(node_id, node_type)?;
+            if types.len() + node.compounds.len() == 1 {
+                for type_enum in &types {
+                    let model_type_name = self.get_model_type_name(node_id, type_enum)?;
                     let model_type_identifier = format_ident!("r#{}", model_type_name);
                     tokens.append_all(quote! {
                         pub type #model_identifier = #model_type_identifier;
@@ -91,7 +94,7 @@ impl<'a> ModelsRsGenerator<'a> {
             } else {
                 let mut enum_tokens = quote! {};
 
-                for node_type in &node.types {
+                for node_type in &types {
                     let type_name = self.to_type_name(node_type);
                     let type_identifier = format_ident!("r#{}", type_name);
                     let model_type_name = self.get_model_type_name(node_id, node_type)?;
@@ -110,59 +113,68 @@ impl<'a> ModelsRsGenerator<'a> {
                 });
             }
 
-            for node_type in &node.types {
-                let model_type_name = self.get_model_type_name(node_id, node_type)?;
+            for type_enum in &types {
+                let model_type_name = self.get_model_type_name(node_id, type_enum)?;
 
-                match node_type {
-                    // null
-                    schemas::intermediate_a::TypeUnion::TypeUnionOneOf0(_) => {
-                        tokens.append_all(self.generate_null_token_stream(&model_type_name))
-                    }
-
-                    // any
-                    schemas::intermediate_a::TypeUnion::TypeUnionOneOf1(_) => {
-                        tokens.append_all(self.generate_any_token_stream(&model_type_name))
-                    }
+                match type_enum {
                     // never
-                    schemas::intermediate_a::TypeUnion::TypeUnionOneOf2(_) => {
+                    TypeEnum::Never => {
                         tokens.append_all(self.generate_never_token_stream(&model_type_name))
                     }
+                    // any
+                    TypeEnum::Any => {
+                        tokens.append_all(self.generate_any_token_stream(&model_type_name))
+                    }
+                    // null
+                    TypeEnum::Null => {
+                        tokens.append_all(self.generate_null_token_stream(&model_type_name))
+                    }
                     // boolean
-                    schemas::intermediate_a::TypeUnion::OneOf3(_) => {
-                        tokens.append_all(self.generate_boolean_token_stream(&model_type_name));
+                    TypeEnum::Boolean => {
+                        tokens.append_all(
+                            self.generate_boolean_token_stream(&model_type_name, &node_id),
+                        );
+                    }
+                    // integer
+                    TypeEnum::Integer => {
+                        tokens.append_all(
+                            self.generate_number_token_stream(&model_type_name, &node_id),
+                        );
                     }
                     // number
-                    schemas::intermediate_a::TypeUnion::OneOf4(_) => {
-                        tokens.append_all(self.generate_number_token_stream(&model_type_name));
+                    TypeEnum::Number => {
+                        tokens.append_all(
+                            self.generate_number_token_stream(&model_type_name, &node_id),
+                        );
                     }
                     // string
-                    schemas::intermediate_a::TypeUnion::OneOf5(node_type) => {
+                    TypeEnum::String => {
                         tokens.append_all(
-                            self.generate_string_token_stream(&model_type_name, &node_type.options),
+                            self.generate_string_token_stream(&model_type_name, &node_id),
                         );
                     }
                     // tuple
-                    schemas::intermediate_a::TypeUnion::OneOf6(type_node) => {
+                    TypeEnum::Tuple => {
                         tokens.append_all(
-                            self.generate_tuple_token_stream(&model_type_name, type_node)?,
+                            self.generate_tuple_token_stream(&model_type_name, &node_id)?,
                         );
                     }
                     // array
-                    schemas::intermediate_a::TypeUnion::OneOf7(type_node) => {
+                    TypeEnum::Array => {
                         tokens.append_all(
-                            self.generate_array_token_stream(&model_type_name, type_node)?,
+                            self.generate_array_token_stream(&model_type_name, &node_id)?,
                         );
                     }
-                    // interface
-                    schemas::intermediate_a::TypeUnion::OneOf8(type_node) => {
+                    // object
+                    TypeEnum::Object => {
                         tokens.append_all(
-                            self.generate_interface_token_stream(&model_type_name, type_node)?,
+                            self.generate_interface_token_stream(&model_type_name, &node_id)?,
                         );
                     }
                     // record
-                    schemas::intermediate_a::TypeUnion::OneOf9(type_node) => {
+                    TypeEnum::Record => {
                         tokens.append_all(
-                            self.generate_record_token_stream(&model_type_name, type_node)?,
+                            self.generate_record_token_stream(&model_type_name, &node_id)?,
                         );
                     }
                 }
@@ -225,7 +237,7 @@ impl<'a> ModelsRsGenerator<'a> {
         todo!()
     }
 
-    fn generate_boolean_token_stream(&self, model_type_name: &str) -> TokenStream {
+    fn generate_boolean_token_stream(&self, model_type_name: &str, node_id: &str) -> TokenStream {
         let mut tokens = quote! {};
 
         let model_type_identifier = format_ident!("r#{}", model_type_name);
@@ -292,7 +304,7 @@ impl<'a> ModelsRsGenerator<'a> {
         tokens
     }
 
-    fn generate_number_token_stream(&self, model_type_name: &str) -> TokenStream {
+    fn generate_number_token_stream(&self, model_type_name: &str, node_id: &str) -> TokenStream {
         let mut tokens = quote! {};
 
         let model_type_identifier = format_ident!("r#{}", model_type_name);
@@ -384,19 +396,15 @@ impl<'a> ModelsRsGenerator<'a> {
         tokens
     }
 
-    fn generate_string_token_stream(
-        &self,
-        model_type_name: &str,
-        options: &Option<schemas::intermediate_a::StringTypeOptions>,
-    ) -> TokenStream {
+    fn generate_string_token_stream(&self, model_type_name: &str, node_id: &str) -> TokenStream {
         let mut tokens = quote! {};
 
         let mut validation_tokens = quote! {};
 
-        if let Some(options) = options {
+        let options = self.intermediate_data.select_string_options(node_id);
+        if !options.is_empty() {
             let mut test_tokens = quote! {};
             for (index, option) in options.iter().enumerate() {
-                let option = option.as_ref();
                 if index > 0 {
                     test_tokens.append_all(quote! { && })
                 }
@@ -499,7 +507,7 @@ impl<'a> ModelsRsGenerator<'a> {
     fn generate_tuple_token_stream(
         &self,
         model_type_name: &str,
-        type_node: &schemas::intermediate_a::TupleTypeInterface,
+        node_id: &str,
     ) -> Result<TokenStream, &'static str> {
         let mut tokens = quote! {};
 
@@ -525,7 +533,7 @@ impl<'a> ModelsRsGenerator<'a> {
     fn generate_array_token_stream(
         &self,
         model_type_name: &str,
-        type_node: &schemas::intermediate_a::ArrayTypeInterface,
+        node_id: &str,
     ) -> Result<TokenStream, &'static str> {
         let mut tokens = quote! {};
 
@@ -543,7 +551,7 @@ impl<'a> ModelsRsGenerator<'a> {
     fn generate_interface_token_stream(
         &self,
         model_type_name: &str,
-        type_node: &schemas::intermediate_a::InterfaceTypeInterface,
+        node_id: &str,
     ) -> Result<TokenStream, &'static str> {
         let mut tokens = quote! {};
 
@@ -656,7 +664,7 @@ impl<'a> ModelsRsGenerator<'a> {
     fn generate_record_token_stream(
         &self,
         model_type_name: &str,
-        type_node: &schemas::intermediate_a::RecordTypeInterface,
+        node_id: &str,
     ) -> Result<TokenStream, &'static str> {
         let model_type_identifier = format_ident!("r#{}", model_type_name);
 
@@ -867,10 +875,10 @@ impl<'a> ModelsRsGenerator<'a> {
     fn get_model_type_name(
         &self,
         node_id: &str,
-        node_type: &schemas::intermediate_a::TypeUnion,
+        type_enum: &TypeEnum,
     ) -> Result<String, &'static str> {
         let model_name = self.get_model_name(node_id)?;
-        let type_name = self.to_type_name(node_type);
+        let type_name = self.to_type_name(type_enum);
         let model_type_name = format!("{}_{}", model_name, type_name);
         let model_type_name = model_type_name.to_pascal_case();
 
@@ -890,28 +898,30 @@ impl<'a> ModelsRsGenerator<'a> {
         Ok(model_compound_name)
     }
 
-    fn to_type_name(&self, node_type: &schemas::intermediate_a::TypeUnion) -> &'static str {
-        match node_type {
-            // null
-            schemas::intermediate_a::TypeUnion::TypeUnionOneOf0(_) => "Null",
-            // any
-            schemas::intermediate_a::TypeUnion::TypeUnionOneOf1(_) => "Any",
+    fn to_type_name(&self, type_enum: &TypeEnum) -> &'static str {
+        match type_enum {
             // never
-            schemas::intermediate_a::TypeUnion::TypeUnionOneOf2(_) => "Never",
+            TypeEnum::Never => "Never",
+            // any
+            TypeEnum::Any => "Any",
+            // null
+            TypeEnum::Null => "Null",
             // boolean
-            schemas::intermediate_a::TypeUnion::OneOf3(_) => "Boolean",
+            TypeEnum::Boolean => "Boolean",
             // number
-            schemas::intermediate_a::TypeUnion::OneOf4(_) => "Number",
+            TypeEnum::Integer => "Integer",
+            // number
+            TypeEnum::Number => "Number",
             // string
-            schemas::intermediate_a::TypeUnion::OneOf5(_) => "String",
+            TypeEnum::String => "String",
             // tuple
-            schemas::intermediate_a::TypeUnion::OneOf6(_) => "Tuple",
+            TypeEnum::Tuple => "Tuple",
             // array
-            schemas::intermediate_a::TypeUnion::OneOf7(_) => "Array",
+            TypeEnum::Array => "Array",
             // interface
-            schemas::intermediate_a::TypeUnion::OneOf8(_) => "Interface",
+            TypeEnum::Object => "Object",
             // record
-            schemas::intermediate_a::TypeUnion::OneOf9(_) => "Record",
+            TypeEnum::Record => "Record",
         }
     }
 
