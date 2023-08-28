@@ -165,7 +165,7 @@ impl Selectors for schemas::intermediate_a::SchemaJson {
         let mut property_type_node_id: Vec<_> = node
             .types
             .iter()
-            .map(array_item_type_node_id_from_type_node)
+            .map(record_property_type_node_id_from_type_node)
             .collect();
         assert!(property_type_node_id.len() <= 1);
         let mut property_type_node_id = property_type_node_id.pop().unwrap_or_default();
