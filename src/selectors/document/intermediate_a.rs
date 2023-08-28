@@ -72,6 +72,7 @@ impl DocumentSelectors for schemas::intermediate_a::SchemaJson {
             .types
             .iter()
             .map(string_options_from_type_node)
+            .filter(|options| !options.is_empty())
             .collect();
         assert!(options.len() <= 1);
         let mut options = options.pop().unwrap_or_default();
@@ -92,6 +93,7 @@ impl DocumentSelectors for schemas::intermediate_a::SchemaJson {
             .types
             .iter()
             .map(tuple_item_type_node_ids_from_type_node)
+            .filter(|item_type_node_ids| !item_type_node_ids.is_empty())
             .collect();
         assert!(item_type_node_ids.len() <= 1);
         let mut item_type_node_ids = item_type_node_ids.pop().unwrap_or_default();
@@ -116,6 +118,7 @@ impl DocumentSelectors for schemas::intermediate_a::SchemaJson {
             .types
             .iter()
             .map(array_item_type_node_id_from_type_node)
+            .filter(|item_type_node_id| item_type_node_id.is_some())
             .collect();
         assert!(item_type_node_id.len() <= 1);
         let mut item_type_node_id = item_type_node_id.pop().unwrap_or_default();
@@ -143,6 +146,7 @@ impl DocumentSelectors for schemas::intermediate_a::SchemaJson {
             .types
             .iter()
             .map(object_property_type_node_ids_from_type_node)
+            .filter(|property_type_node_ids| !property_type_node_ids.is_empty())
             .collect();
         assert!(property_type_node_ids.len() <= 1);
         let mut property_type_node_ids = property_type_node_ids.pop().unwrap_or_default();
@@ -166,6 +170,7 @@ impl DocumentSelectors for schemas::intermediate_a::SchemaJson {
             .types
             .iter()
             .map(record_property_type_node_id_from_type_node)
+            .filter(|property_type_node_id| property_type_node_id.is_some())
             .collect();
         assert!(property_type_node_id.len() <= 1);
         let mut property_type_node_id = property_type_node_id.pop().unwrap_or_default();
@@ -191,6 +196,7 @@ impl DocumentSelectors for schemas::intermediate_a::SchemaJson {
             .types
             .iter()
             .map(object_required_properties_from_type_node)
+            .filter(|required_properties| !required_properties.is_empty())
             .collect();
         assert!(required_properties.len() <= 1);
         let mut required_properties = required_properties.pop().unwrap_or_default();
