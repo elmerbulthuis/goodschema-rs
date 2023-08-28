@@ -68,7 +68,14 @@ impl<'a> ModelsRsGenerator<'a> {
         let mut tokens = quote! {};
 
         if node.select_is_empty() {
-            //
+            if let Some(super_node_id) = &node.super_node_id {
+                let super_model_name = self.get_model_name(super_node_id)?;
+                let super_model_identifier = format_ident!("r#{}", super_model_name);
+                tokens.append_all(quote! {
+                    pub type #model_identifier = #super_model_identifier;
+                });
+                return Ok(tokens);
+            }
         }
 
         let type_enums = self.intermediate_data.select_type_enums(node_id);
@@ -674,7 +681,7 @@ impl<'a> ModelsRsGenerator<'a> {
     fn generate_one_of_token_stream(
         &self,
         model_compound_name: &str,
-        compound_node: &schemas::intermediate_a::OneOfCompoundInterface,
+        compound_node: &schemas::intermediate_a::OneOfCompoundObject,
     ) -> Result<TokenStream, &'static str> {
         let mut tokens = quote! {};
 
@@ -722,7 +729,7 @@ impl<'a> ModelsRsGenerator<'a> {
     fn generate_any_of_token_stream(
         &self,
         model_compound_name: &str,
-        compound_node: &schemas::intermediate_a::AnyOfCompoundInterface,
+        compound_node: &schemas::intermediate_a::AnyOfCompoundObject,
     ) -> Result<TokenStream, &'static str> {
         let mut tokens = quote! {};
         let model_compound_identifier = format_ident!("r#{}", model_compound_name);
@@ -789,7 +796,7 @@ impl<'a> ModelsRsGenerator<'a> {
     fn generate_all_of_token_stream(
         &self,
         model_compound_name: &str,
-        compound_node: &schemas::intermediate_a::AllOfCompoundInterface,
+        compound_node: &schemas::intermediate_a::AllOfCompoundObject,
     ) -> Result<TokenStream, &'static str> {
         let mut tokens = quote! {};
         let model_compound_identifier = format_ident!("r#{}", model_compound_name);

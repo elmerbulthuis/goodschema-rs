@@ -120,7 +120,7 @@ impl Context {
                 .map(|(k, v)| (k.to_string(), v.clone())),
         );
 
-        schemas::intermediate_a::SchemaJsonInterfaceInterior { schema, nodes }
+        schemas::intermediate_a::SchemaJsonObjectInterior { schema, nodes }
             .try_into()
             .unwrap()
     }
