@@ -227,7 +227,7 @@ impl<'a> ModelsRsGenerator<'a> {
 
         tokens.append_all(quote! {
             impl #model_type_identifier {
-                fn new(value: bool) -> Result<Self, ValidationError> {
+                pub fn new(value: bool) -> Result<Self, ValidationError> {
                     let instance = Self(value);
                     if instance.validate() {
                         Ok(instance)
@@ -236,7 +236,7 @@ impl<'a> ModelsRsGenerator<'a> {
                     }
                 }
 
-                pub fn validate(&self) -> bool {
+                fn validate(&self) -> bool {
                     true
                 }
             }
@@ -294,7 +294,7 @@ impl<'a> ModelsRsGenerator<'a> {
 
         tokens.append_all(quote! {
             impl #model_type_identifier {
-                fn new(value: usize) -> Result<Self, ValidationError> {
+                pub fn new(value: usize) -> Result<Self, ValidationError> {
                     let instance = Self(value);
                     if instance.validate() {
                         Ok(instance)
@@ -303,7 +303,7 @@ impl<'a> ModelsRsGenerator<'a> {
                     }
                 }
 
-                pub fn validate(&self) -> bool {
+                fn validate(&self) -> bool {
                     true
                 }
             }
@@ -402,7 +402,7 @@ impl<'a> ModelsRsGenerator<'a> {
         tokens.append_all(quote! {
 
             impl #model_type_identifier {
-                fn new(value: String) -> Result<Self, ValidationError> {
+                pub fn new(value: String) -> Result<Self, ValidationError> {
                     let instance = Self(value);
                     if instance.validate() {
                         Ok(instance)
@@ -593,7 +593,7 @@ impl<'a> ModelsRsGenerator<'a> {
 
         tokens.append_all(quote! {
             impl #model_type_identifier {
-                fn new(value: #model_interior_identifier) -> Result<Self, ValidationError> {
+                pub fn new(value: #model_interior_identifier) -> Result<Self, ValidationError> {
                     let instance = Self(Box::new(value));
                     if instance.validate() {
                         Ok(instance)
@@ -602,7 +602,7 @@ impl<'a> ModelsRsGenerator<'a> {
                     }
                 }
 
-                pub fn validate(&self) -> bool {
+                fn validate(&self) -> bool {
                     true
                 }
             }
