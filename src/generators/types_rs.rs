@@ -51,6 +51,11 @@ impl<'a> ModelsRsGenerator<'a> {
         });
 
         for (node_id, node) in &self.intermediate_data.nodes {
+            if node.select_is_empty() && node.super_node_id.is_some() {
+                continue;
+            }
+
+            let node_id = self.intermediate_data.select_non_empty(node_id);
             tokens.append_all(self.generate_model_token_stream(node_id, node));
         }
 
@@ -67,16 +72,16 @@ impl<'a> ModelsRsGenerator<'a> {
 
         let mut tokens = quote! {};
 
-        if node.select_is_empty() {
-            if let Some(super_node_id) = &node.super_node_id {
-                let super_model_name = self.get_model_name(super_node_id)?;
-                let super_model_identifier = format_ident!("r#{}", super_model_name);
-                tokens.append_all(quote! {
-                    pub type #model_identifier = #super_model_identifier;
-                });
-                return Ok(tokens);
-            }
-        }
+        // if node.select_is_empty() {
+        //     if let Some(super_node_id) = &node.super_node_id {
+        //         let super_model_name = self.get_model_name(super_node_id)?;
+        //         let super_model_identifier = format_ident!("r#{}", super_model_name);
+        //         tokens.append_all(quote! {
+        //             pub type #model_identifier = #super_model_identifier;
+        //         });
+        //         return Ok(tokens);
+        //     }
+        // }
 
         let type_enums = self.intermediate_data.select_type_enums(node_id);
 
@@ -177,19 +182,19 @@ impl<'a> ModelsRsGenerator<'a> {
 
             match node_compound {
                 // one-of
-                schemas::intermediate_a::CompoundUnion::CompoundUnionOneOf0(compound_node) => {
+                schemas::intermediate_a::CompoundUnion::OneOfCompound(compound_node) => {
                     tokens.append_all(
                         self.generate_one_of_token_stream(&model_compound_name, compound_node)?,
                     );
                 }
                 // any-of
-                schemas::intermediate_a::CompoundUnion::CompoundUnionOneOf1(compound_node) => {
+                schemas::intermediate_a::CompoundUnion::AnyOfCompound(compound_node) => {
                     tokens.append_all(
                         self.generate_any_of_token_stream(&model_compound_name, compound_node)?,
                     );
                 }
                 // all-of
-                schemas::intermediate_a::CompoundUnion::CompoundUnionOneOf2(compound_node) => {
+                schemas::intermediate_a::CompoundUnion::AllOfCompound(compound_node) => {
                     tokens.append_all(
                         self.generate_all_of_token_stream(&model_compound_name, compound_node)?,
                     );
@@ -504,7 +509,9 @@ impl<'a> ModelsRsGenerator<'a> {
 
         let item_type_node_ids = self
             .intermediate_data
-            .select_tuple_item_type_node_ids(node_id);
+            .select_tuple_item_type_node_ids(node_id)
+            .into_iter()
+            .map(|node_id| self.intermediate_data.select_non_empty(node_id));
 
         for item_type_node_id in item_type_node_ids {
             let item_type_name = self.get_model_name(item_type_node_id)?;
@@ -533,6 +540,7 @@ impl<'a> ModelsRsGenerator<'a> {
         let item_type_node_id = self
             .intermediate_data
             .select_array_item_type_node_id(node_id)
+            .map(|node_id| self.intermediate_data.select_non_empty(node_id))
             .ok_or("item type not set")?;
         let item_type_name = self.get_model_name(item_type_node_id)?;
         let item_type_identifier = format_ident!("r#{}", item_type_name);
@@ -559,7 +567,11 @@ impl<'a> ModelsRsGenerator<'a> {
 
         let property_type_node_ids = self
             .intermediate_data
-            .select_object_property_type_node_ids(node_id);
+            .select_object_property_type_node_ids(node_id)
+            .into_iter()
+            .map(|(property, node_id)| {
+                (property, self.intermediate_data.select_non_empty(node_id))
+            });
 
         let required_properties = self
             .intermediate_data
@@ -664,6 +676,7 @@ impl<'a> ModelsRsGenerator<'a> {
         let property_type_node_id = self
             .intermediate_data
             .select_record_property_type_node_id(node_id)
+            .map(|node_id| self.intermediate_data.select_non_empty(node_id))
             .ok_or("item type not set")?;
         let property_type_name = self.get_model_name(property_type_node_id)?;
         let property_type_identifier = format_ident!("r#{}", property_type_name);
@@ -685,7 +698,13 @@ impl<'a> ModelsRsGenerator<'a> {
 
         let mut enum_tokens = quote! {};
 
-        for type_node_id in compound_node.type_node_ids.as_ref().unwrap() {
+        for type_node_id in compound_node
+            .type_node_ids
+            .as_ref()
+            .unwrap()
+            .iter()
+            .map(|node_id| self.intermediate_data.select_non_empty(node_id))
+        {
             let type_name = self.get_model_name(type_node_id)?;
             let type_identifier = format_ident!("r#{}", type_name);
             enum_tokens.append_all(quote! {
@@ -701,7 +720,13 @@ impl<'a> ModelsRsGenerator<'a> {
             }
         });
 
-        for type_node_id in compound_node.type_node_ids.as_ref().unwrap() {
+        for type_node_id in compound_node
+            .type_node_ids
+            .as_ref()
+            .unwrap()
+            .iter()
+            .map(|node_id| self.intermediate_data.select_non_empty(node_id))
+        {
             let type_name = self.get_model_name(type_node_id)?;
             let type_identifier = format_ident!("r#{}", type_name);
 
@@ -732,7 +757,13 @@ impl<'a> ModelsRsGenerator<'a> {
 
         let mut property_tokens = quote! {};
 
-        for type_node_id in compound_node.type_node_ids.as_ref().unwrap() {
+        for type_node_id in compound_node
+            .type_node_ids
+            .as_ref()
+            .unwrap()
+            .iter()
+            .map(|node_id| self.intermediate_data.select_non_empty(node_id))
+        {
             let type_name = self.get_model_name(type_node_id)?;
             let type_identifier = format_ident!("r#{}", type_name);
 
@@ -752,7 +783,13 @@ impl<'a> ModelsRsGenerator<'a> {
             }
         });
 
-        for type_node_id in compound_node.type_node_ids.as_ref().unwrap() {
+        for type_node_id in compound_node
+            .type_node_ids
+            .as_ref()
+            .unwrap()
+            .iter()
+            .map(|node_id| self.intermediate_data.select_non_empty(node_id))
+        {
             let type_name = self.get_model_name(type_node_id)?;
             let type_identifier = format_ident!("r#{}", type_name);
 
@@ -770,7 +807,13 @@ impl<'a> ModelsRsGenerator<'a> {
             });
         }
 
-        for type_node_id in compound_node.type_node_ids.as_ref().unwrap() {
+        for type_node_id in compound_node
+            .type_node_ids
+            .as_ref()
+            .unwrap()
+            .iter()
+            .map(|node_id| self.intermediate_data.select_non_empty(node_id))
+        {
             let type_name = self.get_model_name(type_node_id)?;
             let type_identifier = format_ident!("r#{}", type_name);
 
@@ -799,7 +842,13 @@ impl<'a> ModelsRsGenerator<'a> {
 
         let mut property_tokens = quote! {};
 
-        for type_node_id in compound_node.type_node_ids.as_ref().unwrap() {
+        for type_node_id in compound_node
+            .type_node_ids
+            .as_ref()
+            .unwrap()
+            .iter()
+            .map(|node_id| self.intermediate_data.select_non_empty(node_id))
+        {
             let type_name = self.get_model_name(type_node_id)?;
             let type_identifier = format_ident!("r#{}", type_name);
 
@@ -819,7 +868,13 @@ impl<'a> ModelsRsGenerator<'a> {
             }
         });
 
-        for type_node_id in compound_node.type_node_ids.as_ref().unwrap() {
+        for type_node_id in compound_node
+            .type_node_ids
+            .as_ref()
+            .unwrap()
+            .iter()
+            .map(|node_id| self.intermediate_data.select_non_empty(node_id))
+        {
             let type_name = self.get_model_name(type_node_id)?;
             let type_identifier = format_ident!("r#{}", type_name);
 
@@ -835,7 +890,13 @@ impl<'a> ModelsRsGenerator<'a> {
             });
         }
 
-        for type_node_id in compound_node.type_node_ids.as_ref().unwrap() {
+        for type_node_id in compound_node
+            .type_node_ids
+            .as_ref()
+            .unwrap()
+            .iter()
+            .map(|node_id| self.intermediate_data.select_non_empty(node_id))
+        {
             let type_name = self.get_model_name(type_node_id)?;
             let type_identifier = format_ident!("r#{}", type_name);
 
@@ -926,9 +987,9 @@ impl<'a> ModelsRsGenerator<'a> {
         node_compound: &schemas::intermediate_a::CompoundUnion,
     ) -> &'static str {
         match node_compound {
-            schemas::intermediate_a::CompoundUnion::CompoundUnionOneOf0(_) => "OneOf",
-            schemas::intermediate_a::CompoundUnion::CompoundUnionOneOf1(_) => "AnyOf",
-            schemas::intermediate_a::CompoundUnion::CompoundUnionOneOf2(_) => "AllOf",
+            schemas::intermediate_a::CompoundUnion::OneOfCompound(_) => "OneOf",
+            schemas::intermediate_a::CompoundUnion::AnyOfCompound(_) => "AnyOf",
+            schemas::intermediate_a::CompoundUnion::AllOfCompound(_) => "AllOf",
         }
     }
 

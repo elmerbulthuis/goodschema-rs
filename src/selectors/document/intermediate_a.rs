@@ -1,5 +1,5 @@
 use super::{DocumentSelectors, TypeEnum};
-use crate::schemas;
+use crate::{schemas, selectors::node::NodeSelectors};
 use std::{
     collections::{HashMap, HashSet},
     iter::empty,
@@ -212,31 +212,43 @@ impl DocumentSelectors for schemas::intermediate_a::SchemaJson {
 
         required_properties
     }
+
+    fn select_non_empty<'l>(&'l self, node_id: &'l str) -> &'l str {
+        let node = self.nodes.get(node_id).unwrap();
+
+        if node.select_is_empty() {
+            if let Some(super_node_id) = &node.super_node_id {
+                return self.select_non_empty(super_node_id);
+            }
+        }
+
+        node_id
+    }
 }
 
 impl From<&schemas::intermediate_a::TypeUnionOneOf> for TypeEnum {
     fn from(type_node: &schemas::intermediate_a::TypeUnionOneOf) -> Self {
         match type_node {
             // null
-            schemas::intermediate_a::TypeUnion::TypeUnionOneOf0(_) => TypeEnum::Null,
+            schemas::intermediate_a::TypeUnion::NullType(_) => TypeEnum::Null,
             // any
-            schemas::intermediate_a::TypeUnion::TypeUnionOneOf1(_) => TypeEnum::Any,
+            schemas::intermediate_a::TypeUnion::AnyType(_) => TypeEnum::Any,
             // never
-            schemas::intermediate_a::TypeUnion::TypeUnionOneOf2(_) => TypeEnum::Never,
+            schemas::intermediate_a::TypeUnion::NeverType(_) => TypeEnum::Never,
             // boolean
-            schemas::intermediate_a::TypeUnion::OneOf3(_) => TypeEnum::Boolean,
+            schemas::intermediate_a::TypeUnion::BooleanType(_) => TypeEnum::Boolean,
             // number
-            schemas::intermediate_a::TypeUnion::OneOf4(_) => TypeEnum::Number,
+            schemas::intermediate_a::TypeUnion::DefsNumberType(_) => TypeEnum::Number,
             // string
-            schemas::intermediate_a::TypeUnion::OneOf5(_) => TypeEnum::String,
+            schemas::intermediate_a::TypeUnion::StringType(_) => TypeEnum::String,
             // tuple
-            schemas::intermediate_a::TypeUnion::OneOf6(_) => TypeEnum::Tuple,
+            schemas::intermediate_a::TypeUnion::TupleType(_) => TypeEnum::Tuple,
             // array
-            schemas::intermediate_a::TypeUnion::OneOf7(_) => TypeEnum::Array,
+            schemas::intermediate_a::TypeUnion::ArrayType(_) => TypeEnum::Array,
             // interface
-            schemas::intermediate_a::TypeUnion::OneOf8(_) => TypeEnum::Object,
+            schemas::intermediate_a::TypeUnion::InterfaceType(_) => TypeEnum::Object,
             // record
-            schemas::intermediate_a::TypeUnion::OneOf9(_) => TypeEnum::Record,
+            schemas::intermediate_a::TypeUnion::RecordType(_) => TypeEnum::Record,
         }
     }
 }
@@ -246,7 +258,7 @@ fn string_options_from_type_node(
 ) -> HashSet<&str> {
     match type_node {
         // string
-        schemas::intermediate_a::TypeUnion::OneOf5(type_node) => {
+        schemas::intermediate_a::TypeUnion::StringType(type_node) => {
             if let Some(options) = &type_node.options {
                 options.iter().map(|option| option.as_ref()).collect()
             } else {
@@ -262,7 +274,7 @@ fn tuple_item_type_node_ids_from_type_node(
 ) -> Vec<&str> {
     match type_node {
         // tuple
-        schemas::intermediate_a::TypeUnion::OneOf6(type_node) => {
+        schemas::intermediate_a::TypeUnion::TupleType(type_node) => {
             if let Some(node_ids) = &type_node.item_type_node_ids {
                 node_ids.iter().map(|node_id| node_id.as_ref()).collect()
             } else {
@@ -278,7 +290,7 @@ fn array_item_type_node_id_from_type_node(
 ) -> Option<&str> {
     match type_node {
         // array
-        schemas::intermediate_a::TypeUnion::OneOf7(type_node) => {
+        schemas::intermediate_a::TypeUnion::ArrayType(type_node) => {
             if let Some(node_id) = &type_node.item_type_node_id {
                 Some(node_id.as_ref())
             } else {
@@ -294,7 +306,7 @@ fn object_property_type_node_ids_from_type_node(
 ) -> HashMap<&str, &str> {
     match type_node {
         // interface
-        schemas::intermediate_a::TypeUnion::OneOf8(type_node) => {
+        schemas::intermediate_a::TypeUnion::InterfaceType(type_node) => {
             if let Some(node_ids) = &type_node.property_type_node_ids {
                 node_ids
                     .iter()
@@ -313,7 +325,7 @@ fn record_property_type_node_id_from_type_node(
 ) -> Option<&str> {
     match type_node {
         // record
-        schemas::intermediate_a::TypeUnion::OneOf9(type_node) => {
+        schemas::intermediate_a::TypeUnion::RecordType(type_node) => {
             if let Some(node_id) = &type_node.property_type_node_id {
                 Some(node_id.as_ref())
             } else {
@@ -329,7 +341,7 @@ fn object_required_properties_from_type_node(
 ) -> HashSet<&str> {
     match type_node {
         // interface
-        schemas::intermediate_a::TypeUnion::OneOf8(type_node) => {
+        schemas::intermediate_a::TypeUnion::InterfaceType(type_node) => {
             if let Some(properties) = &type_node.required_properties {
                 properties.iter().map(|name| name.as_ref()).collect()
             } else {
