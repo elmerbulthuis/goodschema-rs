@@ -63,7 +63,7 @@ pub fn run_command(options: CommandOptions) -> Result<(), &'static str> {
     let intermediate_data = context.get_intermediate_data();
 
     let mut namer = Namer::new(root_name_part.as_str());
-    for (key, node) in &intermediate_data.nodes {
+    for (key, node) in intermediate_data.nodes.iter() {
         if node.select_is_empty() && node.super_node_id.is_some() {
             continue;
         }
