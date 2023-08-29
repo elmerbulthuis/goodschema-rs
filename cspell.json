@@ -7,6 +7,8 @@
   "words": [
     "inflector",
     "pascalcase",
+    "serde",
+    "struct",
     "urlencoding"
   ]
 }

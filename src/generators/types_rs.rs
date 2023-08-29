@@ -27,7 +27,7 @@ impl<'a> ModelsRsGenerator<'a> {
         let mut tokens = quote! {};
 
         tokens.append_all(quote! {
-            #[derive(Debug)]
+            #[derive(Clone, Debug, PartialEq, PartialOrd, Eq, Ord)]
             pub struct ValidationError {
                 r#type: &'static str,
             }
@@ -208,6 +208,7 @@ impl<'a> ModelsRsGenerator<'a> {
             model_type_identifier,
             model_interior_identifier,
             quote! {false},
+            quote! {Copy, PartialEq, PartialOrd, Eq, Ord},
             false,
         ));
 
@@ -222,28 +223,11 @@ impl<'a> ModelsRsGenerator<'a> {
     fn generate_any_token_stream(&self, model_type_name: &str) -> TokenStream {
         let mut tokens = quote! {};
 
-        let model_interior_name = &format!("{}Interior", model_type_name);
-
         let model_type_identifier = &format_ident!("r#{}", model_type_name);
-        let model_interior_identifier = &format_ident!("r#{}", model_interior_name);
 
         tokens.append_all(quote! {
-            pub type #model_interior_identifier = serde_json::Value;
+            pub type #model_type_identifier = serde_json::Value;
         });
-
-        tokens.append_all(Self::generate_new_type_token_stream(
-            model_type_name,
-            model_interior_name,
-            model_type_identifier,
-            model_interior_identifier,
-            quote! {true},
-            false,
-        ));
-
-        tokens.append_all(Self::generate_new_type_ref_token_stream(
-            model_type_identifier,
-            model_interior_identifier,
-        ));
 
         tokens
     }
@@ -266,6 +250,7 @@ impl<'a> ModelsRsGenerator<'a> {
             model_type_identifier,
             model_interior_identifier,
             quote! {true},
+            quote! {Copy, PartialEq, PartialOrd, Eq, Ord},
             false,
         ));
 
@@ -295,6 +280,7 @@ impl<'a> ModelsRsGenerator<'a> {
             model_type_identifier,
             model_interior_identifier,
             quote! {true},
+            quote! {Copy, PartialEq, PartialOrd, Eq, Ord},
             false,
         ));
 
@@ -324,6 +310,7 @@ impl<'a> ModelsRsGenerator<'a> {
             model_type_identifier,
             model_interior_identifier,
             quote! {true},
+            quote! {Copy, PartialEq, PartialOrd, Eq, Ord},
             false,
         ));
 
@@ -343,6 +330,12 @@ impl<'a> ModelsRsGenerator<'a> {
         let model_type_identifier = &format_ident!("r#{}", model_type_name);
         let model_interior_identifier = &format_ident!("r#{}", model_interior_name);
 
+        let mut validation_tokens = quote! {};
+
+        validation_tokens.append_all(quote! {
+            true
+        });
+
         tokens.append_all(quote! {
             pub type #model_interior_identifier = f64;
         });
@@ -353,6 +346,7 @@ impl<'a> ModelsRsGenerator<'a> {
             model_type_identifier,
             model_interior_identifier,
             quote! {true},
+            quote! {Copy, PartialEq, PartialOrd},
             false,
         ));
 
@@ -405,6 +399,7 @@ impl<'a> ModelsRsGenerator<'a> {
             model_type_identifier,
             model_interior_identifier,
             validation_tokens,
+            quote! {PartialEq, PartialOrd, Eq, Ord},
             false,
         ));
 
@@ -453,6 +448,7 @@ impl<'a> ModelsRsGenerator<'a> {
             model_type_identifier,
             model_interior_identifier,
             quote! { true },
+            quote! { PartialEq },
             false,
         ));
 
@@ -493,6 +489,7 @@ impl<'a> ModelsRsGenerator<'a> {
             model_type_identifier,
             model_interior_identifier,
             quote! { true},
+            quote! { PartialEq },
             false,
         ));
 
@@ -551,7 +548,7 @@ impl<'a> ModelsRsGenerator<'a> {
         }
 
         tokens.append_all(quote! {
-            #[derive(Debug, serde::Serialize, serde::Deserialize, Clone, PartialEq)]
+            #[derive(serde::Serialize, serde::Deserialize, Clone, Debug, PartialEq)]
             pub struct #model_interior_identifier {
                 #property_tokens
             }
@@ -563,6 +560,7 @@ impl<'a> ModelsRsGenerator<'a> {
             model_type_identifier,
             model_interior_identifier,
             quote! { true},
+            quote! { PartialEq },
             true,
         ));
 
@@ -604,6 +602,7 @@ impl<'a> ModelsRsGenerator<'a> {
             model_type_identifier,
             model_interior_identifier,
             quote! {true},
+            quote! {PartialEq },
             false,
         ));
 
@@ -641,7 +640,7 @@ impl<'a> ModelsRsGenerator<'a> {
         }
 
         tokens.append_all(quote! {
-            #[derive(serde::Serialize, serde::Deserialize,Clone, Debug, PartialEq)]
+            #[derive(serde::Serialize, serde::Deserialize, Clone, Debug, PartialEq)]
             #[serde(untagged)]
             pub enum #model_compound_identifier {
                 #enum_tokens
@@ -705,7 +704,7 @@ impl<'a> ModelsRsGenerator<'a> {
         }
 
         tokens.append_all(quote! {
-            #[derive(serde::Serialize, serde::Deserialize,Clone, Debug, PartialEq)]
+            #[derive(serde::Serialize, serde::Deserialize, Clone, Debug, PartialEq)]
             pub struct #model_compound_identifier{
                 #property_tokens
             }
@@ -790,7 +789,7 @@ impl<'a> ModelsRsGenerator<'a> {
         }
 
         tokens.append_all(quote! {
-            #[derive(serde::Serialize, serde::Deserialize,Clone, Debug, PartialEq)]
+            #[derive(serde::Serialize, serde::Deserialize, Clone, Debug, PartialEq)]
             pub struct #model_compound_identifier{
                 #property_tokens
             }
@@ -843,12 +842,14 @@ impl<'a> ModelsRsGenerator<'a> {
         Ok(tokens)
     }
 
+    #[allow(clippy::too_many_arguments)]
     fn generate_new_type_token_stream(
         type_name: &str,
         interior_name: &str,
         type_identifier: &Ident,
         interior_identifier: &Ident,
         validation_tokens: TokenStream,
+        derive_tokens: TokenStream,
         boxed: bool,
     ) -> TokenStream {
         let mut tokens = quote! {};
@@ -860,9 +861,9 @@ impl<'a> ModelsRsGenerator<'a> {
         };
 
         let new_interior_tokens = if boxed {
-            quote! { Box::new(value) }
+            quote! { Box::new(interior) }
         } else {
-            quote! { value }
+            quote! { interior }
         };
 
         let from_tokens = if boxed {
@@ -872,14 +873,14 @@ impl<'a> ModelsRsGenerator<'a> {
         };
 
         tokens.append_all(quote! {
-            #[derive(Debug, serde::Serialize, serde::Deserialize, Clone, PartialEq)]
+            #[derive(Debug, serde::Serialize, serde::Deserialize, Clone, #derive_tokens)]
             #[serde(try_from = #interior_name)]
             pub struct #type_identifier(#interior_tokens);
         });
 
         tokens.append_all(quote! {
             impl #type_identifier {
-                pub fn new(value: #interior_identifier) -> Result<Self, ValidationError> {
+                pub fn new(interior: #interior_identifier) -> Result<Self, ValidationError> {
                     let instance = Self(#new_interior_tokens);
                     if instance.validate() {
                         Ok(instance)
@@ -898,8 +899,8 @@ impl<'a> ModelsRsGenerator<'a> {
             impl TryFrom<#interior_identifier> for #type_identifier {
                 type Error = ValidationError;
 
-                fn try_from(value: #interior_identifier) -> Result<Self, Self::Error> {
-                    Self::new(value)
+                fn try_from(interior: #interior_identifier) -> Result<Self, Self::Error> {
+                    Self::new(interior)
                 }
             }
         });

@@ -2,18 +2,70 @@
 
 ...
 
-## flattening types, thoughts
+references:
 
-So what is the problem. Well we can express union types in rust, as enums. We cannot express intersection types.
+-   [`Ord`](https://doc.rust-lang.org/std/cmp/trait.Ord.html).
+-   [`Hash`](https://doc.rust-lang.org/std/hash/index.html).
 
-In JsonSchema there are 4 ways to compose types. OneOf, AnyOf, AllOf and via ref.
+## types
 
-OneOf is like a union, so in rust, like an enum. We implement the the TryFrom trait for all of the subtypes. They will return the subtype.
+Rust types generated from the json schema specification are represented as new-types. This make (de)serialization easy and allows us to [parse-don't-validate](https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/). The `Deref` trait is implemented for every new-type to allow for better ergonomics.
 
-AnyOf is type that is at least one of its subtypes. This could be represented in rust as a struct that has members that are allow of the subtypes, but optional. Then we implement the TryFrom and AsRef traits for all of the subtypes. They will return the subtype.
+### never
 
-AllOf is where things get interesting. This is like an intersection type. Properties of objects should be merged and if we have an AllOf with conflicting types then the type may never exist. For instance id we would make an AllOf with a number and a string type, then this type can never be. For every subtype a From and an AsRef is implemented for the AllOf type.
+This is the `false` type in Json Schema. In rust this is implemented as a struct that never validates. So deserialization of this type will never happen!
 
-ref works the same way AllOf does, only one type can be referenced via ref. This could be considered inheritance.
+### any
 
-Another way to deal with AnyOf is to consider it more like AllOf. So to merge all properties, but make them optional. In case of conflicting types this would be solved with an enum.
+We call the `true` type in Json Schema the `any` type. This type represents the `std::any::Any` type in rust. We need to write custom (de)serialization logic for this type.
+
+### null
+
+The `null` type is represented as the unit type, `()` in rust. Custom validation is not available.
+
+### boolean
+
+The `boolean` type is represented as a rust `bool`. This type may allowed values specified as options.
+
+### integer
+
+The integer type is a represented as `i64` in rust. Validation is
+
+-   allowed values (options)
+-   minimum and maximum value (inclusive or exclusive)
+-   multiple of validation
+
+### number
+
+Custom validation is the same as with the integer type
+
+### string
+
+The string type is a represented as `String` in rust. Validation is
+
+-   allowed values (options)
+-   minimum and maximum length
+-   pattern validation (regular expression)
+
+### tuple
+
+The tuple type is represented as a rust tuple. The tuple has the following validation:
+
+-   uniqueness, no 2 items in the tuple are the same.
+
+### array
+
+The array type can be represented in rust as a `Vec`.
+
+-   minimum and maximum items
+-   unique items
+
+Unique items is not enforced via a `BTreeSet` or a `HashSet`, if wou would do this we would have to implement `Ord` or `Hash` on all generated types.
+
+### object
+
+...
+
+### record
+
+...

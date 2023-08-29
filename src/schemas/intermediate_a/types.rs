@@ -5,7 +5,7 @@
 // |_____|___|___|_|_|_____|___|_|_|___|_|_|_|___| |_|___|
 //                                 -- www.JsonSchema42.org
 
-#[derive(Debug)]
+#[derive(Clone, Debug, PartialEq, PartialOrd, Eq, Ord)]
 pub struct ValidationError {
     r#type: &'static str,
 }
@@ -17,936 +17,6 @@ impl ValidationError {
 impl std::fmt::Display for ValidationError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "validation error for type {}", self.r#type)
-    }
-}
-pub type r#NumberTypeOptionsItemsInterior = f64;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "NumberTypeOptionsItemsInterior")]
-pub struct r#NumberTypeOptionsItems(r#NumberTypeOptionsItemsInterior);
-impl r#NumberTypeOptionsItems {
-    pub fn new(value: r#NumberTypeOptionsItemsInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("NumberTypeOptionsItems"))
-        }
-    }
-    fn validate(&self) -> bool {
-        true
-    }
-}
-impl TryFrom<r#NumberTypeOptionsItemsInterior> for r#NumberTypeOptionsItems {
-    type Error = ValidationError;
-    fn try_from(value: r#NumberTypeOptionsItemsInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#NumberTypeOptionsItems> for r#NumberTypeOptionsItemsInterior {
-    fn from(value: r#NumberTypeOptionsItems) -> Self {
-        value.0
-    }
-}
-impl AsRef<r#NumberTypeOptionsItemsInterior> for r#NumberTypeOptionsItems {
-    fn as_ref(&self) -> &r#NumberTypeOptionsItemsInterior {
-        &self.0
-    }
-}
-impl std::ops::Deref for r#NumberTypeOptionsItems {
-    type Target = r#NumberTypeOptionsItemsInterior;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-pub type r#RecordTypeTypeInterior = String;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "RecordTypeTypeInterior")]
-pub struct r#RecordTypeType(r#RecordTypeTypeInterior);
-impl r#RecordTypeType {
-    pub fn new(value: r#RecordTypeTypeInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("RecordTypeType"))
-        }
-    }
-    fn validate(&self) -> bool {
-        if self.as_ref() != "record" {
-            return false;
-        }
-        true
-    }
-}
-impl TryFrom<r#RecordTypeTypeInterior> for r#RecordTypeType {
-    type Error = ValidationError;
-    fn try_from(value: r#RecordTypeTypeInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#RecordTypeType> for r#RecordTypeTypeInterior {
-    fn from(value: r#RecordTypeType) -> Self {
-        value.0
-    }
-}
-impl std::str::FromStr for r#RecordTypeType {
-    type Err = ValidationError;
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::new(s.to_string())
-    }
-}
-impl ToString for r#RecordTypeType {
-    fn to_string(&self) -> String {
-        self.0.to_string()
-    }
-}
-impl AsRef<str> for r#RecordTypeType {
-    fn as_ref(&self) -> &str {
-        self.0.as_str()
-    }
-}
-impl std::ops::Deref for r#RecordTypeType {
-    type Target = str;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-pub struct r#NullTypeInterior {
-    #[serde(rename = "type")]
-    pub r#type: r#NullTypeType,
-}
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "NullTypeInterior")]
-pub struct r#NullType(Box<r#NullTypeInterior>);
-impl r#NullType {
-    pub fn new(value: r#NullTypeInterior) -> Result<Self, ValidationError> {
-        let instance = Self(Box::new(value));
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("NullType"))
-        }
-    }
-    fn validate(&self) -> bool {
-        true
-    }
-}
-impl TryFrom<r#NullTypeInterior> for r#NullType {
-    type Error = ValidationError;
-    fn try_from(value: r#NullTypeInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#NullType> for r#NullTypeInterior {
-    fn from(value: r#NullType) -> Self {
-        *value.0
-    }
-}
-impl AsRef<r#NullTypeInterior> for r#NullType {
-    fn as_ref(&self) -> &r#NullTypeInterior {
-        &self.0
-    }
-}
-impl std::ops::Deref for r#NullType {
-    type Target = r#NullTypeInterior;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-pub type r#TupleTypeTypeInterior = String;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "TupleTypeTypeInterior")]
-pub struct r#TupleTypeType(r#TupleTypeTypeInterior);
-impl r#TupleTypeType {
-    pub fn new(value: r#TupleTypeTypeInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("TupleTypeType"))
-        }
-    }
-    fn validate(&self) -> bool {
-        if self.as_ref() != "tuple" {
-            return false;
-        }
-        true
-    }
-}
-impl TryFrom<r#TupleTypeTypeInterior> for r#TupleTypeType {
-    type Error = ValidationError;
-    fn try_from(value: r#TupleTypeTypeInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#TupleTypeType> for r#TupleTypeTypeInterior {
-    fn from(value: r#TupleTypeType) -> Self {
-        value.0
-    }
-}
-impl std::str::FromStr for r#TupleTypeType {
-    type Err = ValidationError;
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::new(s.to_string())
-    }
-}
-impl ToString for r#TupleTypeType {
-    fn to_string(&self) -> String {
-        self.0.to_string()
-    }
-}
-impl AsRef<str> for r#TupleTypeType {
-    fn as_ref(&self) -> &str {
-        self.0.as_str()
-    }
-}
-impl std::ops::Deref for r#TupleTypeType {
-    type Target = str;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-pub struct r#RecordTypeInterior {
-    #[serde(rename = "type")]
-    pub r#type: r#RecordTypeType,
-    #[serde(rename = "propertyTypeNodeId")]
-    pub r#property_type_node_id: Option<r#PropertyTypeNodeId>,
-    #[serde(rename = "requiredProperties")]
-    pub r#required_properties: Option<r#RecordTypeRequiredProperties>,
-    #[serde(rename = "maximumProperties")]
-    pub r#maximum_properties: Option<r#MaximumProperties>,
-    #[serde(rename = "minimumProperties")]
-    pub r#minimum_properties: Option<r#MinimumProperties>,
-}
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "RecordTypeInterior")]
-pub struct r#RecordType(Box<r#RecordTypeInterior>);
-impl r#RecordType {
-    pub fn new(value: r#RecordTypeInterior) -> Result<Self, ValidationError> {
-        let instance = Self(Box::new(value));
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("RecordType"))
-        }
-    }
-    fn validate(&self) -> bool {
-        true
-    }
-}
-impl TryFrom<r#RecordTypeInterior> for r#RecordType {
-    type Error = ValidationError;
-    fn try_from(value: r#RecordTypeInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#RecordType> for r#RecordTypeInterior {
-    fn from(value: r#RecordType) -> Self {
-        *value.0
-    }
-}
-impl AsRef<r#RecordTypeInterior> for r#RecordType {
-    fn as_ref(&self) -> &r#RecordTypeInterior {
-        &self.0
-    }
-}
-impl std::ops::Deref for r#RecordType {
-    type Target = r#RecordTypeInterior;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-pub type r#StringTypeOptionsItemsInterior = String;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "StringTypeOptionsItemsInterior")]
-pub struct r#StringTypeOptionsItems(r#StringTypeOptionsItemsInterior);
-impl r#StringTypeOptionsItems {
-    pub fn new(value: r#StringTypeOptionsItemsInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("StringTypeOptionsItems"))
-        }
-    }
-    fn validate(&self) -> bool {
-        true
-    }
-}
-impl TryFrom<r#StringTypeOptionsItemsInterior> for r#StringTypeOptionsItems {
-    type Error = ValidationError;
-    fn try_from(value: r#StringTypeOptionsItemsInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#StringTypeOptionsItems> for r#StringTypeOptionsItemsInterior {
-    fn from(value: r#StringTypeOptionsItems) -> Self {
-        value.0
-    }
-}
-impl std::str::FromStr for r#StringTypeOptionsItems {
-    type Err = ValidationError;
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::new(s.to_string())
-    }
-}
-impl ToString for r#StringTypeOptionsItems {
-    fn to_string(&self) -> String {
-        self.0.to_string()
-    }
-}
-impl AsRef<str> for r#StringTypeOptionsItems {
-    fn as_ref(&self) -> &str {
-        self.0.as_str()
-    }
-}
-impl std::ops::Deref for r#StringTypeOptionsItems {
-    type Target = str;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-pub type r#OneOfCompoundTypeNodeIdsItemsInterior = String;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "OneOfCompoundTypeNodeIdsItemsInterior")]
-pub struct r#OneOfCompoundTypeNodeIdsItems(r#OneOfCompoundTypeNodeIdsItemsInterior);
-impl r#OneOfCompoundTypeNodeIdsItems {
-    pub fn new(value: r#OneOfCompoundTypeNodeIdsItemsInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("OneOfCompoundTypeNodeIdsItems"))
-        }
-    }
-    fn validate(&self) -> bool {
-        true
-    }
-}
-impl TryFrom<r#OneOfCompoundTypeNodeIdsItemsInterior> for r#OneOfCompoundTypeNodeIdsItems {
-    type Error = ValidationError;
-    fn try_from(value: r#OneOfCompoundTypeNodeIdsItemsInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#OneOfCompoundTypeNodeIdsItems> for r#OneOfCompoundTypeNodeIdsItemsInterior {
-    fn from(value: r#OneOfCompoundTypeNodeIdsItems) -> Self {
-        value.0
-    }
-}
-impl std::str::FromStr for r#OneOfCompoundTypeNodeIdsItems {
-    type Err = ValidationError;
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::new(s.to_string())
-    }
-}
-impl ToString for r#OneOfCompoundTypeNodeIdsItems {
-    fn to_string(&self) -> String {
-        self.0.to_string()
-    }
-}
-impl AsRef<str> for r#OneOfCompoundTypeNodeIdsItems {
-    fn as_ref(&self) -> &str {
-        self.0.as_str()
-    }
-}
-impl std::ops::Deref for r#OneOfCompoundTypeNodeIdsItems {
-    type Target = str;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-pub type r#NumberTypeOptionsInterior = Vec<r#NumberTypeOptionsItems>;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "NumberTypeOptionsInterior")]
-pub struct r#NumberTypeOptions(r#NumberTypeOptionsInterior);
-impl r#NumberTypeOptions {
-    pub fn new(value: r#NumberTypeOptionsInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("NumberTypeOptions"))
-        }
-    }
-    fn validate(&self) -> bool {
-        true
-    }
-}
-impl TryFrom<r#NumberTypeOptionsInterior> for r#NumberTypeOptions {
-    type Error = ValidationError;
-    fn try_from(value: r#NumberTypeOptionsInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#NumberTypeOptions> for r#NumberTypeOptionsInterior {
-    fn from(value: r#NumberTypeOptions) -> Self {
-        value.0
-    }
-}
-impl AsRef<r#NumberTypeOptionsInterior> for r#NumberTypeOptions {
-    fn as_ref(&self) -> &r#NumberTypeOptionsInterior {
-        &self.0
-    }
-}
-impl std::ops::Deref for r#NumberTypeOptions {
-    type Target = r#NumberTypeOptionsInterior;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-pub type r#AllOfCompoundTypeInterior = String;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "AllOfCompoundTypeInterior")]
-pub struct r#AllOfCompoundType(r#AllOfCompoundTypeInterior);
-impl r#AllOfCompoundType {
-    pub fn new(value: r#AllOfCompoundTypeInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("AllOfCompoundType"))
-        }
-    }
-    fn validate(&self) -> bool {
-        if self.as_ref() != "all-of" {
-            return false;
-        }
-        true
-    }
-}
-impl TryFrom<r#AllOfCompoundTypeInterior> for r#AllOfCompoundType {
-    type Error = ValidationError;
-    fn try_from(value: r#AllOfCompoundTypeInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#AllOfCompoundType> for r#AllOfCompoundTypeInterior {
-    fn from(value: r#AllOfCompoundType) -> Self {
-        value.0
-    }
-}
-impl std::str::FromStr for r#AllOfCompoundType {
-    type Err = ValidationError;
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::new(s.to_string())
-    }
-}
-impl ToString for r#AllOfCompoundType {
-    fn to_string(&self) -> String {
-        self.0.to_string()
-    }
-}
-impl AsRef<str> for r#AllOfCompoundType {
-    fn as_ref(&self) -> &str {
-        self.0.as_str()
-    }
-}
-impl std::ops::Deref for r#AllOfCompoundType {
-    type Target = str;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-pub type r#BooleanTypeTypeInterior = String;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "BooleanTypeTypeInterior")]
-pub struct r#BooleanTypeType(r#BooleanTypeTypeInterior);
-impl r#BooleanTypeType {
-    pub fn new(value: r#BooleanTypeTypeInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("BooleanTypeType"))
-        }
-    }
-    fn validate(&self) -> bool {
-        if self.as_ref() != "boolean" {
-            return false;
-        }
-        true
-    }
-}
-impl TryFrom<r#BooleanTypeTypeInterior> for r#BooleanTypeType {
-    type Error = ValidationError;
-    fn try_from(value: r#BooleanTypeTypeInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#BooleanTypeType> for r#BooleanTypeTypeInterior {
-    fn from(value: r#BooleanTypeType) -> Self {
-        value.0
-    }
-}
-impl std::str::FromStr for r#BooleanTypeType {
-    type Err = ValidationError;
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::new(s.to_string())
-    }
-}
-impl ToString for r#BooleanTypeType {
-    fn to_string(&self) -> String {
-        self.0.to_string()
-    }
-}
-impl AsRef<str> for r#BooleanTypeType {
-    fn as_ref(&self) -> &str {
-        self.0.as_str()
-    }
-}
-impl std::ops::Deref for r#BooleanTypeType {
-    type Target = str;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-pub type r#PropertyTypeNodeIdsInterior = std::collections::HashMap<String, r#AdditionalProperties>;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "PropertyTypeNodeIdsInterior")]
-pub struct r#PropertyTypeNodeIds(r#PropertyTypeNodeIdsInterior);
-impl r#PropertyTypeNodeIds {
-    pub fn new(value: r#PropertyTypeNodeIdsInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("PropertyTypeNodeIds"))
-        }
-    }
-    fn validate(&self) -> bool {
-        true
-    }
-}
-impl TryFrom<r#PropertyTypeNodeIdsInterior> for r#PropertyTypeNodeIds {
-    type Error = ValidationError;
-    fn try_from(value: r#PropertyTypeNodeIdsInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#PropertyTypeNodeIds> for r#PropertyTypeNodeIdsInterior {
-    fn from(value: r#PropertyTypeNodeIds) -> Self {
-        value.0
-    }
-}
-impl AsRef<r#PropertyTypeNodeIdsInterior> for r#PropertyTypeNodeIds {
-    fn as_ref(&self) -> &r#PropertyTypeNodeIdsInterior {
-        &self.0
-    }
-}
-impl std::ops::Deref for r#PropertyTypeNodeIds {
-    type Target = r#PropertyTypeNodeIdsInterior;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-pub struct r#OneOfCompoundInterior {
-    #[serde(rename = "typeNodeIds")]
-    pub r#type_node_ids: Option<r#OneOfCompoundTypeNodeIds>,
-    #[serde(rename = "type")]
-    pub r#type: r#OneOfCompoundType,
-}
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "OneOfCompoundInterior")]
-pub struct r#OneOfCompound(Box<r#OneOfCompoundInterior>);
-impl r#OneOfCompound {
-    pub fn new(value: r#OneOfCompoundInterior) -> Result<Self, ValidationError> {
-        let instance = Self(Box::new(value));
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("OneOfCompound"))
-        }
-    }
-    fn validate(&self) -> bool {
-        true
-    }
-}
-impl TryFrom<r#OneOfCompoundInterior> for r#OneOfCompound {
-    type Error = ValidationError;
-    fn try_from(value: r#OneOfCompoundInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#OneOfCompound> for r#OneOfCompoundInterior {
-    fn from(value: r#OneOfCompound) -> Self {
-        *value.0
-    }
-}
-impl AsRef<r#OneOfCompoundInterior> for r#OneOfCompound {
-    fn as_ref(&self) -> &r#OneOfCompoundInterior {
-        &self.0
-    }
-}
-impl std::ops::Deref for r#OneOfCompound {
-    type Target = r#OneOfCompoundInterior;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-pub type r#MaximumPropertiesInterior = f64;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "MaximumPropertiesInterior")]
-pub struct r#MaximumProperties(r#MaximumPropertiesInterior);
-impl r#MaximumProperties {
-    pub fn new(value: r#MaximumPropertiesInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("MaximumProperties"))
-        }
-    }
-    fn validate(&self) -> bool {
-        true
-    }
-}
-impl TryFrom<r#MaximumPropertiesInterior> for r#MaximumProperties {
-    type Error = ValidationError;
-    fn try_from(value: r#MaximumPropertiesInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#MaximumProperties> for r#MaximumPropertiesInterior {
-    fn from(value: r#MaximumProperties) -> Self {
-        value.0
-    }
-}
-impl AsRef<r#MaximumPropertiesInterior> for r#MaximumProperties {
-    fn as_ref(&self) -> &r#MaximumPropertiesInterior {
-        &self.0
-    }
-}
-impl std::ops::Deref for r#MaximumProperties {
-    type Target = r#MaximumPropertiesInterior;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-pub type r#AnyOfCompoundTypeInterior = String;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "AnyOfCompoundTypeInterior")]
-pub struct r#AnyOfCompoundType(r#AnyOfCompoundTypeInterior);
-impl r#AnyOfCompoundType {
-    pub fn new(value: r#AnyOfCompoundTypeInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("AnyOfCompoundType"))
-        }
-    }
-    fn validate(&self) -> bool {
-        if self.as_ref() != "any-of" {
-            return false;
-        }
-        true
-    }
-}
-impl TryFrom<r#AnyOfCompoundTypeInterior> for r#AnyOfCompoundType {
-    type Error = ValidationError;
-    fn try_from(value: r#AnyOfCompoundTypeInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#AnyOfCompoundType> for r#AnyOfCompoundTypeInterior {
-    fn from(value: r#AnyOfCompoundType) -> Self {
-        value.0
-    }
-}
-impl std::str::FromStr for r#AnyOfCompoundType {
-    type Err = ValidationError;
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::new(s.to_string())
-    }
-}
-impl ToString for r#AnyOfCompoundType {
-    fn to_string(&self) -> String {
-        self.0.to_string()
-    }
-}
-impl AsRef<str> for r#AnyOfCompoundType {
-    fn as_ref(&self) -> &str {
-        self.0.as_str()
-    }
-}
-impl std::ops::Deref for r#AnyOfCompoundType {
-    type Target = str;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-pub type r#AllOfCompoundTypeNodeIdsItemsInterior = String;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "AllOfCompoundTypeNodeIdsItemsInterior")]
-pub struct r#AllOfCompoundTypeNodeIdsItems(r#AllOfCompoundTypeNodeIdsItemsInterior);
-impl r#AllOfCompoundTypeNodeIdsItems {
-    pub fn new(value: r#AllOfCompoundTypeNodeIdsItemsInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("AllOfCompoundTypeNodeIdsItems"))
-        }
-    }
-    fn validate(&self) -> bool {
-        true
-    }
-}
-impl TryFrom<r#AllOfCompoundTypeNodeIdsItemsInterior> for r#AllOfCompoundTypeNodeIdsItems {
-    type Error = ValidationError;
-    fn try_from(value: r#AllOfCompoundTypeNodeIdsItemsInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#AllOfCompoundTypeNodeIdsItems> for r#AllOfCompoundTypeNodeIdsItemsInterior {
-    fn from(value: r#AllOfCompoundTypeNodeIdsItems) -> Self {
-        value.0
-    }
-}
-impl std::str::FromStr for r#AllOfCompoundTypeNodeIdsItems {
-    type Err = ValidationError;
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::new(s.to_string())
-    }
-}
-impl ToString for r#AllOfCompoundTypeNodeIdsItems {
-    fn to_string(&self) -> String {
-        self.0.to_string()
-    }
-}
-impl AsRef<str> for r#AllOfCompoundTypeNodeIdsItems {
-    fn as_ref(&self) -> &str {
-        self.0.as_str()
-    }
-}
-impl std::ops::Deref for r#AllOfCompoundTypeNodeIdsItems {
-    type Target = str;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-pub type r#MinimumLengthInterior = f64;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "MinimumLengthInterior")]
-pub struct r#MinimumLength(r#MinimumLengthInterior);
-impl r#MinimumLength {
-    pub fn new(value: r#MinimumLengthInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("MinimumLength"))
-        }
-    }
-    fn validate(&self) -> bool {
-        true
-    }
-}
-impl TryFrom<r#MinimumLengthInterior> for r#MinimumLength {
-    type Error = ValidationError;
-    fn try_from(value: r#MinimumLengthInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#MinimumLength> for r#MinimumLengthInterior {
-    fn from(value: r#MinimumLength) -> Self {
-        value.0
-    }
-}
-impl AsRef<r#MinimumLengthInterior> for r#MinimumLength {
-    fn as_ref(&self) -> &r#MinimumLengthInterior {
-        &self.0
-    }
-}
-impl std::ops::Deref for r#MinimumLength {
-    type Target = r#MinimumLengthInterior;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-pub type r#MinimumInclusiveInterior = f64;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "MinimumInclusiveInterior")]
-pub struct r#MinimumInclusive(r#MinimumInclusiveInterior);
-impl r#MinimumInclusive {
-    pub fn new(value: r#MinimumInclusiveInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("MinimumInclusive"))
-        }
-    }
-    fn validate(&self) -> bool {
-        true
-    }
-}
-impl TryFrom<r#MinimumInclusiveInterior> for r#MinimumInclusive {
-    type Error = ValidationError;
-    fn try_from(value: r#MinimumInclusiveInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#MinimumInclusive> for r#MinimumInclusiveInterior {
-    fn from(value: r#MinimumInclusive) -> Self {
-        value.0
-    }
-}
-impl AsRef<r#MinimumInclusiveInterior> for r#MinimumInclusive {
-    fn as_ref(&self) -> &r#MinimumInclusiveInterior {
-        &self.0
-    }
-}
-impl std::ops::Deref for r#MinimumInclusive {
-    type Target = r#MinimumInclusiveInterior;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-pub type r#PropertyTypeNodeIdInterior = String;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "PropertyTypeNodeIdInterior")]
-pub struct r#PropertyTypeNodeId(r#PropertyTypeNodeIdInterior);
-impl r#PropertyTypeNodeId {
-    pub fn new(value: r#PropertyTypeNodeIdInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("PropertyTypeNodeId"))
-        }
-    }
-    fn validate(&self) -> bool {
-        true
-    }
-}
-impl TryFrom<r#PropertyTypeNodeIdInterior> for r#PropertyTypeNodeId {
-    type Error = ValidationError;
-    fn try_from(value: r#PropertyTypeNodeIdInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#PropertyTypeNodeId> for r#PropertyTypeNodeIdInterior {
-    fn from(value: r#PropertyTypeNodeId) -> Self {
-        value.0
-    }
-}
-impl std::str::FromStr for r#PropertyTypeNodeId {
-    type Err = ValidationError;
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::new(s.to_string())
-    }
-}
-impl ToString for r#PropertyTypeNodeId {
-    fn to_string(&self) -> String {
-        self.0.to_string()
-    }
-}
-impl AsRef<str> for r#PropertyTypeNodeId {
-    fn as_ref(&self) -> &str {
-        self.0.as_str()
-    }
-}
-impl std::ops::Deref for r#PropertyTypeNodeId {
-    type Target = str;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-pub type r#StringTypeOptionsInterior = Vec<r#StringTypeOptionsItems>;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "StringTypeOptionsInterior")]
-pub struct r#StringTypeOptions(r#StringTypeOptionsInterior);
-impl r#StringTypeOptions {
-    pub fn new(value: r#StringTypeOptionsInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("StringTypeOptions"))
-        }
-    }
-    fn validate(&self) -> bool {
-        true
-    }
-}
-impl TryFrom<r#StringTypeOptionsInterior> for r#StringTypeOptions {
-    type Error = ValidationError;
-    fn try_from(value: r#StringTypeOptionsInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#StringTypeOptions> for r#StringTypeOptionsInterior {
-    fn from(value: r#StringTypeOptions) -> Self {
-        value.0
-    }
-}
-impl AsRef<r#StringTypeOptionsInterior> for r#StringTypeOptions {
-    fn as_ref(&self) -> &r#StringTypeOptionsInterior {
-        &self.0
-    }
-}
-impl std::ops::Deref for r#StringTypeOptions {
-    type Target = r#StringTypeOptionsInterior;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-pub type r#ArrayTypeTypeInterior = String;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "ArrayTypeTypeInterior")]
-pub struct r#ArrayTypeType(r#ArrayTypeTypeInterior);
-impl r#ArrayTypeType {
-    pub fn new(value: r#ArrayTypeTypeInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("ArrayTypeType"))
-        }
-    }
-    fn validate(&self) -> bool {
-        if self.as_ref() != "array" {
-            return false;
-        }
-        true
-    }
-}
-impl TryFrom<r#ArrayTypeTypeInterior> for r#ArrayTypeType {
-    type Error = ValidationError;
-    fn try_from(value: r#ArrayTypeTypeInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#ArrayTypeType> for r#ArrayTypeTypeInterior {
-    fn from(value: r#ArrayTypeType) -> Self {
-        value.0
-    }
-}
-impl std::str::FromStr for r#ArrayTypeType {
-    type Err = ValidationError;
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::new(s.to_string())
-    }
-}
-impl ToString for r#ArrayTypeType {
-    fn to_string(&self) -> String {
-        self.0.to_string()
-    }
-}
-impl AsRef<str> for r#ArrayTypeType {
-    fn as_ref(&self) -> &str {
-        self.0.as_str()
-    }
-}
-impl std::ops::Deref for r#ArrayTypeType {
-    type Target = str;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
     }
 }
 #[derive(serde :: Serialize, serde :: Deserialize, Clone, Debug, PartialEq)]
@@ -983,7 +53,469 @@ impl TryFrom<r#CompoundUnion> for r#AllOfCompound {
         }
     }
 }
+pub type r#NumberTypeOptionsInterior = Vec<r#NumberTypeOptionsItems>;
 #[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
+#[serde(try_from = "NumberTypeOptionsInterior")]
+pub struct r#NumberTypeOptions(r#NumberTypeOptionsInterior);
+impl r#NumberTypeOptions {
+    pub fn new(interior: r#NumberTypeOptionsInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("NumberTypeOptions"))
+        }
+    }
+    fn validate(&self) -> bool {
+        true
+    }
+}
+impl TryFrom<r#NumberTypeOptionsInterior> for r#NumberTypeOptions {
+    type Error = ValidationError;
+    fn try_from(interior: r#NumberTypeOptionsInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#NumberTypeOptions> for r#NumberTypeOptionsInterior {
+    fn from(value: r#NumberTypeOptions) -> Self {
+        value.0
+    }
+}
+impl AsRef<r#NumberTypeOptionsInterior> for r#NumberTypeOptions {
+    fn as_ref(&self) -> &r#NumberTypeOptionsInterior {
+        &self.0
+    }
+}
+impl std::ops::Deref for r#NumberTypeOptions {
+    type Target = r#NumberTypeOptionsInterior;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+pub type r#TypesInterior = Vec<r#TypeUnion>;
+#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
+#[serde(try_from = "TypesInterior")]
+pub struct r#Types(r#TypesInterior);
+impl r#Types {
+    pub fn new(interior: r#TypesInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("Types"))
+        }
+    }
+    fn validate(&self) -> bool {
+        true
+    }
+}
+impl TryFrom<r#TypesInterior> for r#Types {
+    type Error = ValidationError;
+    fn try_from(interior: r#TypesInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#Types> for r#TypesInterior {
+    fn from(value: r#Types) -> Self {
+        value.0
+    }
+}
+impl AsRef<r#TypesInterior> for r#Types {
+    fn as_ref(&self) -> &r#TypesInterior {
+        &self.0
+    }
+}
+impl std::ops::Deref for r#Types {
+    type Target = r#TypesInterior;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+pub type r#AllOfCompoundTypeNodeIdsInterior = Vec<r#AllOfCompoundTypeNodeIdsItems>;
+#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
+#[serde(try_from = "AllOfCompoundTypeNodeIdsInterior")]
+pub struct r#AllOfCompoundTypeNodeIds(r#AllOfCompoundTypeNodeIdsInterior);
+impl r#AllOfCompoundTypeNodeIds {
+    pub fn new(interior: r#AllOfCompoundTypeNodeIdsInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("AllOfCompoundTypeNodeIds"))
+        }
+    }
+    fn validate(&self) -> bool {
+        true
+    }
+}
+impl TryFrom<r#AllOfCompoundTypeNodeIdsInterior> for r#AllOfCompoundTypeNodeIds {
+    type Error = ValidationError;
+    fn try_from(interior: r#AllOfCompoundTypeNodeIdsInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#AllOfCompoundTypeNodeIds> for r#AllOfCompoundTypeNodeIdsInterior {
+    fn from(value: r#AllOfCompoundTypeNodeIds) -> Self {
+        value.0
+    }
+}
+impl AsRef<r#AllOfCompoundTypeNodeIdsInterior> for r#AllOfCompoundTypeNodeIds {
+    fn as_ref(&self) -> &r#AllOfCompoundTypeNodeIdsInterior {
+        &self.0
+    }
+}
+impl std::ops::Deref for r#AllOfCompoundTypeNodeIds {
+    type Target = r#AllOfCompoundTypeNodeIdsInterior;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+pub type r#AllOfCompoundTypeInterior = String;
+#[derive(
+    Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq, PartialOrd, Eq, Ord,
+)]
+#[serde(try_from = "AllOfCompoundTypeInterior")]
+pub struct r#AllOfCompoundType(r#AllOfCompoundTypeInterior);
+impl r#AllOfCompoundType {
+    pub fn new(interior: r#AllOfCompoundTypeInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("AllOfCompoundType"))
+        }
+    }
+    fn validate(&self) -> bool {
+        if self.as_ref() != "all-of" {
+            return false;
+        }
+        true
+    }
+}
+impl TryFrom<r#AllOfCompoundTypeInterior> for r#AllOfCompoundType {
+    type Error = ValidationError;
+    fn try_from(interior: r#AllOfCompoundTypeInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#AllOfCompoundType> for r#AllOfCompoundTypeInterior {
+    fn from(value: r#AllOfCompoundType) -> Self {
+        value.0
+    }
+}
+impl std::str::FromStr for r#AllOfCompoundType {
+    type Err = ValidationError;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Self::new(s.to_string())
+    }
+}
+impl ToString for r#AllOfCompoundType {
+    fn to_string(&self) -> String {
+        self.0.to_string()
+    }
+}
+impl AsRef<str> for r#AllOfCompoundType {
+    fn as_ref(&self) -> &str {
+        self.0.as_str()
+    }
+}
+impl std::ops::Deref for r#AllOfCompoundType {
+    type Target = str;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+pub type r#OneOfCompoundTypeNodeIdsInterior = Vec<r#OneOfCompoundTypeNodeIdsItems>;
+#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
+#[serde(try_from = "OneOfCompoundTypeNodeIdsInterior")]
+pub struct r#OneOfCompoundTypeNodeIds(r#OneOfCompoundTypeNodeIdsInterior);
+impl r#OneOfCompoundTypeNodeIds {
+    pub fn new(interior: r#OneOfCompoundTypeNodeIdsInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("OneOfCompoundTypeNodeIds"))
+        }
+    }
+    fn validate(&self) -> bool {
+        true
+    }
+}
+impl TryFrom<r#OneOfCompoundTypeNodeIdsInterior> for r#OneOfCompoundTypeNodeIds {
+    type Error = ValidationError;
+    fn try_from(interior: r#OneOfCompoundTypeNodeIdsInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#OneOfCompoundTypeNodeIds> for r#OneOfCompoundTypeNodeIdsInterior {
+    fn from(value: r#OneOfCompoundTypeNodeIds) -> Self {
+        value.0
+    }
+}
+impl AsRef<r#OneOfCompoundTypeNodeIdsInterior> for r#OneOfCompoundTypeNodeIds {
+    fn as_ref(&self) -> &r#OneOfCompoundTypeNodeIdsInterior {
+        &self.0
+    }
+}
+impl std::ops::Deref for r#OneOfCompoundTypeNodeIds {
+    type Target = r#OneOfCompoundTypeNodeIdsInterior;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+pub type r#MinimumPropertiesInterior = f64;
+#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, Copy, PartialEq, PartialOrd)]
+#[serde(try_from = "MinimumPropertiesInterior")]
+pub struct r#MinimumProperties(r#MinimumPropertiesInterior);
+impl r#MinimumProperties {
+    pub fn new(interior: r#MinimumPropertiesInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("MinimumProperties"))
+        }
+    }
+    fn validate(&self) -> bool {
+        true
+    }
+}
+impl TryFrom<r#MinimumPropertiesInterior> for r#MinimumProperties {
+    type Error = ValidationError;
+    fn try_from(interior: r#MinimumPropertiesInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#MinimumProperties> for r#MinimumPropertiesInterior {
+    fn from(value: r#MinimumProperties) -> Self {
+        value.0
+    }
+}
+impl AsRef<r#MinimumPropertiesInterior> for r#MinimumProperties {
+    fn as_ref(&self) -> &r#MinimumPropertiesInterior {
+        &self.0
+    }
+}
+impl std::ops::Deref for r#MinimumProperties {
+    type Target = r#MinimumPropertiesInterior;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+pub type r#MinimumExclusiveInterior = f64;
+#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, Copy, PartialEq, PartialOrd)]
+#[serde(try_from = "MinimumExclusiveInterior")]
+pub struct r#MinimumExclusive(r#MinimumExclusiveInterior);
+impl r#MinimumExclusive {
+    pub fn new(interior: r#MinimumExclusiveInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("MinimumExclusive"))
+        }
+    }
+    fn validate(&self) -> bool {
+        true
+    }
+}
+impl TryFrom<r#MinimumExclusiveInterior> for r#MinimumExclusive {
+    type Error = ValidationError;
+    fn try_from(interior: r#MinimumExclusiveInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#MinimumExclusive> for r#MinimumExclusiveInterior {
+    fn from(value: r#MinimumExclusive) -> Self {
+        value.0
+    }
+}
+impl AsRef<r#MinimumExclusiveInterior> for r#MinimumExclusive {
+    fn as_ref(&self) -> &r#MinimumExclusiveInterior {
+        &self.0
+    }
+}
+impl std::ops::Deref for r#MinimumExclusive {
+    type Target = r#MinimumExclusiveInterior;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+#[derive(serde :: Serialize, serde :: Deserialize, Clone, Debug, PartialEq)]
+pub struct r#NeverTypeInterior {
+    #[serde(rename = "type")]
+    pub r#type: r#NeverTypeType,
+}
+#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
+#[serde(try_from = "NeverTypeInterior")]
+pub struct r#NeverType(Box<r#NeverTypeInterior>);
+impl r#NeverType {
+    pub fn new(interior: r#NeverTypeInterior) -> Result<Self, ValidationError> {
+        let instance = Self(Box::new(interior));
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("NeverType"))
+        }
+    }
+    fn validate(&self) -> bool {
+        true
+    }
+}
+impl TryFrom<r#NeverTypeInterior> for r#NeverType {
+    type Error = ValidationError;
+    fn try_from(interior: r#NeverTypeInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#NeverType> for r#NeverTypeInterior {
+    fn from(value: r#NeverType) -> Self {
+        *value.0
+    }
+}
+impl AsRef<r#NeverTypeInterior> for r#NeverType {
+    fn as_ref(&self) -> &r#NeverTypeInterior {
+        &self.0
+    }
+}
+impl std::ops::Deref for r#NeverType {
+    type Target = r#NeverTypeInterior;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+pub type r#ItemTypeNodeIdsInterior = Vec<r#ItemTypeNodeIdsItems>;
+#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
+#[serde(try_from = "ItemTypeNodeIdsInterior")]
+pub struct r#ItemTypeNodeIds(r#ItemTypeNodeIdsInterior);
+impl r#ItemTypeNodeIds {
+    pub fn new(interior: r#ItemTypeNodeIdsInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("ItemTypeNodeIds"))
+        }
+    }
+    fn validate(&self) -> bool {
+        true
+    }
+}
+impl TryFrom<r#ItemTypeNodeIdsInterior> for r#ItemTypeNodeIds {
+    type Error = ValidationError;
+    fn try_from(interior: r#ItemTypeNodeIdsInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#ItemTypeNodeIds> for r#ItemTypeNodeIdsInterior {
+    fn from(value: r#ItemTypeNodeIds) -> Self {
+        value.0
+    }
+}
+impl AsRef<r#ItemTypeNodeIdsInterior> for r#ItemTypeNodeIds {
+    fn as_ref(&self) -> &r#ItemTypeNodeIdsInterior {
+        &self.0
+    }
+}
+impl std::ops::Deref for r#ItemTypeNodeIds {
+    type Target = r#ItemTypeNodeIdsInterior;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+pub type r#OneOfCompoundTypeNodeIdsItemsInterior = String;
+#[derive(
+    Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq, PartialOrd, Eq, Ord,
+)]
+#[serde(try_from = "OneOfCompoundTypeNodeIdsItemsInterior")]
+pub struct r#OneOfCompoundTypeNodeIdsItems(r#OneOfCompoundTypeNodeIdsItemsInterior);
+impl r#OneOfCompoundTypeNodeIdsItems {
+    pub fn new(interior: r#OneOfCompoundTypeNodeIdsItemsInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("OneOfCompoundTypeNodeIdsItems"))
+        }
+    }
+    fn validate(&self) -> bool {
+        true
+    }
+}
+impl TryFrom<r#OneOfCompoundTypeNodeIdsItemsInterior> for r#OneOfCompoundTypeNodeIdsItems {
+    type Error = ValidationError;
+    fn try_from(interior: r#OneOfCompoundTypeNodeIdsItemsInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#OneOfCompoundTypeNodeIdsItems> for r#OneOfCompoundTypeNodeIdsItemsInterior {
+    fn from(value: r#OneOfCompoundTypeNodeIdsItems) -> Self {
+        value.0
+    }
+}
+impl std::str::FromStr for r#OneOfCompoundTypeNodeIdsItems {
+    type Err = ValidationError;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Self::new(s.to_string())
+    }
+}
+impl ToString for r#OneOfCompoundTypeNodeIdsItems {
+    fn to_string(&self) -> String {
+        self.0.to_string()
+    }
+}
+impl AsRef<str> for r#OneOfCompoundTypeNodeIdsItems {
+    fn as_ref(&self) -> &str {
+        self.0.as_str()
+    }
+}
+impl std::ops::Deref for r#OneOfCompoundTypeNodeIdsItems {
+    type Target = str;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+pub type r#MinimumInclusiveInterior = f64;
+#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, Copy, PartialEq, PartialOrd)]
+#[serde(try_from = "MinimumInclusiveInterior")]
+pub struct r#MinimumInclusive(r#MinimumInclusiveInterior);
+impl r#MinimumInclusive {
+    pub fn new(interior: r#MinimumInclusiveInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("MinimumInclusive"))
+        }
+    }
+    fn validate(&self) -> bool {
+        true
+    }
+}
+impl TryFrom<r#MinimumInclusiveInterior> for r#MinimumInclusive {
+    type Error = ValidationError;
+    fn try_from(interior: r#MinimumInclusiveInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#MinimumInclusive> for r#MinimumInclusiveInterior {
+    fn from(value: r#MinimumInclusive) -> Self {
+        value.0
+    }
+}
+impl AsRef<r#MinimumInclusiveInterior> for r#MinimumInclusive {
+    fn as_ref(&self) -> &r#MinimumInclusiveInterior {
+        &self.0
+    }
+}
+impl std::ops::Deref for r#MinimumInclusive {
+    type Target = r#MinimumInclusiveInterior;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+#[derive(serde :: Serialize, serde :: Deserialize, Clone, Debug, PartialEq)]
 pub struct r#AllOfCompoundInterior {
     #[serde(rename = "typeNodeIds")]
     pub r#type_node_ids: Option<r#AllOfCompoundTypeNodeIds>,
@@ -994,8 +526,8 @@ pub struct r#AllOfCompoundInterior {
 #[serde(try_from = "AllOfCompoundInterior")]
 pub struct r#AllOfCompound(Box<r#AllOfCompoundInterior>);
 impl r#AllOfCompound {
-    pub fn new(value: r#AllOfCompoundInterior) -> Result<Self, ValidationError> {
-        let instance = Self(Box::new(value));
+    pub fn new(interior: r#AllOfCompoundInterior) -> Result<Self, ValidationError> {
+        let instance = Self(Box::new(interior));
         if instance.validate() {
             Ok(instance)
         } else {
@@ -1008,8 +540,8 @@ impl r#AllOfCompound {
 }
 impl TryFrom<r#AllOfCompoundInterior> for r#AllOfCompound {
     type Error = ValidationError;
-    fn try_from(value: r#AllOfCompoundInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
+    fn try_from(interior: r#AllOfCompoundInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
     }
 }
 impl From<r#AllOfCompound> for r#AllOfCompoundInterior {
@@ -1028,627 +560,117 @@ impl std::ops::Deref for r#AllOfCompound {
         self.as_ref()
     }
 }
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-pub struct r#TupleTypeInterior {
-    #[serde(rename = "type")]
-    pub r#type: r#TupleTypeType,
-    #[serde(rename = "itemTypeNodeIds")]
-    pub r#item_type_node_ids: Option<r#ItemTypeNodeIds>,
-}
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "TupleTypeInterior")]
-pub struct r#TupleType(Box<r#TupleTypeInterior>);
-impl r#TupleType {
-    pub fn new(value: r#TupleTypeInterior) -> Result<Self, ValidationError> {
-        let instance = Self(Box::new(value));
+pub type r#ArrayTypeTypeInterior = String;
+#[derive(
+    Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq, PartialOrd, Eq, Ord,
+)]
+#[serde(try_from = "ArrayTypeTypeInterior")]
+pub struct r#ArrayTypeType(r#ArrayTypeTypeInterior);
+impl r#ArrayTypeType {
+    pub fn new(interior: r#ArrayTypeTypeInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
         if instance.validate() {
             Ok(instance)
         } else {
-            Err(ValidationError::new("TupleType"))
+            Err(ValidationError::new("ArrayTypeType"))
         }
     }
     fn validate(&self) -> bool {
-        true
-    }
-}
-impl TryFrom<r#TupleTypeInterior> for r#TupleType {
-    type Error = ValidationError;
-    fn try_from(value: r#TupleTypeInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#TupleType> for r#TupleTypeInterior {
-    fn from(value: r#TupleType) -> Self {
-        *value.0
-    }
-}
-impl AsRef<r#TupleTypeInterior> for r#TupleType {
-    fn as_ref(&self) -> &r#TupleTypeInterior {
-        &self.0
-    }
-}
-impl std::ops::Deref for r#TupleType {
-    type Target = r#TupleTypeInterior;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-pub type r#StringTypeTypeInterior = String;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "StringTypeTypeInterior")]
-pub struct r#StringTypeType(r#StringTypeTypeInterior);
-impl r#StringTypeType {
-    pub fn new(value: r#StringTypeTypeInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("StringTypeType"))
-        }
-    }
-    fn validate(&self) -> bool {
-        if self.as_ref() != "string" {
+        if self.as_ref() != "array" {
             return false;
         }
         true
     }
 }
-impl TryFrom<r#StringTypeTypeInterior> for r#StringTypeType {
+impl TryFrom<r#ArrayTypeTypeInterior> for r#ArrayTypeType {
     type Error = ValidationError;
-    fn try_from(value: r#StringTypeTypeInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
+    fn try_from(interior: r#ArrayTypeTypeInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
     }
 }
-impl From<r#StringTypeType> for r#StringTypeTypeInterior {
-    fn from(value: r#StringTypeType) -> Self {
+impl From<r#ArrayTypeType> for r#ArrayTypeTypeInterior {
+    fn from(value: r#ArrayTypeType) -> Self {
         value.0
     }
 }
-impl std::str::FromStr for r#StringTypeType {
+impl std::str::FromStr for r#ArrayTypeType {
     type Err = ValidationError;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         Self::new(s.to_string())
     }
 }
-impl ToString for r#StringTypeType {
+impl ToString for r#ArrayTypeType {
     fn to_string(&self) -> String {
         self.0.to_string()
     }
 }
-impl AsRef<str> for r#StringTypeType {
+impl AsRef<str> for r#ArrayTypeType {
     fn as_ref(&self) -> &str {
         self.0.as_str()
     }
 }
-impl std::ops::Deref for r#StringTypeType {
+impl std::ops::Deref for r#ArrayTypeType {
     type Target = str;
     fn deref(&self) -> &Self::Target {
         self.as_ref()
     }
 }
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-pub struct r#NodeInterior {
-    #[serde(rename = "title")]
-    pub r#title: r#Title,
-    #[serde(rename = "compounds")]
-    pub r#compounds: r#Compounds,
-    #[serde(rename = "types")]
-    pub r#types: r#Types,
-    #[serde(rename = "description")]
-    pub r#description: r#Description,
-    #[serde(rename = "deprecated")]
-    pub r#deprecated: r#Deprecated,
-    #[serde(rename = "examples")]
-    pub r#examples: r#Examples,
-    #[serde(rename = "superNodeId")]
-    pub r#super_node_id: Option<r#SuperNodeId>,
-}
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "NodeInterior")]
-pub struct r#Node(Box<r#NodeInterior>);
-impl r#Node {
-    pub fn new(value: r#NodeInterior) -> Result<Self, ValidationError> {
-        let instance = Self(Box::new(value));
+pub type r#TupleTypeTypeInterior = String;
+#[derive(
+    Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq, PartialOrd, Eq, Ord,
+)]
+#[serde(try_from = "TupleTypeTypeInterior")]
+pub struct r#TupleTypeType(r#TupleTypeTypeInterior);
+impl r#TupleTypeType {
+    pub fn new(interior: r#TupleTypeTypeInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
         if instance.validate() {
             Ok(instance)
         } else {
-            Err(ValidationError::new("Node"))
+            Err(ValidationError::new("TupleTypeType"))
         }
     }
     fn validate(&self) -> bool {
-        true
-    }
-}
-impl TryFrom<r#NodeInterior> for r#Node {
-    type Error = ValidationError;
-    fn try_from(value: r#NodeInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#Node> for r#NodeInterior {
-    fn from(value: r#Node) -> Self {
-        *value.0
-    }
-}
-impl AsRef<r#NodeInterior> for r#Node {
-    fn as_ref(&self) -> &r#NodeInterior {
-        &self.0
-    }
-}
-impl std::ops::Deref for r#Node {
-    type Target = r#NodeInterior;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-pub type r#NumberTypeTypeInterior = String;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "NumberTypeTypeInterior")]
-pub struct r#NumberTypeType(r#NumberTypeTypeInterior);
-impl r#NumberTypeType {
-    pub fn new(value: r#NumberTypeTypeInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("NumberTypeType"))
-        }
-    }
-    fn validate(&self) -> bool {
-        if self.as_ref() != "number" {
+        if self.as_ref() != "tuple" {
             return false;
         }
         true
     }
 }
-impl TryFrom<r#NumberTypeTypeInterior> for r#NumberTypeType {
+impl TryFrom<r#TupleTypeTypeInterior> for r#TupleTypeType {
     type Error = ValidationError;
-    fn try_from(value: r#NumberTypeTypeInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
+    fn try_from(interior: r#TupleTypeTypeInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
     }
 }
-impl From<r#NumberTypeType> for r#NumberTypeTypeInterior {
-    fn from(value: r#NumberTypeType) -> Self {
+impl From<r#TupleTypeType> for r#TupleTypeTypeInterior {
+    fn from(value: r#TupleTypeType) -> Self {
         value.0
     }
 }
-impl std::str::FromStr for r#NumberTypeType {
+impl std::str::FromStr for r#TupleTypeType {
     type Err = ValidationError;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         Self::new(s.to_string())
     }
 }
-impl ToString for r#NumberTypeType {
+impl ToString for r#TupleTypeType {
     fn to_string(&self) -> String {
         self.0.to_string()
     }
 }
-impl AsRef<str> for r#NumberTypeType {
+impl AsRef<str> for r#TupleTypeType {
     fn as_ref(&self) -> &str {
         self.0.as_str()
     }
 }
-impl std::ops::Deref for r#NumberTypeType {
+impl std::ops::Deref for r#TupleTypeType {
     type Target = str;
     fn deref(&self) -> &Self::Target {
         self.as_ref()
     }
 }
-pub type r#NodesInterior = std::collections::HashMap<String, r#Node>;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "NodesInterior")]
-pub struct r#Nodes(r#NodesInterior);
-impl r#Nodes {
-    pub fn new(value: r#NodesInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("Nodes"))
-        }
-    }
-    fn validate(&self) -> bool {
-        true
-    }
-}
-impl TryFrom<r#NodesInterior> for r#Nodes {
-    type Error = ValidationError;
-    fn try_from(value: r#NodesInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#Nodes> for r#NodesInterior {
-    fn from(value: r#Nodes) -> Self {
-        value.0
-    }
-}
-impl AsRef<r#NodesInterior> for r#Nodes {
-    fn as_ref(&self) -> &r#NodesInterior {
-        &self.0
-    }
-}
-impl std::ops::Deref for r#Nodes {
-    type Target = r#NodesInterior;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-pub type r#PropertiesNumberTypeInterior = String;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "PropertiesNumberTypeInterior")]
-pub struct r#PropertiesNumberType(r#PropertiesNumberTypeInterior);
-impl r#PropertiesNumberType {
-    pub fn new(value: r#PropertiesNumberTypeInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("PropertiesNumberType"))
-        }
-    }
-    fn validate(&self) -> bool {
-        if self.as_ref() != "integer" && self.as_ref() != "float" {
-            return false;
-        }
-        true
-    }
-}
-impl TryFrom<r#PropertiesNumberTypeInterior> for r#PropertiesNumberType {
-    type Error = ValidationError;
-    fn try_from(value: r#PropertiesNumberTypeInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#PropertiesNumberType> for r#PropertiesNumberTypeInterior {
-    fn from(value: r#PropertiesNumberType) -> Self {
-        value.0
-    }
-}
-impl std::str::FromStr for r#PropertiesNumberType {
-    type Err = ValidationError;
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::new(s.to_string())
-    }
-}
-impl ToString for r#PropertiesNumberType {
-    fn to_string(&self) -> String {
-        self.0.to_string()
-    }
-}
-impl AsRef<str> for r#PropertiesNumberType {
-    fn as_ref(&self) -> &str {
-        self.0.as_str()
-    }
-}
-impl std::ops::Deref for r#PropertiesNumberType {
-    type Target = str;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-pub struct r#StringTypeInterior {
-    #[serde(rename = "options")]
-    pub r#options: Option<r#StringTypeOptions>,
-    #[serde(rename = "minimumLength")]
-    pub r#minimum_length: Option<r#MinimumLength>,
-    #[serde(rename = "valuePattern")]
-    pub r#value_pattern: Option<r#ValuePattern>,
-    #[serde(rename = "type")]
-    pub r#type: r#StringTypeType,
-    #[serde(rename = "maximumLength")]
-    pub r#maximum_length: Option<r#MaximumLength>,
-}
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "StringTypeInterior")]
-pub struct r#StringType(Box<r#StringTypeInterior>);
-impl r#StringType {
-    pub fn new(value: r#StringTypeInterior) -> Result<Self, ValidationError> {
-        let instance = Self(Box::new(value));
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("StringType"))
-        }
-    }
-    fn validate(&self) -> bool {
-        true
-    }
-}
-impl TryFrom<r#StringTypeInterior> for r#StringType {
-    type Error = ValidationError;
-    fn try_from(value: r#StringTypeInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#StringType> for r#StringTypeInterior {
-    fn from(value: r#StringType) -> Self {
-        *value.0
-    }
-}
-impl AsRef<r#StringTypeInterior> for r#StringType {
-    fn as_ref(&self) -> &r#StringTypeInterior {
-        &self.0
-    }
-}
-impl std::ops::Deref for r#StringType {
-    type Target = r#StringTypeInterior;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-pub type r#OneOfCompoundTypeInterior = String;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "OneOfCompoundTypeInterior")]
-pub struct r#OneOfCompoundType(r#OneOfCompoundTypeInterior);
-impl r#OneOfCompoundType {
-    pub fn new(value: r#OneOfCompoundTypeInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("OneOfCompoundType"))
-        }
-    }
-    fn validate(&self) -> bool {
-        if self.as_ref() != "one-of" {
-            return false;
-        }
-        true
-    }
-}
-impl TryFrom<r#OneOfCompoundTypeInterior> for r#OneOfCompoundType {
-    type Error = ValidationError;
-    fn try_from(value: r#OneOfCompoundTypeInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#OneOfCompoundType> for r#OneOfCompoundTypeInterior {
-    fn from(value: r#OneOfCompoundType) -> Self {
-        value.0
-    }
-}
-impl std::str::FromStr for r#OneOfCompoundType {
-    type Err = ValidationError;
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::new(s.to_string())
-    }
-}
-impl ToString for r#OneOfCompoundType {
-    fn to_string(&self) -> String {
-        self.0.to_string()
-    }
-}
-impl AsRef<str> for r#OneOfCompoundType {
-    fn as_ref(&self) -> &str {
-        self.0.as_str()
-    }
-}
-impl std::ops::Deref for r#OneOfCompoundType {
-    type Target = str;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-pub type r#TitleInterior = String;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "TitleInterior")]
-pub struct r#Title(r#TitleInterior);
-impl r#Title {
-    pub fn new(value: r#TitleInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("Title"))
-        }
-    }
-    fn validate(&self) -> bool {
-        true
-    }
-}
-impl TryFrom<r#TitleInterior> for r#Title {
-    type Error = ValidationError;
-    fn try_from(value: r#TitleInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#Title> for r#TitleInterior {
-    fn from(value: r#Title) -> Self {
-        value.0
-    }
-}
-impl std::str::FromStr for r#Title {
-    type Err = ValidationError;
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::new(s.to_string())
-    }
-}
-impl ToString for r#Title {
-    fn to_string(&self) -> String {
-        self.0.to_string()
-    }
-}
-impl AsRef<str> for r#Title {
-    fn as_ref(&self) -> &str {
-        self.0.as_str()
-    }
-}
-impl std::ops::Deref for r#Title {
-    type Target = str;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-pub struct r#ArrayTypeInterior {
-    #[serde(rename = "maximumItems")]
-    pub r#maximum_items: Option<r#MaximumItems>,
-    #[serde(rename = "type")]
-    pub r#type: r#ArrayTypeType,
-    #[serde(rename = "minimumItems")]
-    pub r#minimum_items: Option<r#MinimumItems>,
-    #[serde(rename = "uniqueItems")]
-    pub r#unique_items: Option<r#UniqueItems>,
-    #[serde(rename = "itemTypeNodeId")]
-    pub r#item_type_node_id: Option<r#ItemTypeNodeId>,
-}
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "ArrayTypeInterior")]
-pub struct r#ArrayType(Box<r#ArrayTypeInterior>);
-impl r#ArrayType {
-    pub fn new(value: r#ArrayTypeInterior) -> Result<Self, ValidationError> {
-        let instance = Self(Box::new(value));
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("ArrayType"))
-        }
-    }
-    fn validate(&self) -> bool {
-        true
-    }
-}
-impl TryFrom<r#ArrayTypeInterior> for r#ArrayType {
-    type Error = ValidationError;
-    fn try_from(value: r#ArrayTypeInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#ArrayType> for r#ArrayTypeInterior {
-    fn from(value: r#ArrayType) -> Self {
-        *value.0
-    }
-}
-impl AsRef<r#ArrayTypeInterior> for r#ArrayType {
-    fn as_ref(&self) -> &r#ArrayTypeInterior {
-        &self.0
-    }
-}
-impl std::ops::Deref for r#ArrayType {
-    type Target = r#ArrayTypeInterior;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-pub type r#MinimumItemsInterior = f64;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "MinimumItemsInterior")]
-pub struct r#MinimumItems(r#MinimumItemsInterior);
-impl r#MinimumItems {
-    pub fn new(value: r#MinimumItemsInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("MinimumItems"))
-        }
-    }
-    fn validate(&self) -> bool {
-        true
-    }
-}
-impl TryFrom<r#MinimumItemsInterior> for r#MinimumItems {
-    type Error = ValidationError;
-    fn try_from(value: r#MinimumItemsInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#MinimumItems> for r#MinimumItemsInterior {
-    fn from(value: r#MinimumItems) -> Self {
-        value.0
-    }
-}
-impl AsRef<r#MinimumItemsInterior> for r#MinimumItems {
-    fn as_ref(&self) -> &r#MinimumItemsInterior {
-        &self.0
-    }
-}
-impl std::ops::Deref for r#MinimumItems {
-    type Target = r#MinimumItemsInterior;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-pub type r#DeprecatedInterior = bool;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "DeprecatedInterior")]
-pub struct r#Deprecated(r#DeprecatedInterior);
-impl r#Deprecated {
-    pub fn new(value: r#DeprecatedInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("Deprecated"))
-        }
-    }
-    fn validate(&self) -> bool {
-        true
-    }
-}
-impl TryFrom<r#DeprecatedInterior> for r#Deprecated {
-    type Error = ValidationError;
-    fn try_from(value: r#DeprecatedInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#Deprecated> for r#DeprecatedInterior {
-    fn from(value: r#Deprecated) -> Self {
-        value.0
-    }
-}
-impl AsRef<r#DeprecatedInterior> for r#Deprecated {
-    fn as_ref(&self) -> &r#DeprecatedInterior {
-        &self.0
-    }
-}
-impl std::ops::Deref for r#Deprecated {
-    type Target = r#DeprecatedInterior;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-pub type r#MultipleOfInterior = f64;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "MultipleOfInterior")]
-pub struct r#MultipleOf(r#MultipleOfInterior);
-impl r#MultipleOf {
-    pub fn new(value: r#MultipleOfInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("MultipleOf"))
-        }
-    }
-    fn validate(&self) -> bool {
-        true
-    }
-}
-impl TryFrom<r#MultipleOfInterior> for r#MultipleOf {
-    type Error = ValidationError;
-    fn try_from(value: r#MultipleOfInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#MultipleOf> for r#MultipleOfInterior {
-    fn from(value: r#MultipleOf) -> Self {
-        value.0
-    }
-}
-impl AsRef<r#MultipleOfInterior> for r#MultipleOf {
-    fn as_ref(&self) -> &r#MultipleOfInterior {
-        &self.0
-    }
-}
-impl std::ops::Deref for r#MultipleOf {
-    type Target = r#MultipleOfInterior;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
+#[derive(serde :: Serialize, serde :: Deserialize, Clone, Debug, PartialEq)]
 pub struct r#AnyTypeInterior {
     #[serde(rename = "type")]
     pub r#type: r#AnyTypeType,
@@ -1657,8 +679,8 @@ pub struct r#AnyTypeInterior {
 #[serde(try_from = "AnyTypeInterior")]
 pub struct r#AnyType(Box<r#AnyTypeInterior>);
 impl r#AnyType {
-    pub fn new(value: r#AnyTypeInterior) -> Result<Self, ValidationError> {
-        let instance = Self(Box::new(value));
+    pub fn new(interior: r#AnyTypeInterior) -> Result<Self, ValidationError> {
+        let instance = Self(Box::new(interior));
         if instance.validate() {
             Ok(instance)
         } else {
@@ -1671,8 +693,8 @@ impl r#AnyType {
 }
 impl TryFrom<r#AnyTypeInterior> for r#AnyType {
     type Error = ValidationError;
-    fn try_from(value: r#AnyTypeInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
+    fn try_from(interior: r#AnyTypeInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
     }
 }
 impl From<r#AnyType> for r#AnyTypeInterior {
@@ -1691,174 +713,7 @@ impl std::ops::Deref for r#AnyType {
         self.as_ref()
     }
 }
-pub type r#ExamplesInterior = Vec<r#ExamplesItems>;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "ExamplesInterior")]
-pub struct r#Examples(r#ExamplesInterior);
-impl r#Examples {
-    pub fn new(value: r#ExamplesInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("Examples"))
-        }
-    }
-    fn validate(&self) -> bool {
-        true
-    }
-}
-impl TryFrom<r#ExamplesInterior> for r#Examples {
-    type Error = ValidationError;
-    fn try_from(value: r#ExamplesInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#Examples> for r#ExamplesInterior {
-    fn from(value: r#Examples) -> Self {
-        value.0
-    }
-}
-impl AsRef<r#ExamplesInterior> for r#Examples {
-    fn as_ref(&self) -> &r#ExamplesInterior {
-        &self.0
-    }
-}
-impl std::ops::Deref for r#Examples {
-    type Target = r#ExamplesInterior;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-pub type r#BooleanTypeOptionsInterior = Vec<r#BooleanTypeOptionsItems>;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "BooleanTypeOptionsInterior")]
-pub struct r#BooleanTypeOptions(r#BooleanTypeOptionsInterior);
-impl r#BooleanTypeOptions {
-    pub fn new(value: r#BooleanTypeOptionsInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("BooleanTypeOptions"))
-        }
-    }
-    fn validate(&self) -> bool {
-        true
-    }
-}
-impl TryFrom<r#BooleanTypeOptionsInterior> for r#BooleanTypeOptions {
-    type Error = ValidationError;
-    fn try_from(value: r#BooleanTypeOptionsInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#BooleanTypeOptions> for r#BooleanTypeOptionsInterior {
-    fn from(value: r#BooleanTypeOptions) -> Self {
-        value.0
-    }
-}
-impl AsRef<r#BooleanTypeOptionsInterior> for r#BooleanTypeOptions {
-    fn as_ref(&self) -> &r#BooleanTypeOptionsInterior {
-        &self.0
-    }
-}
-impl std::ops::Deref for r#BooleanTypeOptions {
-    type Target = r#BooleanTypeOptionsInterior;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-pub type r#DescriptionInterior = String;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "DescriptionInterior")]
-pub struct r#Description(r#DescriptionInterior);
-impl r#Description {
-    pub fn new(value: r#DescriptionInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("Description"))
-        }
-    }
-    fn validate(&self) -> bool {
-        true
-    }
-}
-impl TryFrom<r#DescriptionInterior> for r#Description {
-    type Error = ValidationError;
-    fn try_from(value: r#DescriptionInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#Description> for r#DescriptionInterior {
-    fn from(value: r#Description) -> Self {
-        value.0
-    }
-}
-impl std::str::FromStr for r#Description {
-    type Err = ValidationError;
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::new(s.to_string())
-    }
-}
-impl ToString for r#Description {
-    fn to_string(&self) -> String {
-        self.0.to_string()
-    }
-}
-impl AsRef<str> for r#Description {
-    fn as_ref(&self) -> &str {
-        self.0.as_str()
-    }
-}
-impl std::ops::Deref for r#Description {
-    type Target = str;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-pub type r#BooleanTypeOptionsItemsInterior = bool;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "BooleanTypeOptionsItemsInterior")]
-pub struct r#BooleanTypeOptionsItems(r#BooleanTypeOptionsItemsInterior);
-impl r#BooleanTypeOptionsItems {
-    pub fn new(value: r#BooleanTypeOptionsItemsInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("BooleanTypeOptionsItems"))
-        }
-    }
-    fn validate(&self) -> bool {
-        true
-    }
-}
-impl TryFrom<r#BooleanTypeOptionsItemsInterior> for r#BooleanTypeOptionsItems {
-    type Error = ValidationError;
-    fn try_from(value: r#BooleanTypeOptionsItemsInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#BooleanTypeOptionsItems> for r#BooleanTypeOptionsItemsInterior {
-    fn from(value: r#BooleanTypeOptionsItems) -> Self {
-        value.0
-    }
-}
-impl AsRef<r#BooleanTypeOptionsItemsInterior> for r#BooleanTypeOptionsItems {
-    fn as_ref(&self) -> &r#BooleanTypeOptionsItemsInterior {
-        &self.0
-    }
-}
-impl std::ops::Deref for r#BooleanTypeOptionsItems {
-    type Target = r#BooleanTypeOptionsItemsInterior;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
+#[derive(serde :: Serialize, serde :: Deserialize, Clone, Debug, PartialEq)]
 pub struct r#BooleanTypeInterior {
     #[serde(rename = "options")]
     pub r#options: Option<r#BooleanTypeOptions>,
@@ -1869,8 +724,8 @@ pub struct r#BooleanTypeInterior {
 #[serde(try_from = "BooleanTypeInterior")]
 pub struct r#BooleanType(Box<r#BooleanTypeInterior>);
 impl r#BooleanType {
-    pub fn new(value: r#BooleanTypeInterior) -> Result<Self, ValidationError> {
-        let instance = Self(Box::new(value));
+    pub fn new(interior: r#BooleanTypeInterior) -> Result<Self, ValidationError> {
+        let instance = Self(Box::new(interior));
         if instance.validate() {
             Ok(instance)
         } else {
@@ -1883,8 +738,8 @@ impl r#BooleanType {
 }
 impl TryFrom<r#BooleanTypeInterior> for r#BooleanType {
     type Error = ValidationError;
-    fn try_from(value: r#BooleanTypeInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
+    fn try_from(interior: r#BooleanTypeInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
     }
 }
 impl From<r#BooleanType> for r#BooleanTypeInterior {
@@ -1903,205 +758,160 @@ impl std::ops::Deref for r#BooleanType {
         self.as_ref()
     }
 }
-pub type r#ItemTypeNodeIdInterior = String;
+#[derive(serde :: Serialize, serde :: Deserialize, Clone, Debug, PartialEq)]
+pub struct r#RecordTypeInterior {
+    #[serde(rename = "maximumProperties")]
+    pub r#maximum_properties: Option<r#MaximumProperties>,
+    #[serde(rename = "propertyTypeNodeId")]
+    pub r#property_type_node_id: Option<r#PropertyTypeNodeId>,
+    #[serde(rename = "type")]
+    pub r#type: r#RecordTypeType,
+    #[serde(rename = "minimumProperties")]
+    pub r#minimum_properties: Option<r#MinimumProperties>,
+    #[serde(rename = "requiredProperties")]
+    pub r#required_properties: Option<r#RecordTypeRequiredProperties>,
+}
 #[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "ItemTypeNodeIdInterior")]
-pub struct r#ItemTypeNodeId(r#ItemTypeNodeIdInterior);
-impl r#ItemTypeNodeId {
-    pub fn new(value: r#ItemTypeNodeIdInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
+#[serde(try_from = "RecordTypeInterior")]
+pub struct r#RecordType(Box<r#RecordTypeInterior>);
+impl r#RecordType {
+    pub fn new(interior: r#RecordTypeInterior) -> Result<Self, ValidationError> {
+        let instance = Self(Box::new(interior));
         if instance.validate() {
             Ok(instance)
         } else {
-            Err(ValidationError::new("ItemTypeNodeId"))
+            Err(ValidationError::new("RecordType"))
         }
     }
     fn validate(&self) -> bool {
         true
     }
 }
-impl TryFrom<r#ItemTypeNodeIdInterior> for r#ItemTypeNodeId {
+impl TryFrom<r#RecordTypeInterior> for r#RecordType {
     type Error = ValidationError;
-    fn try_from(value: r#ItemTypeNodeIdInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
+    fn try_from(interior: r#RecordTypeInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
     }
 }
-impl From<r#ItemTypeNodeId> for r#ItemTypeNodeIdInterior {
-    fn from(value: r#ItemTypeNodeId) -> Self {
-        value.0
+impl From<r#RecordType> for r#RecordTypeInterior {
+    fn from(value: r#RecordType) -> Self {
+        *value.0
     }
 }
-impl std::str::FromStr for r#ItemTypeNodeId {
-    type Err = ValidationError;
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::new(s.to_string())
-    }
-}
-impl ToString for r#ItemTypeNodeId {
-    fn to_string(&self) -> String {
-        self.0.to_string()
-    }
-}
-impl AsRef<str> for r#ItemTypeNodeId {
-    fn as_ref(&self) -> &str {
-        self.0.as_str()
-    }
-}
-impl std::ops::Deref for r#ItemTypeNodeId {
-    type Target = str;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-pub type r#ValuePatternInterior = String;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "ValuePatternInterior")]
-pub struct r#ValuePattern(r#ValuePatternInterior);
-impl r#ValuePattern {
-    pub fn new(value: r#ValuePatternInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("ValuePattern"))
-        }
-    }
-    fn validate(&self) -> bool {
-        true
-    }
-}
-impl TryFrom<r#ValuePatternInterior> for r#ValuePattern {
-    type Error = ValidationError;
-    fn try_from(value: r#ValuePatternInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#ValuePattern> for r#ValuePatternInterior {
-    fn from(value: r#ValuePattern) -> Self {
-        value.0
-    }
-}
-impl std::str::FromStr for r#ValuePattern {
-    type Err = ValidationError;
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::new(s.to_string())
-    }
-}
-impl ToString for r#ValuePattern {
-    fn to_string(&self) -> String {
-        self.0.to_string()
-    }
-}
-impl AsRef<str> for r#ValuePattern {
-    fn as_ref(&self) -> &str {
-        self.0.as_str()
-    }
-}
-impl std::ops::Deref for r#ValuePattern {
-    type Target = str;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-pub type r#CompoundsInterior = Vec<r#CompoundUnion>;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "CompoundsInterior")]
-pub struct r#Compounds(r#CompoundsInterior);
-impl r#Compounds {
-    pub fn new(value: r#CompoundsInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("Compounds"))
-        }
-    }
-    fn validate(&self) -> bool {
-        true
-    }
-}
-impl TryFrom<r#CompoundsInterior> for r#Compounds {
-    type Error = ValidationError;
-    fn try_from(value: r#CompoundsInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#Compounds> for r#CompoundsInterior {
-    fn from(value: r#Compounds) -> Self {
-        value.0
-    }
-}
-impl AsRef<r#CompoundsInterior> for r#Compounds {
-    fn as_ref(&self) -> &r#CompoundsInterior {
+impl AsRef<r#RecordTypeInterior> for r#RecordType {
+    fn as_ref(&self) -> &r#RecordTypeInterior {
         &self.0
     }
 }
-impl std::ops::Deref for r#Compounds {
-    type Target = r#CompoundsInterior;
+impl std::ops::Deref for r#RecordType {
+    type Target = r#RecordTypeInterior;
     fn deref(&self) -> &Self::Target {
         self.as_ref()
     }
 }
-pub type r#NullTypeTypeInterior = String;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "NullTypeTypeInterior")]
-pub struct r#NullTypeType(r#NullTypeTypeInterior);
-impl r#NullTypeType {
-    pub fn new(value: r#NullTypeTypeInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
+pub type r#InterfaceTypeTypeInterior = String;
+#[derive(
+    Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq, PartialOrd, Eq, Ord,
+)]
+#[serde(try_from = "InterfaceTypeTypeInterior")]
+pub struct r#InterfaceTypeType(r#InterfaceTypeTypeInterior);
+impl r#InterfaceTypeType {
+    pub fn new(interior: r#InterfaceTypeTypeInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
         if instance.validate() {
             Ok(instance)
         } else {
-            Err(ValidationError::new("NullTypeType"))
+            Err(ValidationError::new("InterfaceTypeType"))
         }
     }
     fn validate(&self) -> bool {
-        if self.as_ref() != "null" {
+        if self.as_ref() != "interface" {
             return false;
         }
         true
     }
 }
-impl TryFrom<r#NullTypeTypeInterior> for r#NullTypeType {
+impl TryFrom<r#InterfaceTypeTypeInterior> for r#InterfaceTypeType {
     type Error = ValidationError;
-    fn try_from(value: r#NullTypeTypeInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
+    fn try_from(interior: r#InterfaceTypeTypeInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
     }
 }
-impl From<r#NullTypeType> for r#NullTypeTypeInterior {
-    fn from(value: r#NullTypeType) -> Self {
+impl From<r#InterfaceTypeType> for r#InterfaceTypeTypeInterior {
+    fn from(value: r#InterfaceTypeType) -> Self {
         value.0
     }
 }
-impl std::str::FromStr for r#NullTypeType {
+impl std::str::FromStr for r#InterfaceTypeType {
     type Err = ValidationError;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         Self::new(s.to_string())
     }
 }
-impl ToString for r#NullTypeType {
+impl ToString for r#InterfaceTypeType {
     fn to_string(&self) -> String {
         self.0.to_string()
     }
 }
-impl AsRef<str> for r#NullTypeType {
+impl AsRef<str> for r#InterfaceTypeType {
     fn as_ref(&self) -> &str {
         self.0.as_str()
     }
 }
-impl std::ops::Deref for r#NullTypeType {
+impl std::ops::Deref for r#InterfaceTypeType {
     type Target = str;
     fn deref(&self) -> &Self::Target {
         self.as_ref()
     }
 }
+pub type r#MinimumLengthInterior = f64;
+#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, Copy, PartialEq, PartialOrd)]
+#[serde(try_from = "MinimumLengthInterior")]
+pub struct r#MinimumLength(r#MinimumLengthInterior);
+impl r#MinimumLength {
+    pub fn new(interior: r#MinimumLengthInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("MinimumLength"))
+        }
+    }
+    fn validate(&self) -> bool {
+        true
+    }
+}
+impl TryFrom<r#MinimumLengthInterior> for r#MinimumLength {
+    type Error = ValidationError;
+    fn try_from(interior: r#MinimumLengthInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#MinimumLength> for r#MinimumLengthInterior {
+    fn from(value: r#MinimumLength) -> Self {
+        value.0
+    }
+}
+impl AsRef<r#MinimumLengthInterior> for r#MinimumLength {
+    fn as_ref(&self) -> &r#MinimumLengthInterior {
+        &self.0
+    }
+}
+impl std::ops::Deref for r#MinimumLength {
+    type Target = r#MinimumLengthInterior;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
 pub type r#SuperNodeIdInterior = String;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
+#[derive(
+    Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq, PartialOrd, Eq, Ord,
+)]
 #[serde(try_from = "SuperNodeIdInterior")]
 pub struct r#SuperNodeId(r#SuperNodeIdInterior);
 impl r#SuperNodeId {
-    pub fn new(value: r#SuperNodeIdInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
+    pub fn new(interior: r#SuperNodeIdInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
         if instance.validate() {
             Ok(instance)
         } else {
@@ -2114,8 +924,8 @@ impl r#SuperNodeId {
 }
 impl TryFrom<r#SuperNodeIdInterior> for r#SuperNodeId {
     type Error = ValidationError;
-    fn try_from(value: r#SuperNodeIdInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
+    fn try_from(interior: r#SuperNodeIdInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
     }
 }
 impl From<r#SuperNodeId> for r#SuperNodeIdInterior {
@@ -2145,107 +955,320 @@ impl std::ops::Deref for r#SuperNodeId {
         self.as_ref()
     }
 }
-pub type r#NeverTypeTypeInterior = String;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "NeverTypeTypeInterior")]
-pub struct r#NeverTypeType(r#NeverTypeTypeInterior);
-impl r#NeverTypeType {
-    pub fn new(value: r#NeverTypeTypeInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
+pub type r#NumberTypeOptionsItemsInterior = f64;
+#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, Copy, PartialEq, PartialOrd)]
+#[serde(try_from = "NumberTypeOptionsItemsInterior")]
+pub struct r#NumberTypeOptionsItems(r#NumberTypeOptionsItemsInterior);
+impl r#NumberTypeOptionsItems {
+    pub fn new(interior: r#NumberTypeOptionsItemsInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
         if instance.validate() {
             Ok(instance)
         } else {
-            Err(ValidationError::new("NeverTypeType"))
+            Err(ValidationError::new("NumberTypeOptionsItems"))
         }
     }
     fn validate(&self) -> bool {
-        if self.as_ref() != "never" {
+        true
+    }
+}
+impl TryFrom<r#NumberTypeOptionsItemsInterior> for r#NumberTypeOptionsItems {
+    type Error = ValidationError;
+    fn try_from(interior: r#NumberTypeOptionsItemsInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#NumberTypeOptionsItems> for r#NumberTypeOptionsItemsInterior {
+    fn from(value: r#NumberTypeOptionsItems) -> Self {
+        value.0
+    }
+}
+impl AsRef<r#NumberTypeOptionsItemsInterior> for r#NumberTypeOptionsItems {
+    fn as_ref(&self) -> &r#NumberTypeOptionsItemsInterior {
+        &self.0
+    }
+}
+impl std::ops::Deref for r#NumberTypeOptionsItems {
+    type Target = r#NumberTypeOptionsItemsInterior;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+pub type r#AnyTypeTypeInterior = String;
+#[derive(
+    Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq, PartialOrd, Eq, Ord,
+)]
+#[serde(try_from = "AnyTypeTypeInterior")]
+pub struct r#AnyTypeType(r#AnyTypeTypeInterior);
+impl r#AnyTypeType {
+    pub fn new(interior: r#AnyTypeTypeInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("AnyTypeType"))
+        }
+    }
+    fn validate(&self) -> bool {
+        if self.as_ref() != "any" {
             return false;
         }
         true
     }
 }
-impl TryFrom<r#NeverTypeTypeInterior> for r#NeverTypeType {
+impl TryFrom<r#AnyTypeTypeInterior> for r#AnyTypeType {
     type Error = ValidationError;
-    fn try_from(value: r#NeverTypeTypeInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
+    fn try_from(interior: r#AnyTypeTypeInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
     }
 }
-impl From<r#NeverTypeType> for r#NeverTypeTypeInterior {
-    fn from(value: r#NeverTypeType) -> Self {
+impl From<r#AnyTypeType> for r#AnyTypeTypeInterior {
+    fn from(value: r#AnyTypeType) -> Self {
         value.0
     }
 }
-impl std::str::FromStr for r#NeverTypeType {
+impl std::str::FromStr for r#AnyTypeType {
     type Err = ValidationError;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         Self::new(s.to_string())
     }
 }
-impl ToString for r#NeverTypeType {
+impl ToString for r#AnyTypeType {
     fn to_string(&self) -> String {
         self.0.to_string()
     }
 }
-impl AsRef<str> for r#NeverTypeType {
+impl AsRef<str> for r#AnyTypeType {
     fn as_ref(&self) -> &str {
         self.0.as_str()
     }
 }
-impl std::ops::Deref for r#NeverTypeType {
+impl std::ops::Deref for r#AnyTypeType {
     type Target = str;
     fn deref(&self) -> &Self::Target {
         self.as_ref()
     }
 }
-pub type r#TypesInterior = Vec<r#TypeUnion>;
+#[derive(serde :: Serialize, serde :: Deserialize, Clone, Debug, PartialEq)]
+pub struct r#AnyOfCompoundInterior {
+    #[serde(rename = "type")]
+    pub r#type: r#AnyOfCompoundType,
+    #[serde(rename = "typeNodeIds")]
+    pub r#type_node_ids: Option<r#AnyOfCompoundTypeNodeIds>,
+}
 #[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "TypesInterior")]
-pub struct r#Types(r#TypesInterior);
-impl r#Types {
-    pub fn new(value: r#TypesInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
+#[serde(try_from = "AnyOfCompoundInterior")]
+pub struct r#AnyOfCompound(Box<r#AnyOfCompoundInterior>);
+impl r#AnyOfCompound {
+    pub fn new(interior: r#AnyOfCompoundInterior) -> Result<Self, ValidationError> {
+        let instance = Self(Box::new(interior));
         if instance.validate() {
             Ok(instance)
         } else {
-            Err(ValidationError::new("Types"))
+            Err(ValidationError::new("AnyOfCompound"))
         }
     }
     fn validate(&self) -> bool {
         true
     }
 }
-impl TryFrom<r#TypesInterior> for r#Types {
+impl TryFrom<r#AnyOfCompoundInterior> for r#AnyOfCompound {
     type Error = ValidationError;
-    fn try_from(value: r#TypesInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
+    fn try_from(interior: r#AnyOfCompoundInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
     }
 }
-impl From<r#Types> for r#TypesInterior {
-    fn from(value: r#Types) -> Self {
-        value.0
+impl From<r#AnyOfCompound> for r#AnyOfCompoundInterior {
+    fn from(value: r#AnyOfCompound) -> Self {
+        *value.0
     }
 }
-impl AsRef<r#TypesInterior> for r#Types {
-    fn as_ref(&self) -> &r#TypesInterior {
+impl AsRef<r#AnyOfCompoundInterior> for r#AnyOfCompound {
+    fn as_ref(&self) -> &r#AnyOfCompoundInterior {
         &self.0
     }
 }
-impl std::ops::Deref for r#Types {
-    type Target = r#TypesInterior;
+impl std::ops::Deref for r#AnyOfCompound {
+    type Target = r#AnyOfCompoundInterior;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+#[derive(serde :: Serialize, serde :: Deserialize, Clone, Debug, PartialEq)]
+pub struct r#TupleTypeInterior {
+    #[serde(rename = "itemTypeNodeIds")]
+    pub r#item_type_node_ids: Option<r#ItemTypeNodeIds>,
+    #[serde(rename = "type")]
+    pub r#type: r#TupleTypeType,
+}
+#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
+#[serde(try_from = "TupleTypeInterior")]
+pub struct r#TupleType(Box<r#TupleTypeInterior>);
+impl r#TupleType {
+    pub fn new(interior: r#TupleTypeInterior) -> Result<Self, ValidationError> {
+        let instance = Self(Box::new(interior));
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("TupleType"))
+        }
+    }
+    fn validate(&self) -> bool {
+        true
+    }
+}
+impl TryFrom<r#TupleTypeInterior> for r#TupleType {
+    type Error = ValidationError;
+    fn try_from(interior: r#TupleTypeInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#TupleType> for r#TupleTypeInterior {
+    fn from(value: r#TupleType) -> Self {
+        *value.0
+    }
+}
+impl AsRef<r#TupleTypeInterior> for r#TupleType {
+    fn as_ref(&self) -> &r#TupleTypeInterior {
+        &self.0
+    }
+}
+impl std::ops::Deref for r#TupleType {
+    type Target = r#TupleTypeInterior;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+pub type r#DeprecatedInterior = bool;
+#[derive(
+    Debug, serde :: Serialize, serde :: Deserialize, Clone, Copy, PartialEq, PartialOrd, Eq, Ord,
+)]
+#[serde(try_from = "DeprecatedInterior")]
+pub struct r#Deprecated(r#DeprecatedInterior);
+impl r#Deprecated {
+    pub fn new(interior: r#DeprecatedInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("Deprecated"))
+        }
+    }
+    fn validate(&self) -> bool {
+        true
+    }
+}
+impl TryFrom<r#DeprecatedInterior> for r#Deprecated {
+    type Error = ValidationError;
+    fn try_from(interior: r#DeprecatedInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#Deprecated> for r#DeprecatedInterior {
+    fn from(value: r#Deprecated) -> Self {
+        value.0
+    }
+}
+impl AsRef<r#DeprecatedInterior> for r#Deprecated {
+    fn as_ref(&self) -> &r#DeprecatedInterior {
+        &self.0
+    }
+}
+impl std::ops::Deref for r#Deprecated {
+    type Target = r#DeprecatedInterior;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+pub type r#MaximumExclusiveInterior = f64;
+#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, Copy, PartialEq, PartialOrd)]
+#[serde(try_from = "MaximumExclusiveInterior")]
+pub struct r#MaximumExclusive(r#MaximumExclusiveInterior);
+impl r#MaximumExclusive {
+    pub fn new(interior: r#MaximumExclusiveInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("MaximumExclusive"))
+        }
+    }
+    fn validate(&self) -> bool {
+        true
+    }
+}
+impl TryFrom<r#MaximumExclusiveInterior> for r#MaximumExclusive {
+    type Error = ValidationError;
+    fn try_from(interior: r#MaximumExclusiveInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#MaximumExclusive> for r#MaximumExclusiveInterior {
+    fn from(value: r#MaximumExclusive) -> Self {
+        value.0
+    }
+}
+impl AsRef<r#MaximumExclusiveInterior> for r#MaximumExclusive {
+    fn as_ref(&self) -> &r#MaximumExclusiveInterior {
+        &self.0
+    }
+}
+impl std::ops::Deref for r#MaximumExclusive {
+    type Target = r#MaximumExclusiveInterior;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+pub type r#AnyOfCompoundTypeNodeIdsInterior = Vec<r#AnyOfCompoundTypeNodeIdsItems>;
+#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
+#[serde(try_from = "AnyOfCompoundTypeNodeIdsInterior")]
+pub struct r#AnyOfCompoundTypeNodeIds(r#AnyOfCompoundTypeNodeIdsInterior);
+impl r#AnyOfCompoundTypeNodeIds {
+    pub fn new(interior: r#AnyOfCompoundTypeNodeIdsInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("AnyOfCompoundTypeNodeIds"))
+        }
+    }
+    fn validate(&self) -> bool {
+        true
+    }
+}
+impl TryFrom<r#AnyOfCompoundTypeNodeIdsInterior> for r#AnyOfCompoundTypeNodeIds {
+    type Error = ValidationError;
+    fn try_from(interior: r#AnyOfCompoundTypeNodeIdsInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#AnyOfCompoundTypeNodeIds> for r#AnyOfCompoundTypeNodeIdsInterior {
+    fn from(value: r#AnyOfCompoundTypeNodeIds) -> Self {
+        value.0
+    }
+}
+impl AsRef<r#AnyOfCompoundTypeNodeIdsInterior> for r#AnyOfCompoundTypeNodeIds {
+    fn as_ref(&self) -> &r#AnyOfCompoundTypeNodeIdsInterior {
+        &self.0
+    }
+}
+impl std::ops::Deref for r#AnyOfCompoundTypeNodeIds {
+    type Target = r#AnyOfCompoundTypeNodeIdsInterior;
     fn deref(&self) -> &Self::Target {
         self.as_ref()
     }
 }
 pub type r#InterfaceTypeRequiredPropertiesItemsInterior = String;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
+#[derive(
+    Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq, PartialOrd, Eq, Ord,
+)]
 #[serde(try_from = "InterfaceTypeRequiredPropertiesItemsInterior")]
 pub struct r#InterfaceTypeRequiredPropertiesItems(r#InterfaceTypeRequiredPropertiesItemsInterior);
 impl r#InterfaceTypeRequiredPropertiesItems {
     pub fn new(
-        value: r#InterfaceTypeRequiredPropertiesItemsInterior,
+        interior: r#InterfaceTypeRequiredPropertiesItemsInterior,
     ) -> Result<Self, ValidationError> {
-        let instance = Self(value);
+        let instance = Self(interior);
         if instance.validate() {
             Ok(instance)
         } else {
@@ -2261,9 +1284,9 @@ impl TryFrom<r#InterfaceTypeRequiredPropertiesItemsInterior>
 {
     type Error = ValidationError;
     fn try_from(
-        value: r#InterfaceTypeRequiredPropertiesItemsInterior,
+        interior: r#InterfaceTypeRequiredPropertiesItemsInterior,
     ) -> Result<Self, Self::Error> {
-        Self::new(value)
+        Self::new(interior)
     }
 }
 impl From<r#InterfaceTypeRequiredPropertiesItems>
@@ -2295,620 +1318,15 @@ impl std::ops::Deref for r#InterfaceTypeRequiredPropertiesItems {
         self.as_ref()
     }
 }
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-pub struct r#SchemaJsonInterior {
-    #[serde(rename = "nodes")]
-    pub r#nodes: r#Nodes,
-    #[serde(rename = "$schema")]
-    pub r#schema: Option<r#Schema>,
-}
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "SchemaJsonInterior")]
-pub struct r#SchemaJson(Box<r#SchemaJsonInterior>);
-impl r#SchemaJson {
-    pub fn new(value: r#SchemaJsonInterior) -> Result<Self, ValidationError> {
-        let instance = Self(Box::new(value));
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("SchemaJson"))
-        }
-    }
-    fn validate(&self) -> bool {
-        true
-    }
-}
-impl TryFrom<r#SchemaJsonInterior> for r#SchemaJson {
-    type Error = ValidationError;
-    fn try_from(value: r#SchemaJsonInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#SchemaJson> for r#SchemaJsonInterior {
-    fn from(value: r#SchemaJson) -> Self {
-        *value.0
-    }
-}
-impl AsRef<r#SchemaJsonInterior> for r#SchemaJson {
-    fn as_ref(&self) -> &r#SchemaJsonInterior {
-        &self.0
-    }
-}
-impl std::ops::Deref for r#SchemaJson {
-    type Target = r#SchemaJsonInterior;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-pub type r#AnyOfCompoundTypeNodeIdsInterior = Vec<r#AnyOfCompoundTypeNodeIdsItems>;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "AnyOfCompoundTypeNodeIdsInterior")]
-pub struct r#AnyOfCompoundTypeNodeIds(r#AnyOfCompoundTypeNodeIdsInterior);
-impl r#AnyOfCompoundTypeNodeIds {
-    pub fn new(value: r#AnyOfCompoundTypeNodeIdsInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("AnyOfCompoundTypeNodeIds"))
-        }
-    }
-    fn validate(&self) -> bool {
-        true
-    }
-}
-impl TryFrom<r#AnyOfCompoundTypeNodeIdsInterior> for r#AnyOfCompoundTypeNodeIds {
-    type Error = ValidationError;
-    fn try_from(value: r#AnyOfCompoundTypeNodeIdsInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#AnyOfCompoundTypeNodeIds> for r#AnyOfCompoundTypeNodeIdsInterior {
-    fn from(value: r#AnyOfCompoundTypeNodeIds) -> Self {
-        value.0
-    }
-}
-impl AsRef<r#AnyOfCompoundTypeNodeIdsInterior> for r#AnyOfCompoundTypeNodeIds {
-    fn as_ref(&self) -> &r#AnyOfCompoundTypeNodeIdsInterior {
-        &self.0
-    }
-}
-impl std::ops::Deref for r#AnyOfCompoundTypeNodeIds {
-    type Target = r#AnyOfCompoundTypeNodeIdsInterior;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-pub type r#MaximumItemsInterior = f64;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "MaximumItemsInterior")]
-pub struct r#MaximumItems(r#MaximumItemsInterior);
-impl r#MaximumItems {
-    pub fn new(value: r#MaximumItemsInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("MaximumItems"))
-        }
-    }
-    fn validate(&self) -> bool {
-        true
-    }
-}
-impl TryFrom<r#MaximumItemsInterior> for r#MaximumItems {
-    type Error = ValidationError;
-    fn try_from(value: r#MaximumItemsInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#MaximumItems> for r#MaximumItemsInterior {
-    fn from(value: r#MaximumItems) -> Self {
-        value.0
-    }
-}
-impl AsRef<r#MaximumItemsInterior> for r#MaximumItems {
-    fn as_ref(&self) -> &r#MaximumItemsInterior {
-        &self.0
-    }
-}
-impl std::ops::Deref for r#MaximumItems {
-    type Target = r#MaximumItemsInterior;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-pub struct r#NeverTypeInterior {
-    #[serde(rename = "type")]
-    pub r#type: r#NeverTypeType,
-}
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "NeverTypeInterior")]
-pub struct r#NeverType(Box<r#NeverTypeInterior>);
-impl r#NeverType {
-    pub fn new(value: r#NeverTypeInterior) -> Result<Self, ValidationError> {
-        let instance = Self(Box::new(value));
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("NeverType"))
-        }
-    }
-    fn validate(&self) -> bool {
-        true
-    }
-}
-impl TryFrom<r#NeverTypeInterior> for r#NeverType {
-    type Error = ValidationError;
-    fn try_from(value: r#NeverTypeInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#NeverType> for r#NeverTypeInterior {
-    fn from(value: r#NeverType) -> Self {
-        *value.0
-    }
-}
-impl AsRef<r#NeverTypeInterior> for r#NeverType {
-    fn as_ref(&self) -> &r#NeverTypeInterior {
-        &self.0
-    }
-}
-impl std::ops::Deref for r#NeverType {
-    type Target = r#NeverTypeInterior;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-pub struct r#InterfaceTypeInterior {
-    #[serde(rename = "propertyTypeNodeIds")]
-    pub r#property_type_node_ids: Option<r#PropertyTypeNodeIds>,
-    #[serde(rename = "type")]
-    pub r#type: r#InterfaceTypeType,
-    #[serde(rename = "requiredProperties")]
-    pub r#required_properties: Option<r#InterfaceTypeRequiredProperties>,
-}
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "InterfaceTypeInterior")]
-pub struct r#InterfaceType(Box<r#InterfaceTypeInterior>);
-impl r#InterfaceType {
-    pub fn new(value: r#InterfaceTypeInterior) -> Result<Self, ValidationError> {
-        let instance = Self(Box::new(value));
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("InterfaceType"))
-        }
-    }
-    fn validate(&self) -> bool {
-        true
-    }
-}
-impl TryFrom<r#InterfaceTypeInterior> for r#InterfaceType {
-    type Error = ValidationError;
-    fn try_from(value: r#InterfaceTypeInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#InterfaceType> for r#InterfaceTypeInterior {
-    fn from(value: r#InterfaceType) -> Self {
-        *value.0
-    }
-}
-impl AsRef<r#InterfaceTypeInterior> for r#InterfaceType {
-    fn as_ref(&self) -> &r#InterfaceTypeInterior {
-        &self.0
-    }
-}
-impl std::ops::Deref for r#InterfaceType {
-    type Target = r#InterfaceTypeInterior;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-pub type r#InterfaceTypeRequiredPropertiesInterior = Vec<r#InterfaceTypeRequiredPropertiesItems>;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "InterfaceTypeRequiredPropertiesInterior")]
-pub struct r#InterfaceTypeRequiredProperties(r#InterfaceTypeRequiredPropertiesInterior);
-impl r#InterfaceTypeRequiredProperties {
-    pub fn new(value: r#InterfaceTypeRequiredPropertiesInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("InterfaceTypeRequiredProperties"))
-        }
-    }
-    fn validate(&self) -> bool {
-        true
-    }
-}
-impl TryFrom<r#InterfaceTypeRequiredPropertiesInterior> for r#InterfaceTypeRequiredProperties {
-    type Error = ValidationError;
-    fn try_from(value: r#InterfaceTypeRequiredPropertiesInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#InterfaceTypeRequiredProperties> for r#InterfaceTypeRequiredPropertiesInterior {
-    fn from(value: r#InterfaceTypeRequiredProperties) -> Self {
-        value.0
-    }
-}
-impl AsRef<r#InterfaceTypeRequiredPropertiesInterior> for r#InterfaceTypeRequiredProperties {
-    fn as_ref(&self) -> &r#InterfaceTypeRequiredPropertiesInterior {
-        &self.0
-    }
-}
-impl std::ops::Deref for r#InterfaceTypeRequiredProperties {
-    type Target = r#InterfaceTypeRequiredPropertiesInterior;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-pub type r#AnyTypeTypeInterior = String;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "AnyTypeTypeInterior")]
-pub struct r#AnyTypeType(r#AnyTypeTypeInterior);
-impl r#AnyTypeType {
-    pub fn new(value: r#AnyTypeTypeInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("AnyTypeType"))
-        }
-    }
-    fn validate(&self) -> bool {
-        if self.as_ref() != "any" {
-            return false;
-        }
-        true
-    }
-}
-impl TryFrom<r#AnyTypeTypeInterior> for r#AnyTypeType {
-    type Error = ValidationError;
-    fn try_from(value: r#AnyTypeTypeInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#AnyTypeType> for r#AnyTypeTypeInterior {
-    fn from(value: r#AnyTypeType) -> Self {
-        value.0
-    }
-}
-impl std::str::FromStr for r#AnyTypeType {
-    type Err = ValidationError;
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::new(s.to_string())
-    }
-}
-impl ToString for r#AnyTypeType {
-    fn to_string(&self) -> String {
-        self.0.to_string()
-    }
-}
-impl AsRef<str> for r#AnyTypeType {
-    fn as_ref(&self) -> &str {
-        self.0.as_str()
-    }
-}
-impl std::ops::Deref for r#AnyTypeType {
-    type Target = str;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-pub struct r#DefsNumberTypeInterior {
-    #[serde(rename = "maximumInclusive")]
-    pub r#maximum_inclusive: Option<r#MaximumInclusive>,
-    #[serde(rename = "type")]
-    pub r#type: r#NumberTypeType,
-    #[serde(rename = "multipleOf")]
-    pub r#multiple_of: Option<r#MultipleOf>,
-    #[serde(rename = "minimumInclusive")]
-    pub r#minimum_inclusive: Option<r#MinimumInclusive>,
-    #[serde(rename = "options")]
-    pub r#options: Option<r#NumberTypeOptions>,
-    #[serde(rename = "numberType")]
-    pub r#number_type: Option<r#PropertiesNumberType>,
-    #[serde(rename = "maximumExclusive")]
-    pub r#maximum_exclusive: Option<r#MaximumExclusive>,
-    #[serde(rename = "minimumExclusive")]
-    pub r#minimum_exclusive: Option<r#MinimumExclusive>,
-}
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "DefsNumberTypeInterior")]
-pub struct r#DefsNumberType(Box<r#DefsNumberTypeInterior>);
-impl r#DefsNumberType {
-    pub fn new(value: r#DefsNumberTypeInterior) -> Result<Self, ValidationError> {
-        let instance = Self(Box::new(value));
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("DefsNumberType"))
-        }
-    }
-    fn validate(&self) -> bool {
-        true
-    }
-}
-impl TryFrom<r#DefsNumberTypeInterior> for r#DefsNumberType {
-    type Error = ValidationError;
-    fn try_from(value: r#DefsNumberTypeInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#DefsNumberType> for r#DefsNumberTypeInterior {
-    fn from(value: r#DefsNumberType) -> Self {
-        *value.0
-    }
-}
-impl AsRef<r#DefsNumberTypeInterior> for r#DefsNumberType {
-    fn as_ref(&self) -> &r#DefsNumberTypeInterior {
-        &self.0
-    }
-}
-impl std::ops::Deref for r#DefsNumberType {
-    type Target = r#DefsNumberTypeInterior;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-pub type r#ItemTypeNodeIdsItemsInterior = String;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "ItemTypeNodeIdsItemsInterior")]
-pub struct r#ItemTypeNodeIdsItems(r#ItemTypeNodeIdsItemsInterior);
-impl r#ItemTypeNodeIdsItems {
-    pub fn new(value: r#ItemTypeNodeIdsItemsInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("ItemTypeNodeIdsItems"))
-        }
-    }
-    fn validate(&self) -> bool {
-        true
-    }
-}
-impl TryFrom<r#ItemTypeNodeIdsItemsInterior> for r#ItemTypeNodeIdsItems {
-    type Error = ValidationError;
-    fn try_from(value: r#ItemTypeNodeIdsItemsInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#ItemTypeNodeIdsItems> for r#ItemTypeNodeIdsItemsInterior {
-    fn from(value: r#ItemTypeNodeIdsItems) -> Self {
-        value.0
-    }
-}
-impl std::str::FromStr for r#ItemTypeNodeIdsItems {
-    type Err = ValidationError;
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::new(s.to_string())
-    }
-}
-impl ToString for r#ItemTypeNodeIdsItems {
-    fn to_string(&self) -> String {
-        self.0.to_string()
-    }
-}
-impl AsRef<str> for r#ItemTypeNodeIdsItems {
-    fn as_ref(&self) -> &str {
-        self.0.as_str()
-    }
-}
-impl std::ops::Deref for r#ItemTypeNodeIdsItems {
-    type Target = str;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-pub type r#UniqueItemsInterior = bool;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "UniqueItemsInterior")]
-pub struct r#UniqueItems(r#UniqueItemsInterior);
-impl r#UniqueItems {
-    pub fn new(value: r#UniqueItemsInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("UniqueItems"))
-        }
-    }
-    fn validate(&self) -> bool {
-        true
-    }
-}
-impl TryFrom<r#UniqueItemsInterior> for r#UniqueItems {
-    type Error = ValidationError;
-    fn try_from(value: r#UniqueItemsInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#UniqueItems> for r#UniqueItemsInterior {
-    fn from(value: r#UniqueItems) -> Self {
-        value.0
-    }
-}
-impl AsRef<r#UniqueItemsInterior> for r#UniqueItems {
-    fn as_ref(&self) -> &r#UniqueItemsInterior {
-        &self.0
-    }
-}
-impl std::ops::Deref for r#UniqueItems {
-    type Target = r#UniqueItemsInterior;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-pub type r#ItemTypeNodeIdsInterior = Vec<r#ItemTypeNodeIdsItems>;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "ItemTypeNodeIdsInterior")]
-pub struct r#ItemTypeNodeIds(r#ItemTypeNodeIdsInterior);
-impl r#ItemTypeNodeIds {
-    pub fn new(value: r#ItemTypeNodeIdsInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("ItemTypeNodeIds"))
-        }
-    }
-    fn validate(&self) -> bool {
-        true
-    }
-}
-impl TryFrom<r#ItemTypeNodeIdsInterior> for r#ItemTypeNodeIds {
-    type Error = ValidationError;
-    fn try_from(value: r#ItemTypeNodeIdsInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#ItemTypeNodeIds> for r#ItemTypeNodeIdsInterior {
-    fn from(value: r#ItemTypeNodeIds) -> Self {
-        value.0
-    }
-}
-impl AsRef<r#ItemTypeNodeIdsInterior> for r#ItemTypeNodeIds {
-    fn as_ref(&self) -> &r#ItemTypeNodeIdsInterior {
-        &self.0
-    }
-}
-impl std::ops::Deref for r#ItemTypeNodeIds {
-    type Target = r#ItemTypeNodeIdsInterior;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-pub type r#OneOfCompoundTypeNodeIdsInterior = Vec<r#OneOfCompoundTypeNodeIdsItems>;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "OneOfCompoundTypeNodeIdsInterior")]
-pub struct r#OneOfCompoundTypeNodeIds(r#OneOfCompoundTypeNodeIdsInterior);
-impl r#OneOfCompoundTypeNodeIds {
-    pub fn new(value: r#OneOfCompoundTypeNodeIdsInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("OneOfCompoundTypeNodeIds"))
-        }
-    }
-    fn validate(&self) -> bool {
-        true
-    }
-}
-impl TryFrom<r#OneOfCompoundTypeNodeIdsInterior> for r#OneOfCompoundTypeNodeIds {
-    type Error = ValidationError;
-    fn try_from(value: r#OneOfCompoundTypeNodeIdsInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#OneOfCompoundTypeNodeIds> for r#OneOfCompoundTypeNodeIdsInterior {
-    fn from(value: r#OneOfCompoundTypeNodeIds) -> Self {
-        value.0
-    }
-}
-impl AsRef<r#OneOfCompoundTypeNodeIdsInterior> for r#OneOfCompoundTypeNodeIds {
-    fn as_ref(&self) -> &r#OneOfCompoundTypeNodeIdsInterior {
-        &self.0
-    }
-}
-impl std::ops::Deref for r#OneOfCompoundTypeNodeIds {
-    type Target = r#OneOfCompoundTypeNodeIdsInterior;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-pub type r#MaximumInclusiveInterior = f64;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "MaximumInclusiveInterior")]
-pub struct r#MaximumInclusive(r#MaximumInclusiveInterior);
-impl r#MaximumInclusive {
-    pub fn new(value: r#MaximumInclusiveInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("MaximumInclusive"))
-        }
-    }
-    fn validate(&self) -> bool {
-        true
-    }
-}
-impl TryFrom<r#MaximumInclusiveInterior> for r#MaximumInclusive {
-    type Error = ValidationError;
-    fn try_from(value: r#MaximumInclusiveInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#MaximumInclusive> for r#MaximumInclusiveInterior {
-    fn from(value: r#MaximumInclusive) -> Self {
-        value.0
-    }
-}
-impl AsRef<r#MaximumInclusiveInterior> for r#MaximumInclusive {
-    fn as_ref(&self) -> &r#MaximumInclusiveInterior {
-        &self.0
-    }
-}
-impl std::ops::Deref for r#MaximumInclusive {
-    type Target = r#MaximumInclusiveInterior;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-pub type r#MaximumLengthInterior = f64;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "MaximumLengthInterior")]
-pub struct r#MaximumLength(r#MaximumLengthInterior);
-impl r#MaximumLength {
-    pub fn new(value: r#MaximumLengthInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("MaximumLength"))
-        }
-    }
-    fn validate(&self) -> bool {
-        true
-    }
-}
-impl TryFrom<r#MaximumLengthInterior> for r#MaximumLength {
-    type Error = ValidationError;
-    fn try_from(value: r#MaximumLengthInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#MaximumLength> for r#MaximumLengthInterior {
-    fn from(value: r#MaximumLength) -> Self {
-        value.0
-    }
-}
-impl AsRef<r#MaximumLengthInterior> for r#MaximumLength {
-    fn as_ref(&self) -> &r#MaximumLengthInterior {
-        &self.0
-    }
-}
-impl std::ops::Deref for r#MaximumLength {
-    type Target = r#MaximumLengthInterior;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
 pub type r#AnyOfCompoundTypeNodeIdsItemsInterior = String;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
+#[derive(
+    Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq, PartialOrd, Eq, Ord,
+)]
 #[serde(try_from = "AnyOfCompoundTypeNodeIdsItemsInterior")]
 pub struct r#AnyOfCompoundTypeNodeIdsItems(r#AnyOfCompoundTypeNodeIdsItemsInterior);
 impl r#AnyOfCompoundTypeNodeIdsItems {
-    pub fn new(value: r#AnyOfCompoundTypeNodeIdsItemsInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
+    pub fn new(interior: r#AnyOfCompoundTypeNodeIdsItemsInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
         if instance.validate() {
             Ok(instance)
         } else {
@@ -2921,8 +1339,8 @@ impl r#AnyOfCompoundTypeNodeIdsItems {
 }
 impl TryFrom<r#AnyOfCompoundTypeNodeIdsItemsInterior> for r#AnyOfCompoundTypeNodeIdsItems {
     type Error = ValidationError;
-    fn try_from(value: r#AnyOfCompoundTypeNodeIdsItemsInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
+    fn try_from(interior: r#AnyOfCompoundTypeNodeIdsItemsInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
     }
 }
 impl From<r#AnyOfCompoundTypeNodeIdsItems> for r#AnyOfCompoundTypeNodeIdsItemsInterior {
@@ -2952,13 +1370,422 @@ impl std::ops::Deref for r#AnyOfCompoundTypeNodeIdsItems {
         self.as_ref()
     }
 }
-pub type r#SchemaInterior = String;
+pub type r#StringTypeOptionsInterior = Vec<r#StringTypeOptionsItems>;
 #[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
+#[serde(try_from = "StringTypeOptionsInterior")]
+pub struct r#StringTypeOptions(r#StringTypeOptionsInterior);
+impl r#StringTypeOptions {
+    pub fn new(interior: r#StringTypeOptionsInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("StringTypeOptions"))
+        }
+    }
+    fn validate(&self) -> bool {
+        true
+    }
+}
+impl TryFrom<r#StringTypeOptionsInterior> for r#StringTypeOptions {
+    type Error = ValidationError;
+    fn try_from(interior: r#StringTypeOptionsInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#StringTypeOptions> for r#StringTypeOptionsInterior {
+    fn from(value: r#StringTypeOptions) -> Self {
+        value.0
+    }
+}
+impl AsRef<r#StringTypeOptionsInterior> for r#StringTypeOptions {
+    fn as_ref(&self) -> &r#StringTypeOptionsInterior {
+        &self.0
+    }
+}
+impl std::ops::Deref for r#StringTypeOptions {
+    type Target = r#StringTypeOptionsInterior;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+#[derive(serde :: Serialize, serde :: Deserialize, Clone, Debug, PartialEq)]
+pub struct r#OneOfCompoundInterior {
+    #[serde(rename = "typeNodeIds")]
+    pub r#type_node_ids: Option<r#OneOfCompoundTypeNodeIds>,
+    #[serde(rename = "type")]
+    pub r#type: r#OneOfCompoundType,
+}
+#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
+#[serde(try_from = "OneOfCompoundInterior")]
+pub struct r#OneOfCompound(Box<r#OneOfCompoundInterior>);
+impl r#OneOfCompound {
+    pub fn new(interior: r#OneOfCompoundInterior) -> Result<Self, ValidationError> {
+        let instance = Self(Box::new(interior));
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("OneOfCompound"))
+        }
+    }
+    fn validate(&self) -> bool {
+        true
+    }
+}
+impl TryFrom<r#OneOfCompoundInterior> for r#OneOfCompound {
+    type Error = ValidationError;
+    fn try_from(interior: r#OneOfCompoundInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#OneOfCompound> for r#OneOfCompoundInterior {
+    fn from(value: r#OneOfCompound) -> Self {
+        *value.0
+    }
+}
+impl AsRef<r#OneOfCompoundInterior> for r#OneOfCompound {
+    fn as_ref(&self) -> &r#OneOfCompoundInterior {
+        &self.0
+    }
+}
+impl std::ops::Deref for r#OneOfCompound {
+    type Target = r#OneOfCompoundInterior;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+pub type r#MaximumInclusiveInterior = f64;
+#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, Copy, PartialEq, PartialOrd)]
+#[serde(try_from = "MaximumInclusiveInterior")]
+pub struct r#MaximumInclusive(r#MaximumInclusiveInterior);
+impl r#MaximumInclusive {
+    pub fn new(interior: r#MaximumInclusiveInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("MaximumInclusive"))
+        }
+    }
+    fn validate(&self) -> bool {
+        true
+    }
+}
+impl TryFrom<r#MaximumInclusiveInterior> for r#MaximumInclusive {
+    type Error = ValidationError;
+    fn try_from(interior: r#MaximumInclusiveInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#MaximumInclusive> for r#MaximumInclusiveInterior {
+    fn from(value: r#MaximumInclusive) -> Self {
+        value.0
+    }
+}
+impl AsRef<r#MaximumInclusiveInterior> for r#MaximumInclusive {
+    fn as_ref(&self) -> &r#MaximumInclusiveInterior {
+        &self.0
+    }
+}
+impl std::ops::Deref for r#MaximumInclusive {
+    type Target = r#MaximumInclusiveInterior;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+#[derive(serde :: Serialize, serde :: Deserialize, Clone, Debug, PartialEq)]
+pub struct r#SchemaJsonInterior {
+    #[serde(rename = "nodes")]
+    pub r#nodes: r#Nodes,
+    #[serde(rename = "$schema")]
+    pub r#schema: Option<r#Schema>,
+}
+#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
+#[serde(try_from = "SchemaJsonInterior")]
+pub struct r#SchemaJson(Box<r#SchemaJsonInterior>);
+impl r#SchemaJson {
+    pub fn new(interior: r#SchemaJsonInterior) -> Result<Self, ValidationError> {
+        let instance = Self(Box::new(interior));
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("SchemaJson"))
+        }
+    }
+    fn validate(&self) -> bool {
+        true
+    }
+}
+impl TryFrom<r#SchemaJsonInterior> for r#SchemaJson {
+    type Error = ValidationError;
+    fn try_from(interior: r#SchemaJsonInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#SchemaJson> for r#SchemaJsonInterior {
+    fn from(value: r#SchemaJson) -> Self {
+        *value.0
+    }
+}
+impl AsRef<r#SchemaJsonInterior> for r#SchemaJson {
+    fn as_ref(&self) -> &r#SchemaJsonInterior {
+        &self.0
+    }
+}
+impl std::ops::Deref for r#SchemaJson {
+    type Target = r#SchemaJsonInterior;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+pub type r#MaximumLengthInterior = f64;
+#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, Copy, PartialEq, PartialOrd)]
+#[serde(try_from = "MaximumLengthInterior")]
+pub struct r#MaximumLength(r#MaximumLengthInterior);
+impl r#MaximumLength {
+    pub fn new(interior: r#MaximumLengthInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("MaximumLength"))
+        }
+    }
+    fn validate(&self) -> bool {
+        true
+    }
+}
+impl TryFrom<r#MaximumLengthInterior> for r#MaximumLength {
+    type Error = ValidationError;
+    fn try_from(interior: r#MaximumLengthInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#MaximumLength> for r#MaximumLengthInterior {
+    fn from(value: r#MaximumLength) -> Self {
+        value.0
+    }
+}
+impl AsRef<r#MaximumLengthInterior> for r#MaximumLength {
+    fn as_ref(&self) -> &r#MaximumLengthInterior {
+        &self.0
+    }
+}
+impl std::ops::Deref for r#MaximumLength {
+    type Target = r#MaximumLengthInterior;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+pub type r#MinimumItemsInterior = f64;
+#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, Copy, PartialEq, PartialOrd)]
+#[serde(try_from = "MinimumItemsInterior")]
+pub struct r#MinimumItems(r#MinimumItemsInterior);
+impl r#MinimumItems {
+    pub fn new(interior: r#MinimumItemsInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("MinimumItems"))
+        }
+    }
+    fn validate(&self) -> bool {
+        true
+    }
+}
+impl TryFrom<r#MinimumItemsInterior> for r#MinimumItems {
+    type Error = ValidationError;
+    fn try_from(interior: r#MinimumItemsInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#MinimumItems> for r#MinimumItemsInterior {
+    fn from(value: r#MinimumItems) -> Self {
+        value.0
+    }
+}
+impl AsRef<r#MinimumItemsInterior> for r#MinimumItems {
+    fn as_ref(&self) -> &r#MinimumItemsInterior {
+        &self.0
+    }
+}
+impl std::ops::Deref for r#MinimumItems {
+    type Target = r#MinimumItemsInterior;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+#[derive(serde :: Serialize, serde :: Deserialize, Clone, Debug, PartialEq)]
+pub struct r#StringTypeInterior {
+    #[serde(rename = "valuePattern")]
+    pub r#value_pattern: Option<r#ValuePattern>,
+    #[serde(rename = "minimumLength")]
+    pub r#minimum_length: Option<r#MinimumLength>,
+    #[serde(rename = "type")]
+    pub r#type: r#StringTypeType,
+    #[serde(rename = "options")]
+    pub r#options: Option<r#StringTypeOptions>,
+    #[serde(rename = "maximumLength")]
+    pub r#maximum_length: Option<r#MaximumLength>,
+}
+#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
+#[serde(try_from = "StringTypeInterior")]
+pub struct r#StringType(Box<r#StringTypeInterior>);
+impl r#StringType {
+    pub fn new(interior: r#StringTypeInterior) -> Result<Self, ValidationError> {
+        let instance = Self(Box::new(interior));
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("StringType"))
+        }
+    }
+    fn validate(&self) -> bool {
+        true
+    }
+}
+impl TryFrom<r#StringTypeInterior> for r#StringType {
+    type Error = ValidationError;
+    fn try_from(interior: r#StringTypeInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#StringType> for r#StringTypeInterior {
+    fn from(value: r#StringType) -> Self {
+        *value.0
+    }
+}
+impl AsRef<r#StringTypeInterior> for r#StringType {
+    fn as_ref(&self) -> &r#StringTypeInterior {
+        &self.0
+    }
+}
+impl std::ops::Deref for r#StringType {
+    type Target = r#StringTypeInterior;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+pub type r#RecordTypeTypeInterior = String;
+#[derive(
+    Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq, PartialOrd, Eq, Ord,
+)]
+#[serde(try_from = "RecordTypeTypeInterior")]
+pub struct r#RecordTypeType(r#RecordTypeTypeInterior);
+impl r#RecordTypeType {
+    pub fn new(interior: r#RecordTypeTypeInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("RecordTypeType"))
+        }
+    }
+    fn validate(&self) -> bool {
+        if self.as_ref() != "record" {
+            return false;
+        }
+        true
+    }
+}
+impl TryFrom<r#RecordTypeTypeInterior> for r#RecordTypeType {
+    type Error = ValidationError;
+    fn try_from(interior: r#RecordTypeTypeInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#RecordTypeType> for r#RecordTypeTypeInterior {
+    fn from(value: r#RecordTypeType) -> Self {
+        value.0
+    }
+}
+impl std::str::FromStr for r#RecordTypeType {
+    type Err = ValidationError;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Self::new(s.to_string())
+    }
+}
+impl ToString for r#RecordTypeType {
+    fn to_string(&self) -> String {
+        self.0.to_string()
+    }
+}
+impl AsRef<str> for r#RecordTypeType {
+    fn as_ref(&self) -> &str {
+        self.0.as_str()
+    }
+}
+impl std::ops::Deref for r#RecordTypeType {
+    type Target = str;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+pub type r#OneOfCompoundTypeInterior = String;
+#[derive(
+    Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq, PartialOrd, Eq, Ord,
+)]
+#[serde(try_from = "OneOfCompoundTypeInterior")]
+pub struct r#OneOfCompoundType(r#OneOfCompoundTypeInterior);
+impl r#OneOfCompoundType {
+    pub fn new(interior: r#OneOfCompoundTypeInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("OneOfCompoundType"))
+        }
+    }
+    fn validate(&self) -> bool {
+        if self.as_ref() != "one-of" {
+            return false;
+        }
+        true
+    }
+}
+impl TryFrom<r#OneOfCompoundTypeInterior> for r#OneOfCompoundType {
+    type Error = ValidationError;
+    fn try_from(interior: r#OneOfCompoundTypeInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#OneOfCompoundType> for r#OneOfCompoundTypeInterior {
+    fn from(value: r#OneOfCompoundType) -> Self {
+        value.0
+    }
+}
+impl std::str::FromStr for r#OneOfCompoundType {
+    type Err = ValidationError;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Self::new(s.to_string())
+    }
+}
+impl ToString for r#OneOfCompoundType {
+    fn to_string(&self) -> String {
+        self.0.to_string()
+    }
+}
+impl AsRef<str> for r#OneOfCompoundType {
+    fn as_ref(&self) -> &str {
+        self.0.as_str()
+    }
+}
+impl std::ops::Deref for r#OneOfCompoundType {
+    type Target = str;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+pub type r#SchemaInterior = String;
+#[derive(
+    Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq, PartialOrd, Eq, Ord,
+)]
 #[serde(try_from = "SchemaInterior")]
 pub struct r#Schema(r#SchemaInterior);
 impl r#Schema {
-    pub fn new(value: r#SchemaInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
+    pub fn new(interior: r#SchemaInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
         if instance.validate() {
             Ok(instance)
         } else {
@@ -2974,8 +1801,8 @@ impl r#Schema {
 }
 impl TryFrom<r#SchemaInterior> for r#Schema {
     type Error = ValidationError;
-    fn try_from(value: r#SchemaInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
+    fn try_from(interior: r#SchemaInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
     }
 }
 impl From<r#Schema> for r#SchemaInterior {
@@ -3005,97 +1832,694 @@ impl std::ops::Deref for r#Schema {
         self.as_ref()
     }
 }
-pub type r#MinimumExclusiveInterior = f64;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "MinimumExclusiveInterior")]
-pub struct r#MinimumExclusive(r#MinimumExclusiveInterior);
-impl r#MinimumExclusive {
-    pub fn new(value: r#MinimumExclusiveInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
+pub type r#AdditionalPropertiesInterior = String;
+#[derive(
+    Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq, PartialOrd, Eq, Ord,
+)]
+#[serde(try_from = "AdditionalPropertiesInterior")]
+pub struct r#AdditionalProperties(r#AdditionalPropertiesInterior);
+impl r#AdditionalProperties {
+    pub fn new(interior: r#AdditionalPropertiesInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
         if instance.validate() {
             Ok(instance)
         } else {
-            Err(ValidationError::new("MinimumExclusive"))
+            Err(ValidationError::new("AdditionalProperties"))
         }
     }
     fn validate(&self) -> bool {
         true
     }
 }
-impl TryFrom<r#MinimumExclusiveInterior> for r#MinimumExclusive {
+impl TryFrom<r#AdditionalPropertiesInterior> for r#AdditionalProperties {
     type Error = ValidationError;
-    fn try_from(value: r#MinimumExclusiveInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
+    fn try_from(interior: r#AdditionalPropertiesInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
     }
 }
-impl From<r#MinimumExclusive> for r#MinimumExclusiveInterior {
-    fn from(value: r#MinimumExclusive) -> Self {
+impl From<r#AdditionalProperties> for r#AdditionalPropertiesInterior {
+    fn from(value: r#AdditionalProperties) -> Self {
         value.0
     }
 }
-impl AsRef<r#MinimumExclusiveInterior> for r#MinimumExclusive {
-    fn as_ref(&self) -> &r#MinimumExclusiveInterior {
-        &self.0
-    }
-}
-impl std::ops::Deref for r#MinimumExclusive {
-    type Target = r#MinimumExclusiveInterior;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-pub type r#RecordTypeRequiredPropertiesItemsInterior = String;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "RecordTypeRequiredPropertiesItemsInterior")]
-pub struct r#RecordTypeRequiredPropertiesItems(r#RecordTypeRequiredPropertiesItemsInterior);
-impl r#RecordTypeRequiredPropertiesItems {
-    pub fn new(
-        value: r#RecordTypeRequiredPropertiesItemsInterior,
-    ) -> Result<Self, ValidationError> {
-        let instance = Self(value);
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("RecordTypeRequiredPropertiesItems"))
-        }
-    }
-    fn validate(&self) -> bool {
-        true
-    }
-}
-impl TryFrom<r#RecordTypeRequiredPropertiesItemsInterior> for r#RecordTypeRequiredPropertiesItems {
-    type Error = ValidationError;
-    fn try_from(value: r#RecordTypeRequiredPropertiesItemsInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#RecordTypeRequiredPropertiesItems> for r#RecordTypeRequiredPropertiesItemsInterior {
-    fn from(value: r#RecordTypeRequiredPropertiesItems) -> Self {
-        value.0
-    }
-}
-impl std::str::FromStr for r#RecordTypeRequiredPropertiesItems {
+impl std::str::FromStr for r#AdditionalProperties {
     type Err = ValidationError;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         Self::new(s.to_string())
     }
 }
-impl ToString for r#RecordTypeRequiredPropertiesItems {
+impl ToString for r#AdditionalProperties {
     fn to_string(&self) -> String {
         self.0.to_string()
     }
 }
-impl AsRef<str> for r#RecordTypeRequiredPropertiesItems {
+impl AsRef<str> for r#AdditionalProperties {
     fn as_ref(&self) -> &str {
         self.0.as_str()
     }
 }
-impl std::ops::Deref for r#RecordTypeRequiredPropertiesItems {
+impl std::ops::Deref for r#AdditionalProperties {
     type Target = str;
     fn deref(&self) -> &Self::Target {
         self.as_ref()
     }
 }
+pub type r#NullTypeTypeInterior = String;
+#[derive(
+    Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq, PartialOrd, Eq, Ord,
+)]
+#[serde(try_from = "NullTypeTypeInterior")]
+pub struct r#NullTypeType(r#NullTypeTypeInterior);
+impl r#NullTypeType {
+    pub fn new(interior: r#NullTypeTypeInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("NullTypeType"))
+        }
+    }
+    fn validate(&self) -> bool {
+        if self.as_ref() != "null" {
+            return false;
+        }
+        true
+    }
+}
+impl TryFrom<r#NullTypeTypeInterior> for r#NullTypeType {
+    type Error = ValidationError;
+    fn try_from(interior: r#NullTypeTypeInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#NullTypeType> for r#NullTypeTypeInterior {
+    fn from(value: r#NullTypeType) -> Self {
+        value.0
+    }
+}
+impl std::str::FromStr for r#NullTypeType {
+    type Err = ValidationError;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Self::new(s.to_string())
+    }
+}
+impl ToString for r#NullTypeType {
+    fn to_string(&self) -> String {
+        self.0.to_string()
+    }
+}
+impl AsRef<str> for r#NullTypeType {
+    fn as_ref(&self) -> &str {
+        self.0.as_str()
+    }
+}
+impl std::ops::Deref for r#NullTypeType {
+    type Target = str;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+pub type r#MaximumItemsInterior = f64;
+#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, Copy, PartialEq, PartialOrd)]
+#[serde(try_from = "MaximumItemsInterior")]
+pub struct r#MaximumItems(r#MaximumItemsInterior);
+impl r#MaximumItems {
+    pub fn new(interior: r#MaximumItemsInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("MaximumItems"))
+        }
+    }
+    fn validate(&self) -> bool {
+        true
+    }
+}
+impl TryFrom<r#MaximumItemsInterior> for r#MaximumItems {
+    type Error = ValidationError;
+    fn try_from(interior: r#MaximumItemsInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#MaximumItems> for r#MaximumItemsInterior {
+    fn from(value: r#MaximumItems) -> Self {
+        value.0
+    }
+}
+impl AsRef<r#MaximumItemsInterior> for r#MaximumItems {
+    fn as_ref(&self) -> &r#MaximumItemsInterior {
+        &self.0
+    }
+}
+impl std::ops::Deref for r#MaximumItems {
+    type Target = r#MaximumItemsInterior;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+pub type r#ValuePatternInterior = String;
+#[derive(
+    Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq, PartialOrd, Eq, Ord,
+)]
+#[serde(try_from = "ValuePatternInterior")]
+pub struct r#ValuePattern(r#ValuePatternInterior);
+impl r#ValuePattern {
+    pub fn new(interior: r#ValuePatternInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("ValuePattern"))
+        }
+    }
+    fn validate(&self) -> bool {
+        true
+    }
+}
+impl TryFrom<r#ValuePatternInterior> for r#ValuePattern {
+    type Error = ValidationError;
+    fn try_from(interior: r#ValuePatternInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#ValuePattern> for r#ValuePatternInterior {
+    fn from(value: r#ValuePattern) -> Self {
+        value.0
+    }
+}
+impl std::str::FromStr for r#ValuePattern {
+    type Err = ValidationError;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Self::new(s.to_string())
+    }
+}
+impl ToString for r#ValuePattern {
+    fn to_string(&self) -> String {
+        self.0.to_string()
+    }
+}
+impl AsRef<str> for r#ValuePattern {
+    fn as_ref(&self) -> &str {
+        self.0.as_str()
+    }
+}
+impl std::ops::Deref for r#ValuePattern {
+    type Target = str;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+#[derive(serde :: Serialize, serde :: Deserialize, Clone, Debug, PartialEq)]
+pub struct r#DefsNumberTypeInterior {
+    #[serde(rename = "maximumExclusive")]
+    pub r#maximum_exclusive: Option<r#MaximumExclusive>,
+    #[serde(rename = "numberType")]
+    pub r#number_type: Option<r#PropertiesNumberType>,
+    #[serde(rename = "minimumInclusive")]
+    pub r#minimum_inclusive: Option<r#MinimumInclusive>,
+    #[serde(rename = "maximumInclusive")]
+    pub r#maximum_inclusive: Option<r#MaximumInclusive>,
+    #[serde(rename = "minimumExclusive")]
+    pub r#minimum_exclusive: Option<r#MinimumExclusive>,
+    #[serde(rename = "options")]
+    pub r#options: Option<r#NumberTypeOptions>,
+    #[serde(rename = "type")]
+    pub r#type: r#NumberTypeType,
+    #[serde(rename = "multipleOf")]
+    pub r#multiple_of: Option<r#MultipleOf>,
+}
+#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
+#[serde(try_from = "DefsNumberTypeInterior")]
+pub struct r#DefsNumberType(Box<r#DefsNumberTypeInterior>);
+impl r#DefsNumberType {
+    pub fn new(interior: r#DefsNumberTypeInterior) -> Result<Self, ValidationError> {
+        let instance = Self(Box::new(interior));
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("DefsNumberType"))
+        }
+    }
+    fn validate(&self) -> bool {
+        true
+    }
+}
+impl TryFrom<r#DefsNumberTypeInterior> for r#DefsNumberType {
+    type Error = ValidationError;
+    fn try_from(interior: r#DefsNumberTypeInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#DefsNumberType> for r#DefsNumberTypeInterior {
+    fn from(value: r#DefsNumberType) -> Self {
+        *value.0
+    }
+}
+impl AsRef<r#DefsNumberTypeInterior> for r#DefsNumberType {
+    fn as_ref(&self) -> &r#DefsNumberTypeInterior {
+        &self.0
+    }
+}
+impl std::ops::Deref for r#DefsNumberType {
+    type Target = r#DefsNumberTypeInterior;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+pub type r#StringTypeTypeInterior = String;
+#[derive(
+    Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq, PartialOrd, Eq, Ord,
+)]
+#[serde(try_from = "StringTypeTypeInterior")]
+pub struct r#StringTypeType(r#StringTypeTypeInterior);
+impl r#StringTypeType {
+    pub fn new(interior: r#StringTypeTypeInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("StringTypeType"))
+        }
+    }
+    fn validate(&self) -> bool {
+        if self.as_ref() != "string" {
+            return false;
+        }
+        true
+    }
+}
+impl TryFrom<r#StringTypeTypeInterior> for r#StringTypeType {
+    type Error = ValidationError;
+    fn try_from(interior: r#StringTypeTypeInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#StringTypeType> for r#StringTypeTypeInterior {
+    fn from(value: r#StringTypeType) -> Self {
+        value.0
+    }
+}
+impl std::str::FromStr for r#StringTypeType {
+    type Err = ValidationError;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Self::new(s.to_string())
+    }
+}
+impl ToString for r#StringTypeType {
+    fn to_string(&self) -> String {
+        self.0.to_string()
+    }
+}
+impl AsRef<str> for r#StringTypeType {
+    fn as_ref(&self) -> &str {
+        self.0.as_str()
+    }
+}
+impl std::ops::Deref for r#StringTypeType {
+    type Target = str;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+pub type r#PropertyTypeNodeIdInterior = String;
+#[derive(
+    Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq, PartialOrd, Eq, Ord,
+)]
+#[serde(try_from = "PropertyTypeNodeIdInterior")]
+pub struct r#PropertyTypeNodeId(r#PropertyTypeNodeIdInterior);
+impl r#PropertyTypeNodeId {
+    pub fn new(interior: r#PropertyTypeNodeIdInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("PropertyTypeNodeId"))
+        }
+    }
+    fn validate(&self) -> bool {
+        true
+    }
+}
+impl TryFrom<r#PropertyTypeNodeIdInterior> for r#PropertyTypeNodeId {
+    type Error = ValidationError;
+    fn try_from(interior: r#PropertyTypeNodeIdInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#PropertyTypeNodeId> for r#PropertyTypeNodeIdInterior {
+    fn from(value: r#PropertyTypeNodeId) -> Self {
+        value.0
+    }
+}
+impl std::str::FromStr for r#PropertyTypeNodeId {
+    type Err = ValidationError;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Self::new(s.to_string())
+    }
+}
+impl ToString for r#PropertyTypeNodeId {
+    fn to_string(&self) -> String {
+        self.0.to_string()
+    }
+}
+impl AsRef<str> for r#PropertyTypeNodeId {
+    fn as_ref(&self) -> &str {
+        self.0.as_str()
+    }
+}
+impl std::ops::Deref for r#PropertyTypeNodeId {
+    type Target = str;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+pub type r#NeverTypeTypeInterior = String;
+#[derive(
+    Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq, PartialOrd, Eq, Ord,
+)]
+#[serde(try_from = "NeverTypeTypeInterior")]
+pub struct r#NeverTypeType(r#NeverTypeTypeInterior);
+impl r#NeverTypeType {
+    pub fn new(interior: r#NeverTypeTypeInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("NeverTypeType"))
+        }
+    }
+    fn validate(&self) -> bool {
+        if self.as_ref() != "never" {
+            return false;
+        }
+        true
+    }
+}
+impl TryFrom<r#NeverTypeTypeInterior> for r#NeverTypeType {
+    type Error = ValidationError;
+    fn try_from(interior: r#NeverTypeTypeInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#NeverTypeType> for r#NeverTypeTypeInterior {
+    fn from(value: r#NeverTypeType) -> Self {
+        value.0
+    }
+}
+impl std::str::FromStr for r#NeverTypeType {
+    type Err = ValidationError;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Self::new(s.to_string())
+    }
+}
+impl ToString for r#NeverTypeType {
+    fn to_string(&self) -> String {
+        self.0.to_string()
+    }
+}
+impl AsRef<str> for r#NeverTypeType {
+    fn as_ref(&self) -> &str {
+        self.0.as_str()
+    }
+}
+impl std::ops::Deref for r#NeverTypeType {
+    type Target = str;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+pub type r#InterfaceTypeRequiredPropertiesInterior = Vec<r#InterfaceTypeRequiredPropertiesItems>;
+#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
+#[serde(try_from = "InterfaceTypeRequiredPropertiesInterior")]
+pub struct r#InterfaceTypeRequiredProperties(r#InterfaceTypeRequiredPropertiesInterior);
+impl r#InterfaceTypeRequiredProperties {
+    pub fn new(
+        interior: r#InterfaceTypeRequiredPropertiesInterior,
+    ) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("InterfaceTypeRequiredProperties"))
+        }
+    }
+    fn validate(&self) -> bool {
+        true
+    }
+}
+impl TryFrom<r#InterfaceTypeRequiredPropertiesInterior> for r#InterfaceTypeRequiredProperties {
+    type Error = ValidationError;
+    fn try_from(interior: r#InterfaceTypeRequiredPropertiesInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#InterfaceTypeRequiredProperties> for r#InterfaceTypeRequiredPropertiesInterior {
+    fn from(value: r#InterfaceTypeRequiredProperties) -> Self {
+        value.0
+    }
+}
+impl AsRef<r#InterfaceTypeRequiredPropertiesInterior> for r#InterfaceTypeRequiredProperties {
+    fn as_ref(&self) -> &r#InterfaceTypeRequiredPropertiesInterior {
+        &self.0
+    }
+}
+impl std::ops::Deref for r#InterfaceTypeRequiredProperties {
+    type Target = r#InterfaceTypeRequiredPropertiesInterior;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+#[derive(serde :: Serialize, serde :: Deserialize, Clone, Debug, PartialEq)]
+pub struct r#NullTypeInterior {
+    #[serde(rename = "type")]
+    pub r#type: r#NullTypeType,
+}
+#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
+#[serde(try_from = "NullTypeInterior")]
+pub struct r#NullType(Box<r#NullTypeInterior>);
+impl r#NullType {
+    pub fn new(interior: r#NullTypeInterior) -> Result<Self, ValidationError> {
+        let instance = Self(Box::new(interior));
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("NullType"))
+        }
+    }
+    fn validate(&self) -> bool {
+        true
+    }
+}
+impl TryFrom<r#NullTypeInterior> for r#NullType {
+    type Error = ValidationError;
+    fn try_from(interior: r#NullTypeInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#NullType> for r#NullTypeInterior {
+    fn from(value: r#NullType) -> Self {
+        *value.0
+    }
+}
+impl AsRef<r#NullTypeInterior> for r#NullType {
+    fn as_ref(&self) -> &r#NullTypeInterior {
+        &self.0
+    }
+}
+impl std::ops::Deref for r#NullType {
+    type Target = r#NullTypeInterior;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+pub type r#CompoundsInterior = Vec<r#CompoundUnion>;
+#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
+#[serde(try_from = "CompoundsInterior")]
+pub struct r#Compounds(r#CompoundsInterior);
+impl r#Compounds {
+    pub fn new(interior: r#CompoundsInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("Compounds"))
+        }
+    }
+    fn validate(&self) -> bool {
+        true
+    }
+}
+impl TryFrom<r#CompoundsInterior> for r#Compounds {
+    type Error = ValidationError;
+    fn try_from(interior: r#CompoundsInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#Compounds> for r#CompoundsInterior {
+    fn from(value: r#Compounds) -> Self {
+        value.0
+    }
+}
+impl AsRef<r#CompoundsInterior> for r#Compounds {
+    fn as_ref(&self) -> &r#CompoundsInterior {
+        &self.0
+    }
+}
+impl std::ops::Deref for r#Compounds {
+    type Target = r#CompoundsInterior;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+pub type r#BooleanTypeOptionsItemsInterior = bool;
+#[derive(
+    Debug, serde :: Serialize, serde :: Deserialize, Clone, Copy, PartialEq, PartialOrd, Eq, Ord,
+)]
+#[serde(try_from = "BooleanTypeOptionsItemsInterior")]
+pub struct r#BooleanTypeOptionsItems(r#BooleanTypeOptionsItemsInterior);
+impl r#BooleanTypeOptionsItems {
+    pub fn new(interior: r#BooleanTypeOptionsItemsInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("BooleanTypeOptionsItems"))
+        }
+    }
+    fn validate(&self) -> bool {
+        true
+    }
+}
+impl TryFrom<r#BooleanTypeOptionsItemsInterior> for r#BooleanTypeOptionsItems {
+    type Error = ValidationError;
+    fn try_from(interior: r#BooleanTypeOptionsItemsInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#BooleanTypeOptionsItems> for r#BooleanTypeOptionsItemsInterior {
+    fn from(value: r#BooleanTypeOptionsItems) -> Self {
+        value.0
+    }
+}
+impl AsRef<r#BooleanTypeOptionsItemsInterior> for r#BooleanTypeOptionsItems {
+    fn as_ref(&self) -> &r#BooleanTypeOptionsItemsInterior {
+        &self.0
+    }
+}
+impl std::ops::Deref for r#BooleanTypeOptionsItems {
+    type Target = r#BooleanTypeOptionsItemsInterior;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+#[derive(serde :: Serialize, serde :: Deserialize, Clone, Debug, PartialEq)]
+pub struct r#NodeInterior {
+    #[serde(rename = "compounds")]
+    pub r#compounds: r#Compounds,
+    #[serde(rename = "title")]
+    pub r#title: r#Title,
+    #[serde(rename = "description")]
+    pub r#description: r#Description,
+    #[serde(rename = "examples")]
+    pub r#examples: r#Examples,
+    #[serde(rename = "superNodeId")]
+    pub r#super_node_id: Option<r#SuperNodeId>,
+    #[serde(rename = "deprecated")]
+    pub r#deprecated: r#Deprecated,
+    #[serde(rename = "types")]
+    pub r#types: r#Types,
+}
+#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
+#[serde(try_from = "NodeInterior")]
+pub struct r#Node(Box<r#NodeInterior>);
+impl r#Node {
+    pub fn new(interior: r#NodeInterior) -> Result<Self, ValidationError> {
+        let instance = Self(Box::new(interior));
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("Node"))
+        }
+    }
+    fn validate(&self) -> bool {
+        true
+    }
+}
+impl TryFrom<r#NodeInterior> for r#Node {
+    type Error = ValidationError;
+    fn try_from(interior: r#NodeInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#Node> for r#NodeInterior {
+    fn from(value: r#Node) -> Self {
+        *value.0
+    }
+}
+impl AsRef<r#NodeInterior> for r#Node {
+    fn as_ref(&self) -> &r#NodeInterior {
+        &self.0
+    }
+}
+impl std::ops::Deref for r#Node {
+    type Target = r#NodeInterior;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+#[derive(serde :: Serialize, serde :: Deserialize, Clone, Debug, PartialEq)]
+pub struct r#ArrayTypeInterior {
+    #[serde(rename = "maximumItems")]
+    pub r#maximum_items: Option<r#MaximumItems>,
+    #[serde(rename = "itemTypeNodeId")]
+    pub r#item_type_node_id: Option<r#ItemTypeNodeId>,
+    #[serde(rename = "type")]
+    pub r#type: r#ArrayTypeType,
+    #[serde(rename = "uniqueItems")]
+    pub r#unique_items: Option<r#UniqueItems>,
+    #[serde(rename = "minimumItems")]
+    pub r#minimum_items: Option<r#MinimumItems>,
+}
+#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
+#[serde(try_from = "ArrayTypeInterior")]
+pub struct r#ArrayType(Box<r#ArrayTypeInterior>);
+impl r#ArrayType {
+    pub fn new(interior: r#ArrayTypeInterior) -> Result<Self, ValidationError> {
+        let instance = Self(Box::new(interior));
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("ArrayType"))
+        }
+    }
+    fn validate(&self) -> bool {
+        true
+    }
+}
+impl TryFrom<r#ArrayTypeInterior> for r#ArrayType {
+    type Error = ValidationError;
+    fn try_from(interior: r#ArrayTypeInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#ArrayType> for r#ArrayTypeInterior {
+    fn from(value: r#ArrayType) -> Self {
+        *value.0
+    }
+}
+impl AsRef<r#ArrayTypeInterior> for r#ArrayType {
+    fn as_ref(&self) -> &r#ArrayTypeInterior {
+        &self.0
+    }
+}
+impl std::ops::Deref for r#ArrayType {
+    type Target = r#ArrayTypeInterior;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+pub type r#ExamplesItems = serde_json::Value;
 #[derive(serde :: Serialize, serde :: Deserialize, Clone, Debug, PartialEq)]
 #[serde(untagged)]
 pub enum r#TypeUnion {
@@ -3200,228 +2624,41 @@ impl TryFrom<r#TypeUnion> for r#RecordType {
         }
     }
 }
-pub type r#AdditionalPropertiesInterior = String;
+pub type r#ExamplesInterior = Vec<r#ExamplesItems>;
 #[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "AdditionalPropertiesInterior")]
-pub struct r#AdditionalProperties(r#AdditionalPropertiesInterior);
-impl r#AdditionalProperties {
-    pub fn new(value: r#AdditionalPropertiesInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
+#[serde(try_from = "ExamplesInterior")]
+pub struct r#Examples(r#ExamplesInterior);
+impl r#Examples {
+    pub fn new(interior: r#ExamplesInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
         if instance.validate() {
             Ok(instance)
         } else {
-            Err(ValidationError::new("AdditionalProperties"))
+            Err(ValidationError::new("Examples"))
         }
     }
     fn validate(&self) -> bool {
         true
     }
 }
-impl TryFrom<r#AdditionalPropertiesInterior> for r#AdditionalProperties {
+impl TryFrom<r#ExamplesInterior> for r#Examples {
     type Error = ValidationError;
-    fn try_from(value: r#AdditionalPropertiesInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
+    fn try_from(interior: r#ExamplesInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
     }
 }
-impl From<r#AdditionalProperties> for r#AdditionalPropertiesInterior {
-    fn from(value: r#AdditionalProperties) -> Self {
+impl From<r#Examples> for r#ExamplesInterior {
+    fn from(value: r#Examples) -> Self {
         value.0
     }
 }
-impl std::str::FromStr for r#AdditionalProperties {
-    type Err = ValidationError;
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::new(s.to_string())
-    }
-}
-impl ToString for r#AdditionalProperties {
-    fn to_string(&self) -> String {
-        self.0.to_string()
-    }
-}
-impl AsRef<str> for r#AdditionalProperties {
-    fn as_ref(&self) -> &str {
-        self.0.as_str()
-    }
-}
-impl std::ops::Deref for r#AdditionalProperties {
-    type Target = str;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-pub type r#AllOfCompoundTypeNodeIdsInterior = Vec<r#AllOfCompoundTypeNodeIdsItems>;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "AllOfCompoundTypeNodeIdsInterior")]
-pub struct r#AllOfCompoundTypeNodeIds(r#AllOfCompoundTypeNodeIdsInterior);
-impl r#AllOfCompoundTypeNodeIds {
-    pub fn new(value: r#AllOfCompoundTypeNodeIdsInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("AllOfCompoundTypeNodeIds"))
-        }
-    }
-    fn validate(&self) -> bool {
-        true
-    }
-}
-impl TryFrom<r#AllOfCompoundTypeNodeIdsInterior> for r#AllOfCompoundTypeNodeIds {
-    type Error = ValidationError;
-    fn try_from(value: r#AllOfCompoundTypeNodeIdsInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#AllOfCompoundTypeNodeIds> for r#AllOfCompoundTypeNodeIdsInterior {
-    fn from(value: r#AllOfCompoundTypeNodeIds) -> Self {
-        value.0
-    }
-}
-impl AsRef<r#AllOfCompoundTypeNodeIdsInterior> for r#AllOfCompoundTypeNodeIds {
-    fn as_ref(&self) -> &r#AllOfCompoundTypeNodeIdsInterior {
+impl AsRef<r#ExamplesInterior> for r#Examples {
+    fn as_ref(&self) -> &r#ExamplesInterior {
         &self.0
     }
 }
-impl std::ops::Deref for r#AllOfCompoundTypeNodeIds {
-    type Target = r#AllOfCompoundTypeNodeIdsInterior;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-pub struct r#AnyOfCompoundInterior {
-    #[serde(rename = "type")]
-    pub r#type: r#AnyOfCompoundType,
-    #[serde(rename = "typeNodeIds")]
-    pub r#type_node_ids: Option<r#AnyOfCompoundTypeNodeIds>,
-}
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "AnyOfCompoundInterior")]
-pub struct r#AnyOfCompound(Box<r#AnyOfCompoundInterior>);
-impl r#AnyOfCompound {
-    pub fn new(value: r#AnyOfCompoundInterior) -> Result<Self, ValidationError> {
-        let instance = Self(Box::new(value));
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("AnyOfCompound"))
-        }
-    }
-    fn validate(&self) -> bool {
-        true
-    }
-}
-impl TryFrom<r#AnyOfCompoundInterior> for r#AnyOfCompound {
-    type Error = ValidationError;
-    fn try_from(value: r#AnyOfCompoundInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#AnyOfCompound> for r#AnyOfCompoundInterior {
-    fn from(value: r#AnyOfCompound) -> Self {
-        *value.0
-    }
-}
-impl AsRef<r#AnyOfCompoundInterior> for r#AnyOfCompound {
-    fn as_ref(&self) -> &r#AnyOfCompoundInterior {
-        &self.0
-    }
-}
-impl std::ops::Deref for r#AnyOfCompound {
-    type Target = r#AnyOfCompoundInterior;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-pub type r#InterfaceTypeTypeInterior = String;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "InterfaceTypeTypeInterior")]
-pub struct r#InterfaceTypeType(r#InterfaceTypeTypeInterior);
-impl r#InterfaceTypeType {
-    pub fn new(value: r#InterfaceTypeTypeInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("InterfaceTypeType"))
-        }
-    }
-    fn validate(&self) -> bool {
-        if self.as_ref() != "interface" {
-            return false;
-        }
-        true
-    }
-}
-impl TryFrom<r#InterfaceTypeTypeInterior> for r#InterfaceTypeType {
-    type Error = ValidationError;
-    fn try_from(value: r#InterfaceTypeTypeInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#InterfaceTypeType> for r#InterfaceTypeTypeInterior {
-    fn from(value: r#InterfaceTypeType) -> Self {
-        value.0
-    }
-}
-impl std::str::FromStr for r#InterfaceTypeType {
-    type Err = ValidationError;
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::new(s.to_string())
-    }
-}
-impl ToString for r#InterfaceTypeType {
-    fn to_string(&self) -> String {
-        self.0.to_string()
-    }
-}
-impl AsRef<str> for r#InterfaceTypeType {
-    fn as_ref(&self) -> &str {
-        self.0.as_str()
-    }
-}
-impl std::ops::Deref for r#InterfaceTypeType {
-    type Target = str;
-    fn deref(&self) -> &Self::Target {
-        self.as_ref()
-    }
-}
-pub type r#MaximumExclusiveInterior = f64;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "MaximumExclusiveInterior")]
-pub struct r#MaximumExclusive(r#MaximumExclusiveInterior);
-impl r#MaximumExclusive {
-    pub fn new(value: r#MaximumExclusiveInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
-        if instance.validate() {
-            Ok(instance)
-        } else {
-            Err(ValidationError::new("MaximumExclusive"))
-        }
-    }
-    fn validate(&self) -> bool {
-        true
-    }
-}
-impl TryFrom<r#MaximumExclusiveInterior> for r#MaximumExclusive {
-    type Error = ValidationError;
-    fn try_from(value: r#MaximumExclusiveInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
-    }
-}
-impl From<r#MaximumExclusive> for r#MaximumExclusiveInterior {
-    fn from(value: r#MaximumExclusive) -> Self {
-        value.0
-    }
-}
-impl AsRef<r#MaximumExclusiveInterior> for r#MaximumExclusive {
-    fn as_ref(&self) -> &r#MaximumExclusiveInterior {
-        &self.0
-    }
-}
-impl std::ops::Deref for r#MaximumExclusive {
-    type Target = r#MaximumExclusiveInterior;
+impl std::ops::Deref for r#Examples {
+    type Target = r#ExamplesInterior;
     fn deref(&self) -> &Self::Target {
         self.as_ref()
     }
@@ -3431,8 +2668,8 @@ pub type r#RecordTypeRequiredPropertiesInterior = Vec<r#RecordTypeRequiredProper
 #[serde(try_from = "RecordTypeRequiredPropertiesInterior")]
 pub struct r#RecordTypeRequiredProperties(r#RecordTypeRequiredPropertiesInterior);
 impl r#RecordTypeRequiredProperties {
-    pub fn new(value: r#RecordTypeRequiredPropertiesInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
+    pub fn new(interior: r#RecordTypeRequiredPropertiesInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
         if instance.validate() {
             Ok(instance)
         } else {
@@ -3445,8 +2682,8 @@ impl r#RecordTypeRequiredProperties {
 }
 impl TryFrom<r#RecordTypeRequiredPropertiesInterior> for r#RecordTypeRequiredProperties {
     type Error = ValidationError;
-    fn try_from(value: r#RecordTypeRequiredPropertiesInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
+    fn try_from(interior: r#RecordTypeRequiredPropertiesInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
     }
 }
 impl From<r#RecordTypeRequiredProperties> for r#RecordTypeRequiredPropertiesInterior {
@@ -3465,80 +2702,873 @@ impl std::ops::Deref for r#RecordTypeRequiredProperties {
         self.as_ref()
     }
 }
-pub type r#ExamplesItemsInterior = serde_json::Value;
-#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "ExamplesItemsInterior")]
-pub struct r#ExamplesItems(r#ExamplesItemsInterior);
-impl r#ExamplesItems {
-    pub fn new(value: r#ExamplesItemsInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
+pub type r#AllOfCompoundTypeNodeIdsItemsInterior = String;
+#[derive(
+    Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq, PartialOrd, Eq, Ord,
+)]
+#[serde(try_from = "AllOfCompoundTypeNodeIdsItemsInterior")]
+pub struct r#AllOfCompoundTypeNodeIdsItems(r#AllOfCompoundTypeNodeIdsItemsInterior);
+impl r#AllOfCompoundTypeNodeIdsItems {
+    pub fn new(interior: r#AllOfCompoundTypeNodeIdsItemsInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
         if instance.validate() {
             Ok(instance)
         } else {
-            Err(ValidationError::new("ExamplesItems"))
+            Err(ValidationError::new("AllOfCompoundTypeNodeIdsItems"))
         }
     }
     fn validate(&self) -> bool {
         true
     }
 }
-impl TryFrom<r#ExamplesItemsInterior> for r#ExamplesItems {
+impl TryFrom<r#AllOfCompoundTypeNodeIdsItemsInterior> for r#AllOfCompoundTypeNodeIdsItems {
     type Error = ValidationError;
-    fn try_from(value: r#ExamplesItemsInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
+    fn try_from(interior: r#AllOfCompoundTypeNodeIdsItemsInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
     }
 }
-impl From<r#ExamplesItems> for r#ExamplesItemsInterior {
-    fn from(value: r#ExamplesItems) -> Self {
+impl From<r#AllOfCompoundTypeNodeIdsItems> for r#AllOfCompoundTypeNodeIdsItemsInterior {
+    fn from(value: r#AllOfCompoundTypeNodeIdsItems) -> Self {
         value.0
     }
 }
-impl AsRef<r#ExamplesItemsInterior> for r#ExamplesItems {
-    fn as_ref(&self) -> &r#ExamplesItemsInterior {
-        &self.0
+impl std::str::FromStr for r#AllOfCompoundTypeNodeIdsItems {
+    type Err = ValidationError;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Self::new(s.to_string())
     }
 }
-impl std::ops::Deref for r#ExamplesItems {
-    type Target = r#ExamplesItemsInterior;
+impl ToString for r#AllOfCompoundTypeNodeIdsItems {
+    fn to_string(&self) -> String {
+        self.0.to_string()
+    }
+}
+impl AsRef<str> for r#AllOfCompoundTypeNodeIdsItems {
+    fn as_ref(&self) -> &str {
+        self.0.as_str()
+    }
+}
+impl std::ops::Deref for r#AllOfCompoundTypeNodeIdsItems {
+    type Target = str;
     fn deref(&self) -> &Self::Target {
         self.as_ref()
     }
 }
-pub type r#MinimumPropertiesInterior = f64;
+pub type r#PropertyTypeNodeIdsInterior = std::collections::HashMap<String, r#AdditionalProperties>;
 #[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
-#[serde(try_from = "MinimumPropertiesInterior")]
-pub struct r#MinimumProperties(r#MinimumPropertiesInterior);
-impl r#MinimumProperties {
-    pub fn new(value: r#MinimumPropertiesInterior) -> Result<Self, ValidationError> {
-        let instance = Self(value);
+#[serde(try_from = "PropertyTypeNodeIdsInterior")]
+pub struct r#PropertyTypeNodeIds(r#PropertyTypeNodeIdsInterior);
+impl r#PropertyTypeNodeIds {
+    pub fn new(interior: r#PropertyTypeNodeIdsInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
         if instance.validate() {
             Ok(instance)
         } else {
-            Err(ValidationError::new("MinimumProperties"))
+            Err(ValidationError::new("PropertyTypeNodeIds"))
         }
     }
     fn validate(&self) -> bool {
         true
     }
 }
-impl TryFrom<r#MinimumPropertiesInterior> for r#MinimumProperties {
+impl TryFrom<r#PropertyTypeNodeIdsInterior> for r#PropertyTypeNodeIds {
     type Error = ValidationError;
-    fn try_from(value: r#MinimumPropertiesInterior) -> Result<Self, Self::Error> {
-        Self::new(value)
+    fn try_from(interior: r#PropertyTypeNodeIdsInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
     }
 }
-impl From<r#MinimumProperties> for r#MinimumPropertiesInterior {
-    fn from(value: r#MinimumProperties) -> Self {
+impl From<r#PropertyTypeNodeIds> for r#PropertyTypeNodeIdsInterior {
+    fn from(value: r#PropertyTypeNodeIds) -> Self {
         value.0
     }
 }
-impl AsRef<r#MinimumPropertiesInterior> for r#MinimumProperties {
-    fn as_ref(&self) -> &r#MinimumPropertiesInterior {
+impl AsRef<r#PropertyTypeNodeIdsInterior> for r#PropertyTypeNodeIds {
+    fn as_ref(&self) -> &r#PropertyTypeNodeIdsInterior {
         &self.0
     }
 }
-impl std::ops::Deref for r#MinimumProperties {
-    type Target = r#MinimumPropertiesInterior;
+impl std::ops::Deref for r#PropertyTypeNodeIds {
+    type Target = r#PropertyTypeNodeIdsInterior;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+pub type r#PropertiesNumberTypeInterior = String;
+#[derive(
+    Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq, PartialOrd, Eq, Ord,
+)]
+#[serde(try_from = "PropertiesNumberTypeInterior")]
+pub struct r#PropertiesNumberType(r#PropertiesNumberTypeInterior);
+impl r#PropertiesNumberType {
+    pub fn new(interior: r#PropertiesNumberTypeInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("PropertiesNumberType"))
+        }
+    }
+    fn validate(&self) -> bool {
+        if self.as_ref() != "float" && self.as_ref() != "integer" {
+            return false;
+        }
+        true
+    }
+}
+impl TryFrom<r#PropertiesNumberTypeInterior> for r#PropertiesNumberType {
+    type Error = ValidationError;
+    fn try_from(interior: r#PropertiesNumberTypeInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#PropertiesNumberType> for r#PropertiesNumberTypeInterior {
+    fn from(value: r#PropertiesNumberType) -> Self {
+        value.0
+    }
+}
+impl std::str::FromStr for r#PropertiesNumberType {
+    type Err = ValidationError;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Self::new(s.to_string())
+    }
+}
+impl ToString for r#PropertiesNumberType {
+    fn to_string(&self) -> String {
+        self.0.to_string()
+    }
+}
+impl AsRef<str> for r#PropertiesNumberType {
+    fn as_ref(&self) -> &str {
+        self.0.as_str()
+    }
+}
+impl std::ops::Deref for r#PropertiesNumberType {
+    type Target = str;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+pub type r#RecordTypeRequiredPropertiesItemsInterior = String;
+#[derive(
+    Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq, PartialOrd, Eq, Ord,
+)]
+#[serde(try_from = "RecordTypeRequiredPropertiesItemsInterior")]
+pub struct r#RecordTypeRequiredPropertiesItems(r#RecordTypeRequiredPropertiesItemsInterior);
+impl r#RecordTypeRequiredPropertiesItems {
+    pub fn new(
+        interior: r#RecordTypeRequiredPropertiesItemsInterior,
+    ) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("RecordTypeRequiredPropertiesItems"))
+        }
+    }
+    fn validate(&self) -> bool {
+        true
+    }
+}
+impl TryFrom<r#RecordTypeRequiredPropertiesItemsInterior> for r#RecordTypeRequiredPropertiesItems {
+    type Error = ValidationError;
+    fn try_from(
+        interior: r#RecordTypeRequiredPropertiesItemsInterior,
+    ) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#RecordTypeRequiredPropertiesItems> for r#RecordTypeRequiredPropertiesItemsInterior {
+    fn from(value: r#RecordTypeRequiredPropertiesItems) -> Self {
+        value.0
+    }
+}
+impl std::str::FromStr for r#RecordTypeRequiredPropertiesItems {
+    type Err = ValidationError;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Self::new(s.to_string())
+    }
+}
+impl ToString for r#RecordTypeRequiredPropertiesItems {
+    fn to_string(&self) -> String {
+        self.0.to_string()
+    }
+}
+impl AsRef<str> for r#RecordTypeRequiredPropertiesItems {
+    fn as_ref(&self) -> &str {
+        self.0.as_str()
+    }
+}
+impl std::ops::Deref for r#RecordTypeRequiredPropertiesItems {
+    type Target = str;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+pub type r#ItemTypeNodeIdInterior = String;
+#[derive(
+    Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq, PartialOrd, Eq, Ord,
+)]
+#[serde(try_from = "ItemTypeNodeIdInterior")]
+pub struct r#ItemTypeNodeId(r#ItemTypeNodeIdInterior);
+impl r#ItemTypeNodeId {
+    pub fn new(interior: r#ItemTypeNodeIdInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("ItemTypeNodeId"))
+        }
+    }
+    fn validate(&self) -> bool {
+        true
+    }
+}
+impl TryFrom<r#ItemTypeNodeIdInterior> for r#ItemTypeNodeId {
+    type Error = ValidationError;
+    fn try_from(interior: r#ItemTypeNodeIdInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#ItemTypeNodeId> for r#ItemTypeNodeIdInterior {
+    fn from(value: r#ItemTypeNodeId) -> Self {
+        value.0
+    }
+}
+impl std::str::FromStr for r#ItemTypeNodeId {
+    type Err = ValidationError;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Self::new(s.to_string())
+    }
+}
+impl ToString for r#ItemTypeNodeId {
+    fn to_string(&self) -> String {
+        self.0.to_string()
+    }
+}
+impl AsRef<str> for r#ItemTypeNodeId {
+    fn as_ref(&self) -> &str {
+        self.0.as_str()
+    }
+}
+impl std::ops::Deref for r#ItemTypeNodeId {
+    type Target = str;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+pub type r#BooleanTypeTypeInterior = String;
+#[derive(
+    Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq, PartialOrd, Eq, Ord,
+)]
+#[serde(try_from = "BooleanTypeTypeInterior")]
+pub struct r#BooleanTypeType(r#BooleanTypeTypeInterior);
+impl r#BooleanTypeType {
+    pub fn new(interior: r#BooleanTypeTypeInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("BooleanTypeType"))
+        }
+    }
+    fn validate(&self) -> bool {
+        if self.as_ref() != "boolean" {
+            return false;
+        }
+        true
+    }
+}
+impl TryFrom<r#BooleanTypeTypeInterior> for r#BooleanTypeType {
+    type Error = ValidationError;
+    fn try_from(interior: r#BooleanTypeTypeInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#BooleanTypeType> for r#BooleanTypeTypeInterior {
+    fn from(value: r#BooleanTypeType) -> Self {
+        value.0
+    }
+}
+impl std::str::FromStr for r#BooleanTypeType {
+    type Err = ValidationError;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Self::new(s.to_string())
+    }
+}
+impl ToString for r#BooleanTypeType {
+    fn to_string(&self) -> String {
+        self.0.to_string()
+    }
+}
+impl AsRef<str> for r#BooleanTypeType {
+    fn as_ref(&self) -> &str {
+        self.0.as_str()
+    }
+}
+impl std::ops::Deref for r#BooleanTypeType {
+    type Target = str;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+pub type r#NumberTypeTypeInterior = String;
+#[derive(
+    Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq, PartialOrd, Eq, Ord,
+)]
+#[serde(try_from = "NumberTypeTypeInterior")]
+pub struct r#NumberTypeType(r#NumberTypeTypeInterior);
+impl r#NumberTypeType {
+    pub fn new(interior: r#NumberTypeTypeInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("NumberTypeType"))
+        }
+    }
+    fn validate(&self) -> bool {
+        if self.as_ref() != "number" {
+            return false;
+        }
+        true
+    }
+}
+impl TryFrom<r#NumberTypeTypeInterior> for r#NumberTypeType {
+    type Error = ValidationError;
+    fn try_from(interior: r#NumberTypeTypeInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#NumberTypeType> for r#NumberTypeTypeInterior {
+    fn from(value: r#NumberTypeType) -> Self {
+        value.0
+    }
+}
+impl std::str::FromStr for r#NumberTypeType {
+    type Err = ValidationError;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Self::new(s.to_string())
+    }
+}
+impl ToString for r#NumberTypeType {
+    fn to_string(&self) -> String {
+        self.0.to_string()
+    }
+}
+impl AsRef<str> for r#NumberTypeType {
+    fn as_ref(&self) -> &str {
+        self.0.as_str()
+    }
+}
+impl std::ops::Deref for r#NumberTypeType {
+    type Target = str;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+pub type r#StringTypeOptionsItemsInterior = String;
+#[derive(
+    Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq, PartialOrd, Eq, Ord,
+)]
+#[serde(try_from = "StringTypeOptionsItemsInterior")]
+pub struct r#StringTypeOptionsItems(r#StringTypeOptionsItemsInterior);
+impl r#StringTypeOptionsItems {
+    pub fn new(interior: r#StringTypeOptionsItemsInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("StringTypeOptionsItems"))
+        }
+    }
+    fn validate(&self) -> bool {
+        true
+    }
+}
+impl TryFrom<r#StringTypeOptionsItemsInterior> for r#StringTypeOptionsItems {
+    type Error = ValidationError;
+    fn try_from(interior: r#StringTypeOptionsItemsInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#StringTypeOptionsItems> for r#StringTypeOptionsItemsInterior {
+    fn from(value: r#StringTypeOptionsItems) -> Self {
+        value.0
+    }
+}
+impl std::str::FromStr for r#StringTypeOptionsItems {
+    type Err = ValidationError;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Self::new(s.to_string())
+    }
+}
+impl ToString for r#StringTypeOptionsItems {
+    fn to_string(&self) -> String {
+        self.0.to_string()
+    }
+}
+impl AsRef<str> for r#StringTypeOptionsItems {
+    fn as_ref(&self) -> &str {
+        self.0.as_str()
+    }
+}
+impl std::ops::Deref for r#StringTypeOptionsItems {
+    type Target = str;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+#[derive(serde :: Serialize, serde :: Deserialize, Clone, Debug, PartialEq)]
+pub struct r#InterfaceTypeInterior {
+    #[serde(rename = "requiredProperties")]
+    pub r#required_properties: Option<r#InterfaceTypeRequiredProperties>,
+    #[serde(rename = "propertyTypeNodeIds")]
+    pub r#property_type_node_ids: Option<r#PropertyTypeNodeIds>,
+    #[serde(rename = "type")]
+    pub r#type: r#InterfaceTypeType,
+}
+#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
+#[serde(try_from = "InterfaceTypeInterior")]
+pub struct r#InterfaceType(Box<r#InterfaceTypeInterior>);
+impl r#InterfaceType {
+    pub fn new(interior: r#InterfaceTypeInterior) -> Result<Self, ValidationError> {
+        let instance = Self(Box::new(interior));
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("InterfaceType"))
+        }
+    }
+    fn validate(&self) -> bool {
+        true
+    }
+}
+impl TryFrom<r#InterfaceTypeInterior> for r#InterfaceType {
+    type Error = ValidationError;
+    fn try_from(interior: r#InterfaceTypeInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#InterfaceType> for r#InterfaceTypeInterior {
+    fn from(value: r#InterfaceType) -> Self {
+        *value.0
+    }
+}
+impl AsRef<r#InterfaceTypeInterior> for r#InterfaceType {
+    fn as_ref(&self) -> &r#InterfaceTypeInterior {
+        &self.0
+    }
+}
+impl std::ops::Deref for r#InterfaceType {
+    type Target = r#InterfaceTypeInterior;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+pub type r#ItemTypeNodeIdsItemsInterior = String;
+#[derive(
+    Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq, PartialOrd, Eq, Ord,
+)]
+#[serde(try_from = "ItemTypeNodeIdsItemsInterior")]
+pub struct r#ItemTypeNodeIdsItems(r#ItemTypeNodeIdsItemsInterior);
+impl r#ItemTypeNodeIdsItems {
+    pub fn new(interior: r#ItemTypeNodeIdsItemsInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("ItemTypeNodeIdsItems"))
+        }
+    }
+    fn validate(&self) -> bool {
+        true
+    }
+}
+impl TryFrom<r#ItemTypeNodeIdsItemsInterior> for r#ItemTypeNodeIdsItems {
+    type Error = ValidationError;
+    fn try_from(interior: r#ItemTypeNodeIdsItemsInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#ItemTypeNodeIdsItems> for r#ItemTypeNodeIdsItemsInterior {
+    fn from(value: r#ItemTypeNodeIdsItems) -> Self {
+        value.0
+    }
+}
+impl std::str::FromStr for r#ItemTypeNodeIdsItems {
+    type Err = ValidationError;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Self::new(s.to_string())
+    }
+}
+impl ToString for r#ItemTypeNodeIdsItems {
+    fn to_string(&self) -> String {
+        self.0.to_string()
+    }
+}
+impl AsRef<str> for r#ItemTypeNodeIdsItems {
+    fn as_ref(&self) -> &str {
+        self.0.as_str()
+    }
+}
+impl std::ops::Deref for r#ItemTypeNodeIdsItems {
+    type Target = str;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+pub type r#MultipleOfInterior = f64;
+#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, Copy, PartialEq, PartialOrd)]
+#[serde(try_from = "MultipleOfInterior")]
+pub struct r#MultipleOf(r#MultipleOfInterior);
+impl r#MultipleOf {
+    pub fn new(interior: r#MultipleOfInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("MultipleOf"))
+        }
+    }
+    fn validate(&self) -> bool {
+        true
+    }
+}
+impl TryFrom<r#MultipleOfInterior> for r#MultipleOf {
+    type Error = ValidationError;
+    fn try_from(interior: r#MultipleOfInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#MultipleOf> for r#MultipleOfInterior {
+    fn from(value: r#MultipleOf) -> Self {
+        value.0
+    }
+}
+impl AsRef<r#MultipleOfInterior> for r#MultipleOf {
+    fn as_ref(&self) -> &r#MultipleOfInterior {
+        &self.0
+    }
+}
+impl std::ops::Deref for r#MultipleOf {
+    type Target = r#MultipleOfInterior;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+pub type r#UniqueItemsInterior = bool;
+#[derive(
+    Debug, serde :: Serialize, serde :: Deserialize, Clone, Copy, PartialEq, PartialOrd, Eq, Ord,
+)]
+#[serde(try_from = "UniqueItemsInterior")]
+pub struct r#UniqueItems(r#UniqueItemsInterior);
+impl r#UniqueItems {
+    pub fn new(interior: r#UniqueItemsInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("UniqueItems"))
+        }
+    }
+    fn validate(&self) -> bool {
+        true
+    }
+}
+impl TryFrom<r#UniqueItemsInterior> for r#UniqueItems {
+    type Error = ValidationError;
+    fn try_from(interior: r#UniqueItemsInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#UniqueItems> for r#UniqueItemsInterior {
+    fn from(value: r#UniqueItems) -> Self {
+        value.0
+    }
+}
+impl AsRef<r#UniqueItemsInterior> for r#UniqueItems {
+    fn as_ref(&self) -> &r#UniqueItemsInterior {
+        &self.0
+    }
+}
+impl std::ops::Deref for r#UniqueItems {
+    type Target = r#UniqueItemsInterior;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+pub type r#DescriptionInterior = String;
+#[derive(
+    Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq, PartialOrd, Eq, Ord,
+)]
+#[serde(try_from = "DescriptionInterior")]
+pub struct r#Description(r#DescriptionInterior);
+impl r#Description {
+    pub fn new(interior: r#DescriptionInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("Description"))
+        }
+    }
+    fn validate(&self) -> bool {
+        true
+    }
+}
+impl TryFrom<r#DescriptionInterior> for r#Description {
+    type Error = ValidationError;
+    fn try_from(interior: r#DescriptionInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#Description> for r#DescriptionInterior {
+    fn from(value: r#Description) -> Self {
+        value.0
+    }
+}
+impl std::str::FromStr for r#Description {
+    type Err = ValidationError;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Self::new(s.to_string())
+    }
+}
+impl ToString for r#Description {
+    fn to_string(&self) -> String {
+        self.0.to_string()
+    }
+}
+impl AsRef<str> for r#Description {
+    fn as_ref(&self) -> &str {
+        self.0.as_str()
+    }
+}
+impl std::ops::Deref for r#Description {
+    type Target = str;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+pub type r#MaximumPropertiesInterior = f64;
+#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, Copy, PartialEq, PartialOrd)]
+#[serde(try_from = "MaximumPropertiesInterior")]
+pub struct r#MaximumProperties(r#MaximumPropertiesInterior);
+impl r#MaximumProperties {
+    pub fn new(interior: r#MaximumPropertiesInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("MaximumProperties"))
+        }
+    }
+    fn validate(&self) -> bool {
+        true
+    }
+}
+impl TryFrom<r#MaximumPropertiesInterior> for r#MaximumProperties {
+    type Error = ValidationError;
+    fn try_from(interior: r#MaximumPropertiesInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#MaximumProperties> for r#MaximumPropertiesInterior {
+    fn from(value: r#MaximumProperties) -> Self {
+        value.0
+    }
+}
+impl AsRef<r#MaximumPropertiesInterior> for r#MaximumProperties {
+    fn as_ref(&self) -> &r#MaximumPropertiesInterior {
+        &self.0
+    }
+}
+impl std::ops::Deref for r#MaximumProperties {
+    type Target = r#MaximumPropertiesInterior;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+pub type r#NodesInterior = std::collections::HashMap<String, r#Node>;
+#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
+#[serde(try_from = "NodesInterior")]
+pub struct r#Nodes(r#NodesInterior);
+impl r#Nodes {
+    pub fn new(interior: r#NodesInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("Nodes"))
+        }
+    }
+    fn validate(&self) -> bool {
+        true
+    }
+}
+impl TryFrom<r#NodesInterior> for r#Nodes {
+    type Error = ValidationError;
+    fn try_from(interior: r#NodesInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#Nodes> for r#NodesInterior {
+    fn from(value: r#Nodes) -> Self {
+        value.0
+    }
+}
+impl AsRef<r#NodesInterior> for r#Nodes {
+    fn as_ref(&self) -> &r#NodesInterior {
+        &self.0
+    }
+}
+impl std::ops::Deref for r#Nodes {
+    type Target = r#NodesInterior;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+pub type r#AnyOfCompoundTypeInterior = String;
+#[derive(
+    Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq, PartialOrd, Eq, Ord,
+)]
+#[serde(try_from = "AnyOfCompoundTypeInterior")]
+pub struct r#AnyOfCompoundType(r#AnyOfCompoundTypeInterior);
+impl r#AnyOfCompoundType {
+    pub fn new(interior: r#AnyOfCompoundTypeInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("AnyOfCompoundType"))
+        }
+    }
+    fn validate(&self) -> bool {
+        if self.as_ref() != "any-of" {
+            return false;
+        }
+        true
+    }
+}
+impl TryFrom<r#AnyOfCompoundTypeInterior> for r#AnyOfCompoundType {
+    type Error = ValidationError;
+    fn try_from(interior: r#AnyOfCompoundTypeInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#AnyOfCompoundType> for r#AnyOfCompoundTypeInterior {
+    fn from(value: r#AnyOfCompoundType) -> Self {
+        value.0
+    }
+}
+impl std::str::FromStr for r#AnyOfCompoundType {
+    type Err = ValidationError;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Self::new(s.to_string())
+    }
+}
+impl ToString for r#AnyOfCompoundType {
+    fn to_string(&self) -> String {
+        self.0.to_string()
+    }
+}
+impl AsRef<str> for r#AnyOfCompoundType {
+    fn as_ref(&self) -> &str {
+        self.0.as_str()
+    }
+}
+impl std::ops::Deref for r#AnyOfCompoundType {
+    type Target = str;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+pub type r#TitleInterior = String;
+#[derive(
+    Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq, PartialOrd, Eq, Ord,
+)]
+#[serde(try_from = "TitleInterior")]
+pub struct r#Title(r#TitleInterior);
+impl r#Title {
+    pub fn new(interior: r#TitleInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("Title"))
+        }
+    }
+    fn validate(&self) -> bool {
+        true
+    }
+}
+impl TryFrom<r#TitleInterior> for r#Title {
+    type Error = ValidationError;
+    fn try_from(interior: r#TitleInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#Title> for r#TitleInterior {
+    fn from(value: r#Title) -> Self {
+        value.0
+    }
+}
+impl std::str::FromStr for r#Title {
+    type Err = ValidationError;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Self::new(s.to_string())
+    }
+}
+impl ToString for r#Title {
+    fn to_string(&self) -> String {
+        self.0.to_string()
+    }
+}
+impl AsRef<str> for r#Title {
+    fn as_ref(&self) -> &str {
+        self.0.as_str()
+    }
+}
+impl std::ops::Deref for r#Title {
+    type Target = str;
+    fn deref(&self) -> &Self::Target {
+        self.as_ref()
+    }
+}
+pub type r#BooleanTypeOptionsInterior = Vec<r#BooleanTypeOptionsItems>;
+#[derive(Debug, serde :: Serialize, serde :: Deserialize, Clone, PartialEq)]
+#[serde(try_from = "BooleanTypeOptionsInterior")]
+pub struct r#BooleanTypeOptions(r#BooleanTypeOptionsInterior);
+impl r#BooleanTypeOptions {
+    pub fn new(interior: r#BooleanTypeOptionsInterior) -> Result<Self, ValidationError> {
+        let instance = Self(interior);
+        if instance.validate() {
+            Ok(instance)
+        } else {
+            Err(ValidationError::new("BooleanTypeOptions"))
+        }
+    }
+    fn validate(&self) -> bool {
+        true
+    }
+}
+impl TryFrom<r#BooleanTypeOptionsInterior> for r#BooleanTypeOptions {
+    type Error = ValidationError;
+    fn try_from(interior: r#BooleanTypeOptionsInterior) -> Result<Self, Self::Error> {
+        Self::new(interior)
+    }
+}
+impl From<r#BooleanTypeOptions> for r#BooleanTypeOptionsInterior {
+    fn from(value: r#BooleanTypeOptions) -> Self {
+        value.0
+    }
+}
+impl AsRef<r#BooleanTypeOptionsInterior> for r#BooleanTypeOptions {
+    fn as_ref(&self) -> &r#BooleanTypeOptionsInterior {
+        &self.0
+    }
+}
+impl std::ops::Deref for r#BooleanTypeOptions {
+    type Target = r#BooleanTypeOptionsInterior;
     fn deref(&self) -> &Self::Target {
         self.as_ref()
     }
