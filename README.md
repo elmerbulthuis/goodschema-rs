@@ -71,3 +71,19 @@ Objects are represented as rust `struct`'s. Fields that are not required are `Op
 Record types are `HashMap`'s in rust, the key being a `String`. Custom validation is:
 
 -   minimum and maximum properties
+
+### one-of
+
+...
+
+### any-of
+
+...
+
+### all-of
+
+...
+
+### if-then-else
+
+...
