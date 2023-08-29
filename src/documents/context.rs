@@ -118,7 +118,9 @@ impl Context {
         let nodes = HashMap::from_iter(
             self.get_intermediate_node_pairs()
                 .map(|(k, v)| (k.to_string(), v.clone())),
-        );
+        )
+        .try_into()
+        .unwrap();
 
         schemas::intermediate_a::SchemaJsonInterior { schema, nodes }
             .try_into()

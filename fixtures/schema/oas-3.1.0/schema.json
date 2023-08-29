@@ -1,0 +1,2835 @@
+{
+    "$schema": "https://schema.JsonSchema42.org/jns42-intermediate-a/schema.json",
+    "nodes": {
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/specification-extensions",
+        "deprecated": false,
+        "title": "",
+        "description": "The description of OpenAPI v3.1.x documents without schema validation, as defined by https://spec.openapis.org/oas/v3.1.0",
+        "examples": [],
+        "types": [
+          {
+            "type": "interface",
+            "requiredProperties": [
+              "openapi",
+              "info"
+            ],
+            "propertyTypeNodeIds": {
+              "openapi": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/openapi",
+              "info": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/info",
+              "jsonSchemaDialect": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/jsonSchemaDialect",
+              "servers": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/servers",
+              "paths": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/paths",
+              "webhooks": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/webhooks",
+              "components": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/components",
+              "security": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/security",
+              "tags": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/tags",
+              "externalDocs": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/externalDocs"
+            }
+          }
+        ],
+        "compounds": [
+          {
+            "type": "any-of",
+            "typeNodeIds": [
+              "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/anyOf/0",
+              "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/anyOf/1",
+              "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/anyOf/2"
+            ]
+          }
+        ]
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/info": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/specification-extensions",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "interface",
+            "requiredProperties": [
+              "title",
+              "version"
+            ],
+            "propertyTypeNodeIds": {
+              "title": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/info/properties/title",
+              "summary": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/info/properties/summary",
+              "description": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/info/properties/description",
+              "termsOfService": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/info/properties/termsOfService",
+              "contact": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/info/properties/contact",
+              "license": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/info/properties/license",
+              "version": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/info/properties/version"
+            }
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/contact": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/specification-extensions",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "interface",
+            "requiredProperties": [],
+            "propertyTypeNodeIds": {
+              "name": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/contact/properties/name",
+              "url": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/contact/properties/url",
+              "email": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/contact/properties/email"
+            }
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/license": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/specification-extensions",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "interface",
+            "requiredProperties": [
+              "name"
+            ],
+            "propertyTypeNodeIds": {
+              "name": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/license/properties/name",
+              "identifier": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/license/properties/identifier",
+              "url": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/license/properties/url"
+            }
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/specification-extensions",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "interface",
+            "requiredProperties": [
+              "url"
+            ],
+            "propertyTypeNodeIds": {
+              "url": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server/properties/url",
+              "description": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server/properties/description",
+              "variables": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server/properties/variables"
+            }
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server-variable": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/specification-extensions",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "interface",
+            "requiredProperties": [
+              "default"
+            ],
+            "propertyTypeNodeIds": {
+              "enum": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server-variable/properties/enum",
+              "default": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server-variable/properties/default",
+              "description": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server-variable/properties/description"
+            }
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/specification-extensions",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "interface",
+            "requiredProperties": [],
+            "propertyTypeNodeIds": {
+              "schemas": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/schemas",
+              "responses": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/responses",
+              "parameters": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/parameters",
+              "examples": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/examples",
+              "requestBodies": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/requestBodies",
+              "headers": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/headers",
+              "securitySchemes": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/securitySchemes",
+              "links": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/links",
+              "callbacks": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/callbacks",
+              "pathItems": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/pathItems"
+            }
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/paths": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/specification-extensions",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/specification-extensions",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "interface",
+            "requiredProperties": [],
+            "propertyTypeNodeIds": {
+              "summary": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/summary",
+              "description": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/description",
+              "servers": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/servers",
+              "parameters": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/parameters",
+              "get": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/get",
+              "put": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/put",
+              "post": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/post",
+              "delete": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/delete",
+              "options": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/options",
+              "head": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/head",
+              "patch": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/patch",
+              "trace": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/trace"
+            }
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item-or-reference": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/specification-extensions",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "interface",
+            "requiredProperties": [],
+            "propertyTypeNodeIds": {
+              "tags": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/tags",
+              "summary": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/summary",
+              "description": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/description",
+              "externalDocs": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/externalDocs",
+              "operationId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/operationId",
+              "parameters": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/parameters",
+              "requestBody": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/requestBody",
+              "responses": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/responses",
+              "callbacks": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/callbacks",
+              "deprecated": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/deprecated",
+              "security": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/security",
+              "servers": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/servers"
+            }
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/external-documentation": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/specification-extensions",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "interface",
+            "requiredProperties": [
+              "url"
+            ],
+            "propertyTypeNodeIds": {
+              "description": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/external-documentation/properties/description",
+              "url": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/external-documentation/properties/url"
+            }
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/specification-extensions",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "interface",
+            "requiredProperties": [
+              "name",
+              "in"
+            ],
+            "propertyTypeNodeIds": {
+              "name": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/properties/name",
+              "in": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/properties/in",
+              "description": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/properties/description",
+              "required": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/properties/required",
+              "deprecated": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/properties/deprecated",
+              "schema": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/properties/schema",
+              "content": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/properties/content"
+            }
+          }
+        ],
+        "compounds": [
+          {
+            "type": "one-of",
+            "typeNodeIds": [
+              "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/oneOf/0",
+              "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/oneOf/1"
+            ]
+          }
+        ]
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter-or-reference": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/request-body": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/specification-extensions",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "interface",
+            "requiredProperties": [
+              "content"
+            ],
+            "propertyTypeNodeIds": {
+              "description": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/request-body/properties/description",
+              "content": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/request-body/properties/content",
+              "required": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/request-body/properties/required"
+            }
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/request-body-or-reference": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/content": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "record",
+            "requiredProperties": [],
+            "propertyTypeNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/content/additionalProperties"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/media-type": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "interface",
+            "requiredProperties": [],
+            "propertyTypeNodeIds": {
+              "schema": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/media-type/properties/schema",
+              "encoding": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/media-type/properties/encoding"
+            }
+          }
+        ],
+        "compounds": [
+          {
+            "type": "all-of",
+            "typeNodeIds": [
+              "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/media-type/allOf/0",
+              "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/media-type/allOf/1"
+            ]
+          }
+        ]
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "interface",
+            "requiredProperties": [],
+            "propertyTypeNodeIds": {
+              "contentType": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/properties/contentType",
+              "headers": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/properties/headers",
+              "style": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/properties/style",
+              "explode": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/properties/explode",
+              "allowReserved": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/properties/allowReserved"
+            }
+          }
+        ],
+        "compounds": [
+          {
+            "type": "all-of",
+            "typeNodeIds": [
+              "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/allOf/0",
+              "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/allOf/1"
+            ]
+          }
+        ]
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/responses": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/specification-extensions",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "interface",
+            "requiredProperties": [],
+            "propertyTypeNodeIds": {
+              "default": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/responses/properties/default"
+            }
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/specification-extensions",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "interface",
+            "requiredProperties": [
+              "description"
+            ],
+            "propertyTypeNodeIds": {
+              "description": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response/properties/description",
+              "headers": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response/properties/headers",
+              "content": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response/properties/content",
+              "links": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response/properties/links"
+            }
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response-or-reference": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/callbacks": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/specification-extensions",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "record",
+            "requiredProperties": [],
+            "propertyTypeNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/callbacks/additionalProperties"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/callbacks-or-reference": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/specification-extensions",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "interface",
+            "requiredProperties": [],
+            "propertyTypeNodeIds": {
+              "summary": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example/properties/summary",
+              "description": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example/properties/description",
+              "value": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example/properties/value",
+              "externalValue": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example/properties/externalValue"
+            }
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example-or-reference": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/specification-extensions",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "interface",
+            "requiredProperties": [],
+            "propertyTypeNodeIds": {
+              "operationRef": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link/properties/operationRef",
+              "operationId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link/properties/operationId",
+              "parameters": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link/properties/parameters",
+              "requestBody": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link/properties/requestBody",
+              "description": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link/properties/description",
+              "body": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link/properties/body"
+            }
+          }
+        ],
+        "compounds": [
+          {
+            "type": "one-of",
+            "typeNodeIds": [
+              "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link/oneOf/0",
+              "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link/oneOf/1"
+            ]
+          }
+        ]
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link-or-reference": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/specification-extensions",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "interface",
+            "requiredProperties": [],
+            "propertyTypeNodeIds": {
+              "description": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header/properties/description",
+              "required": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header/properties/required",
+              "deprecated": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header/properties/deprecated",
+              "schema": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header/properties/schema",
+              "content": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header/properties/content"
+            }
+          }
+        ],
+        "compounds": [
+          {
+            "type": "one-of",
+            "typeNodeIds": [
+              "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header/oneOf/0",
+              "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header/oneOf/1"
+            ]
+          }
+        ]
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header-or-reference": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/tag": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/specification-extensions",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "interface",
+            "requiredProperties": [
+              "name"
+            ],
+            "propertyTypeNodeIds": {
+              "name": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/tag/properties/name",
+              "description": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/tag/properties/description",
+              "externalDocs": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/tag/properties/externalDocs"
+            }
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/reference": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "interface",
+            "requiredProperties": [],
+            "propertyTypeNodeIds": {
+              "$ref": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/reference/properties/$ref",
+              "summary": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/reference/properties/summary",
+              "description": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/reference/properties/description"
+            }
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/schema": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "boolean"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "interface",
+            "requiredProperties": [
+              "type"
+            ],
+            "propertyTypeNodeIds": {
+              "type": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/properties/type",
+              "description": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/properties/description"
+            }
+          }
+        ],
+        "compounds": [
+          {
+            "type": "all-of",
+            "typeNodeIds": [
+              "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/allOf/0",
+              "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/allOf/1",
+              "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/allOf/2",
+              "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/allOf/3",
+              "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/allOf/4",
+              "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/allOf/5"
+            ]
+          }
+        ]
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme-or-reference": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/specification-extensions",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "interface",
+            "requiredProperties": [],
+            "propertyTypeNodeIds": {
+              "implicit": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/properties/implicit",
+              "password": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/properties/password",
+              "clientCredentials": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/properties/clientCredentials",
+              "authorizationCode": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/properties/authorizationCode"
+            }
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-requirement": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "record",
+            "requiredProperties": [],
+            "propertyTypeNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-requirement/additionalProperties"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/specification-extensions": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/examples": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/map-of-strings": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "record",
+            "requiredProperties": [],
+            "propertyTypeNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/map-of-strings/additionalProperties"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/openapi": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string",
+            "valuePattern": "^3\\.1\\.\\d+(-.+)?$"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/info": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/info",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/jsonSchemaDialect": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/servers": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "array",
+            "uniqueItems": false,
+            "itemTypeNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/servers/items"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/paths": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/paths",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/webhooks": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "record",
+            "requiredProperties": [],
+            "propertyTypeNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/webhooks/additionalProperties"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/components": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/security": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "array",
+            "uniqueItems": false,
+            "itemTypeNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/security/items"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/tags": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "array",
+            "uniqueItems": false,
+            "itemTypeNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/tags/items"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/externalDocs": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/external-documentation",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/anyOf/0": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/anyOf/1": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/anyOf/2": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/info/properties/title": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/info/properties/summary": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/info/properties/description": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/info/properties/termsOfService": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/info/properties/contact": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/contact",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/info/properties/license": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/license",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/info/properties/version": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/contact/properties/name": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/contact/properties/url": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/contact/properties/email": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/license/properties/name": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/license/properties/identifier": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/license/properties/url": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server/properties/url": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server/properties/description": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server/properties/variables": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "record",
+            "requiredProperties": [],
+            "propertyTypeNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server/properties/variables/additionalProperties"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server-variable/properties/enum": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "array",
+            "minimumItems": 1,
+            "uniqueItems": false,
+            "itemTypeNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server-variable/properties/enum/items"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server-variable/properties/default": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server-variable/properties/description": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/schemas": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "record",
+            "requiredProperties": [],
+            "propertyTypeNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/schemas/additionalProperties"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/responses": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "record",
+            "requiredProperties": [],
+            "propertyTypeNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/responses/additionalProperties"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/parameters": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "record",
+            "requiredProperties": [],
+            "propertyTypeNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/parameters/additionalProperties"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/examples": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "record",
+            "requiredProperties": [],
+            "propertyTypeNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/examples/additionalProperties"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/requestBodies": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "record",
+            "requiredProperties": [],
+            "propertyTypeNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/requestBodies/additionalProperties"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/headers": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "record",
+            "requiredProperties": [],
+            "propertyTypeNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/headers/additionalProperties"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/securitySchemes": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "record",
+            "requiredProperties": [],
+            "propertyTypeNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/securitySchemes/additionalProperties"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/links": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "record",
+            "requiredProperties": [],
+            "propertyTypeNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/links/additionalProperties"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/callbacks": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "record",
+            "requiredProperties": [],
+            "propertyTypeNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/callbacks/additionalProperties"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/pathItems": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "record",
+            "requiredProperties": [],
+            "propertyTypeNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/pathItems/additionalProperties"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/summary": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/description": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/servers": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "array",
+            "uniqueItems": false,
+            "itemTypeNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/servers/items"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/parameters": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "array",
+            "uniqueItems": false,
+            "itemTypeNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/parameters/items"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/get": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/put": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/post": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/delete": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/options": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/head": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/patch": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/trace": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/tags": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "array",
+            "uniqueItems": false,
+            "itemTypeNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/tags/items"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/summary": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/description": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/externalDocs": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/external-documentation",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/operationId": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/parameters": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "array",
+            "uniqueItems": false,
+            "itemTypeNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/parameters/items"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/requestBody": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/request-body-or-reference",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/responses": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/responses",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/callbacks": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "record",
+            "requiredProperties": [],
+            "propertyTypeNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/callbacks/additionalProperties"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/deprecated": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "boolean"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/security": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "array",
+            "uniqueItems": false,
+            "itemTypeNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/security/items"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/servers": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "array",
+            "uniqueItems": false,
+            "itemTypeNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/servers/items"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/external-documentation/properties/description": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/external-documentation/properties/url": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/properties/name": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/properties/in": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/properties/description": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/properties/required": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "boolean"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/properties/deprecated": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "boolean"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/properties/schema": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/schema",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/properties/content": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/content",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/oneOf/0": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/oneOf/1": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/request-body/properties/description": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/request-body/properties/content": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/content",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/request-body/properties/required": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "boolean"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/content/additionalProperties": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/media-type",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/media-type/properties/schema": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/schema",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/media-type/properties/encoding": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "record",
+            "requiredProperties": [],
+            "propertyTypeNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/media-type/properties/encoding/additionalProperties"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/media-type/allOf/0": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/specification-extensions",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/media-type/allOf/1": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/examples",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/$defs/explode-default": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/properties/contentType": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/properties/headers": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "record",
+            "requiredProperties": [],
+            "propertyTypeNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/properties/headers/additionalProperties"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/properties/style": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/properties/explode": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "boolean"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/properties/allowReserved": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "boolean"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/allOf/0": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/specification-extensions",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/allOf/1": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/$defs/explode-default",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/responses/properties/default": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response-or-reference",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response/properties/description": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response/properties/headers": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "record",
+            "requiredProperties": [],
+            "propertyTypeNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response/properties/headers/additionalProperties"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response/properties/content": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/content",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response/properties/links": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "record",
+            "requiredProperties": [],
+            "propertyTypeNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response/properties/links/additionalProperties"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/callbacks/additionalProperties": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item-or-reference",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example/properties/summary": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example/properties/description": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example/properties/value": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "any"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example/properties/externalValue": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link/properties/operationRef": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link/properties/operationId": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link/properties/parameters": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/map-of-strings",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link/properties/requestBody": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "any"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link/properties/description": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link/properties/body": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link/oneOf/0": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link/oneOf/1": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header/properties/description": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header/properties/required": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "boolean"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header/properties/deprecated": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "boolean"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header/properties/schema": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/schema",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header/properties/content": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/content",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header/oneOf/0": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header/oneOf/1": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/tag/properties/name": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/tag/properties/description": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/tag/properties/externalDocs": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/external-documentation",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/reference/properties/$ref": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/reference/properties/summary": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/reference/properties/description": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-apikey": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-http": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-http-bearer": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-oauth2": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-oidc": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/properties/type": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/properties/description": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/allOf/0": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/specification-extensions",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/allOf/1": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-apikey",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/allOf/2": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-http",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/allOf/3": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-http-bearer",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/allOf/4": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-oauth2",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/allOf/5": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-oidc",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/implicit": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/specification-extensions",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "interface",
+            "requiredProperties": [
+              "authorizationUrl",
+              "scopes"
+            ],
+            "propertyTypeNodeIds": {
+              "authorizationUrl": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/implicit/properties/authorizationUrl",
+              "refreshUrl": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/implicit/properties/refreshUrl",
+              "scopes": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/implicit/properties/scopes"
+            }
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/password": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/specification-extensions",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "interface",
+            "requiredProperties": [
+              "tokenUrl",
+              "scopes"
+            ],
+            "propertyTypeNodeIds": {
+              "tokenUrl": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/password/properties/tokenUrl",
+              "refreshUrl": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/password/properties/refreshUrl",
+              "scopes": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/password/properties/scopes"
+            }
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/client-credentials": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/specification-extensions",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "interface",
+            "requiredProperties": [
+              "tokenUrl",
+              "scopes"
+            ],
+            "propertyTypeNodeIds": {
+              "tokenUrl": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/client-credentials/properties/tokenUrl",
+              "refreshUrl": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/client-credentials/properties/refreshUrl",
+              "scopes": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/client-credentials/properties/scopes"
+            }
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/authorization-code": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/specification-extensions",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "interface",
+            "requiredProperties": [
+              "authorizationUrl",
+              "tokenUrl",
+              "scopes"
+            ],
+            "propertyTypeNodeIds": {
+              "authorizationUrl": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/authorization-code/properties/authorizationUrl",
+              "tokenUrl": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/authorization-code/properties/tokenUrl",
+              "refreshUrl": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/authorization-code/properties/refreshUrl",
+              "scopes": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/authorization-code/properties/scopes"
+            }
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/properties/implicit": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/implicit",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/properties/password": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/password",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/properties/clientCredentials": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/client-credentials",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/properties/authorizationCode": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/authorization-code",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-requirement/additionalProperties": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "array",
+            "uniqueItems": false,
+            "itemTypeNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-requirement/additionalProperties/items"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/examples/properties/example": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "any"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/examples/properties/examples": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "record",
+            "requiredProperties": [],
+            "propertyTypeNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/examples/properties/examples/additionalProperties"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/map-of-strings/additionalProperties": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/servers/items": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/webhooks/additionalProperties": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item-or-reference",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/security/items": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-requirement",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/tags/items": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/tag",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server/properties/variables/additionalProperties": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server-variable",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server-variable/properties/enum/items": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/schemas/additionalProperties": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/schema",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/responses/additionalProperties": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response-or-reference",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/parameters/additionalProperties": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter-or-reference",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/examples/additionalProperties": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example-or-reference",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/requestBodies/additionalProperties": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/request-body-or-reference",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/headers/additionalProperties": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header-or-reference",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/securitySchemes/additionalProperties": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme-or-reference",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/links/additionalProperties": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link-or-reference",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/callbacks/additionalProperties": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/callbacks-or-reference",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/pathItems/additionalProperties": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item-or-reference",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/servers/items": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/parameters/items": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter-or-reference",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/tags/items": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/parameters/items": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter-or-reference",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/callbacks/additionalProperties": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/callbacks-or-reference",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/security/items": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-requirement",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/servers/items": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/media-type/properties/encoding/additionalProperties": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/properties/headers/additionalProperties": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header-or-reference",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response/properties/headers/additionalProperties": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header-or-reference",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response/properties/links/additionalProperties": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link-or-reference",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/implicit/properties/authorizationUrl": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/implicit/properties/refreshUrl": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/implicit/properties/scopes": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/map-of-strings",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/password/properties/tokenUrl": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/password/properties/refreshUrl": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/password/properties/scopes": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/map-of-strings",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/client-credentials/properties/tokenUrl": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/client-credentials/properties/refreshUrl": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/client-credentials/properties/scopes": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/map-of-strings",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/authorization-code/properties/authorizationUrl": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/authorization-code/properties/tokenUrl": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/authorization-code/properties/refreshUrl": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/authorization-code/properties/scopes": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/map-of-strings",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-requirement/additionalProperties/items": {
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [
+          {
+            "type": "string"
+          }
+        ],
+        "compounds": []
+      },
+      "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/examples/properties/examples/additionalProperties": {
+        "superNodeId": "https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example-or-reference",
+        "deprecated": false,
+        "title": "",
+        "description": "",
+        "examples": [],
+        "types": [],
+        "compounds": []
+      }
+    }
+  }

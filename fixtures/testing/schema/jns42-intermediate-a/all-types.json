@@ -1,0 +1,383 @@
+{
+	"$schema": "https://schema.JsonSchema42.org/jns42-intermediate-a/schema.json",
+	"nodes": {
+		"file:///all-types.json": {
+			"deprecated": false,
+			"title": "",
+			"description": "all types",
+			"examples": [],
+			"types": [],
+			"compounds": [
+				{
+					"type": "one-of",
+					"typeNodeIds": [
+						"file:///all-types.json#/oneOf/0",
+						"file:///all-types.json#/oneOf/1",
+						"file:///all-types.json#/oneOf/2",
+						"file:///all-types.json#/oneOf/3",
+						"file:///all-types.json#/oneOf/4",
+						"file:///all-types.json#/oneOf/5",
+						"file:///all-types.json#/oneOf/6",
+						"file:///all-types.json#/oneOf/7",
+						"file:///all-types.json#/oneOf/8",
+						"file:///all-types.json#/oneOf/9",
+						"file:///all-types.json#/oneOf/10"
+					]
+				}
+			]
+		},
+		"file:///all-types.json#/$defs/never-model": {
+			"deprecated": false,
+			"title": "",
+			"description": "",
+			"examples": [],
+			"types": [
+				{
+					"type": "never"
+				}
+			],
+			"compounds": []
+		},
+		"file:///all-types.json#/$defs/any-model": {
+			"deprecated": false,
+			"title": "",
+			"description": "",
+			"examples": [],
+			"types": [
+				{
+					"type": "any"
+				}
+			],
+			"compounds": []
+		},
+		"file:///all-types.json#/$defs/null-model": {
+			"deprecated": false,
+			"title": "",
+			"description": "",
+			"examples": [],
+			"types": [
+				{
+					"type": "null"
+				}
+			],
+			"compounds": []
+		},
+		"file:///all-types.json#/$defs/boolean-model": {
+			"deprecated": false,
+			"title": "",
+			"description": "",
+			"examples": [],
+			"types": [
+				{
+					"type": "boolean"
+				}
+			],
+			"compounds": []
+		},
+		"file:///all-types.json#/$defs/integer-model": {
+			"deprecated": false,
+			"title": "",
+			"description": "",
+			"examples": [],
+			"types": [
+				{
+					"type": "number",
+					"numberType": "integer"
+				}
+			],
+			"compounds": []
+		},
+		"file:///all-types.json#/$defs/number-model": {
+			"deprecated": false,
+			"title": "",
+			"description": "",
+			"examples": [],
+			"types": [
+				{
+					"type": "number",
+					"numberType": "float"
+				}
+			],
+			"compounds": []
+		},
+		"file:///all-types.json#/$defs/string-model": {
+			"deprecated": false,
+			"title": "",
+			"description": "",
+			"examples": [],
+			"types": [
+				{
+					"type": "string"
+				}
+			],
+			"compounds": []
+		},
+		"file:///all-types.json#/$defs/tuple-model": {
+			"deprecated": false,
+			"title": "",
+			"description": "",
+			"examples": [],
+			"types": [
+				{
+					"type": "tuple",
+					"itemTypeNodeIds": [
+						"file:///all-types.json#/$defs/tuple-model/prefixItems/0",
+						"file:///all-types.json#/$defs/tuple-model/prefixItems/1"
+					]
+				},
+				{
+					"type": "array",
+					"uniqueItems": false,
+					"itemTypeNodeId": "file:///all-types.json#/$defs/tuple-model/items"
+				}
+			],
+			"compounds": []
+		},
+		"file:///all-types.json#/$defs/array-model": {
+			"deprecated": false,
+			"title": "",
+			"description": "",
+			"examples": [],
+			"types": [
+				{
+					"type": "array",
+					"uniqueItems": false,
+					"itemTypeNodeId": "file:///all-types.json#/$defs/array-model/items"
+				}
+			],
+			"compounds": []
+		},
+		"file:///all-types.json#/$defs/object-model": {
+			"deprecated": false,
+			"title": "",
+			"description": "",
+			"examples": [],
+			"types": [
+				{
+					"type": "interface",
+					"requiredProperties": ["a"],
+					"propertyTypeNodeIds": {
+						"a": "file:///all-types.json#/$defs/object-model/properties/a",
+						"b": "file:///all-types.json#/$defs/object-model/properties/b"
+					}
+				},
+				{
+					"type": "record",
+					"requiredProperties": ["a"],
+					"propertyTypeNodeId": "file:///all-types.json#/$defs/object-model/additionalProperties"
+				}
+			],
+			"compounds": []
+		},
+		"file:///all-types.json#/$defs/record-model": {
+			"deprecated": false,
+			"title": "",
+			"description": "",
+			"examples": [],
+			"types": [
+				{
+					"type": "record",
+					"requiredProperties": [],
+					"propertyTypeNodeId": "file:///all-types.json#/$defs/record-model/additionalProperties"
+				}
+			],
+			"compounds": []
+		},
+		"file:///all-types.json#/oneOf/0": {
+			"superNodeId": "file:///all-types.json#/$defs/never-model",
+			"deprecated": false,
+			"title": "",
+			"description": "",
+			"examples": [],
+			"types": [],
+			"compounds": []
+		},
+		"file:///all-types.json#/oneOf/1": {
+			"superNodeId": "file:///all-types.json#/$defs/any-model",
+			"deprecated": false,
+			"title": "",
+			"description": "",
+			"examples": [],
+			"types": [],
+			"compounds": []
+		},
+		"file:///all-types.json#/oneOf/2": {
+			"superNodeId": "file:///all-types.json#/$defs/null-model",
+			"deprecated": false,
+			"title": "",
+			"description": "",
+			"examples": [],
+			"types": [],
+			"compounds": []
+		},
+		"file:///all-types.json#/oneOf/3": {
+			"superNodeId": "file:///all-types.json#/$defs/boolean-model",
+			"deprecated": false,
+			"title": "",
+			"description": "",
+			"examples": [],
+			"types": [],
+			"compounds": []
+		},
+		"file:///all-types.json#/oneOf/4": {
+			"superNodeId": "file:///all-types.json#/$defs/integer-model",
+			"deprecated": false,
+			"title": "",
+			"description": "",
+			"examples": [],
+			"types": [],
+			"compounds": []
+		},
+		"file:///all-types.json#/oneOf/5": {
+			"superNodeId": "file:///all-types.json#/$defs/number-model",
+			"deprecated": false,
+			"title": "",
+			"description": "",
+			"examples": [],
+			"types": [],
+			"compounds": []
+		},
+		"file:///all-types.json#/oneOf/6": {
+			"superNodeId": "file:///all-types.json#/$defs/string-model",
+			"deprecated": false,
+			"title": "",
+			"description": "",
+			"examples": [],
+			"types": [],
+			"compounds": []
+		},
+		"file:///all-types.json#/oneOf/7": {
+			"superNodeId": "file:///all-types.json#/$defs/tuple-model",
+			"deprecated": false,
+			"title": "",
+			"description": "",
+			"examples": [],
+			"types": [],
+			"compounds": []
+		},
+		"file:///all-types.json#/oneOf/8": {
+			"superNodeId": "file:///all-types.json#/$defs/array-model",
+			"deprecated": false,
+			"title": "",
+			"description": "",
+			"examples": [],
+			"types": [],
+			"compounds": []
+		},
+		"file:///all-types.json#/oneOf/9": {
+			"superNodeId": "file:///all-types.json#/$defs/object-model",
+			"deprecated": false,
+			"title": "",
+			"description": "",
+			"examples": [],
+			"types": [],
+			"compounds": []
+		},
+		"file:///all-types.json#/oneOf/10": {
+			"superNodeId": "file:///all-types.json#/$defs/record-model",
+			"deprecated": false,
+			"title": "",
+			"description": "",
+			"examples": [],
+			"types": [],
+			"compounds": []
+		},
+		"file:///all-types.json#/$defs/tuple-model/prefixItems/0": {
+			"deprecated": false,
+			"title": "",
+			"description": "",
+			"examples": [],
+			"types": [
+				{
+					"type": "string"
+				}
+			],
+			"compounds": []
+		},
+		"file:///all-types.json#/$defs/tuple-model/prefixItems/1": {
+			"deprecated": false,
+			"title": "",
+			"description": "",
+			"examples": [],
+			"types": [
+				{
+					"type": "number",
+					"numberType": "integer"
+				}
+			],
+			"compounds": []
+		},
+		"file:///all-types.json#/$defs/tuple-model/items": {
+			"deprecated": false,
+			"title": "",
+			"description": "",
+			"examples": [],
+			"types": [
+				{
+					"type": "never"
+				}
+			],
+			"compounds": []
+		},
+		"file:///all-types.json#/$defs/array-model/items": {
+			"deprecated": false,
+			"title": "",
+			"description": "",
+			"examples": [],
+			"types": [
+				{
+					"type": "string"
+				}
+			],
+			"compounds": []
+		},
+		"file:///all-types.json#/$defs/object-model/properties/a": {
+			"deprecated": false,
+			"title": "",
+			"description": "",
+			"examples": [],
+			"types": [
+				{
+					"type": "string"
+				}
+			],
+			"compounds": []
+		},
+		"file:///all-types.json#/$defs/object-model/properties/b": {
+			"deprecated": false,
+			"title": "",
+			"description": "",
+			"examples": [],
+			"types": [
+				{
+					"type": "string"
+				}
+			],
+			"compounds": []
+		},
+		"file:///all-types.json#/$defs/object-model/additionalProperties": {
+			"deprecated": false,
+			"title": "",
+			"description": "",
+			"examples": [],
+			"types": [
+				{
+					"type": "never"
+				}
+			],
+			"compounds": []
+		},
+		"file:///all-types.json#/$defs/record-model/additionalProperties": {
+			"deprecated": false,
+			"title": "",
+			"description": "",
+			"examples": [],
+			"types": [
+				{
+					"type": "string"
+				}
+			],
+			"compounds": []
+		}
+	}
+}
