@@ -64,8 +64,10 @@ Unique items is not enforced via a `BTreeSet` or a `HashSet`, if wou would do th
 
 ### object
 
-...
+Objects are represented as rust `struct`'s. Fields that are not required are `Option`'s.
 
 ### record
 
-...
+Record types are `HashMap`'s in rust, the key being a `String`. Custom validation is:
+
+-   minimum and maximum properties
