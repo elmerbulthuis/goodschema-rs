@@ -55,7 +55,6 @@ impl<'a> ModelsRsGenerator<'a> {
                 continue;
             }
 
-            let node_id = self.intermediate_data.select_non_empty(node_id);
             tokens.append_all(self.generate_model_token_stream(node_id, node));
         }
 
@@ -73,6 +72,10 @@ impl<'a> ModelsRsGenerator<'a> {
         let mut tokens = quote! {};
 
         let type_enums = self.intermediate_data.select_type_enums(node_id);
+
+        if type_enums.len() + node.compounds.len() == 0 {
+            tokens.append_all(self.generate_any_token_stream(&model_name))
+        }
 
         if type_enums.len() + node.compounds.len() > 1 {
             let mut enum_tokens = quote! {};
