@@ -6,21 +6,27 @@ use std::collections::HashMap;
 impl TypeArena {
     pub fn new_from_intermediate_document(
         intermediate_document: &schemas::intermediate_a::SchemaJson,
+        name_map: &HashMap<String, String>,
     ) -> Self {
         let mut arena = Self::new();
-        let mut names = HashMap::new();
+        let mut type_keys = HashMap::new();
 
         for node_id in intermediate_document.nodes.keys() {
             let type_key = TypeKey::new();
-            assert!(names.insert(node_id.clone(), type_key).is_none());
+            let type_name = name_map.get(node_id).unwrap();
+            assert!(type_keys.insert(type_name.clone(), type_key).is_none());
         }
 
         for (node_id, node) in intermediate_document.nodes.iter() {
-            let super_type_key = node
+            let type_name = name_map.get(node_id).unwrap();
+            let type_key = *type_keys.get(type_name).unwrap();
+
+            let super_type_name = node
                 .super_node_id
                 .as_ref()
-                .map(|super_node_id| *names.get(super_node_id.as_ref()).unwrap());
-            let type_key = *names.get(node_id).unwrap();
+                .map(|super_node_id| name_map.get(super_node_id.as_ref()).unwrap());
+            let super_type_key =
+                super_type_name.map(|super_type_name| *type_keys.get(super_type_name).unwrap());
 
             let mut one_of_type_keys = Vec::new();
             let mut any_of_type_keys = Vec::new();
@@ -68,7 +74,8 @@ impl TypeArena {
                             .as_ref()
                             .unwrap()
                             .iter()
-                            .map(|node_id| *names.get(node_id.as_ref()).unwrap())
+                            .map(|node_id| name_map.get(node_id.as_ref()).unwrap())
+                            .map(|type_name| *type_keys.get(type_name).unwrap())
                             .collect();
                         validators.push(ValidatorEnum::Array(ArrayValidator {}));
                         TypeEnum::Tuple
@@ -77,7 +84,8 @@ impl TypeArena {
                         item = type_node
                             .item_type_node_id
                             .as_ref()
-                            .map(|node_id| *names.get(node_id.as_ref()).unwrap());
+                            .map(|node_id| name_map.get(node_id.as_ref()).unwrap())
+                            .map(|type_name| *type_keys.get(type_name).unwrap());
                         validators.push(ValidatorEnum::Array(ArrayValidator {}));
                         TypeEnum::Array
                     }
@@ -87,8 +95,9 @@ impl TypeArena {
                             .as_ref()
                             .unwrap()
                             .iter()
-                            .map(|(name, node_id)| {
-                                (name.clone(), *names.get(node_id.as_ref()).unwrap())
+                            .map(|(key, node_id)| (key, name_map.get(node_id.as_ref()).unwrap()))
+                            .map(|(key, type_name)| {
+                                (key.clone(), *type_keys.get(type_name).unwrap())
                             })
                             .collect();
                         validators.push(ValidatorEnum::Map(MapValidator {}));
@@ -98,14 +107,15 @@ impl TypeArena {
                         property = type_node
                             .property_type_node_id
                             .as_ref()
-                            .map(|node_id| *names.get(node_id.as_ref()).unwrap());
+                            .map(|node_id| name_map.get(node_id.as_ref()).unwrap())
+                            .map(|type_name| *type_keys.get(type_name).unwrap());
 
                         validators.push(ValidatorEnum::Map(MapValidator {}));
                         TypeEnum::Map
                     }
                 };
                 let one_of_type_model = TypeModel {
-                    name: None,
+                    name: Some(format!("{}{}", type_name, sub_type_type)),
                     super_type_key: Some(type_key),
                     r#type: sub_type_type,
                     validators: Default::default(),
@@ -129,7 +139,8 @@ impl TypeArena {
                                 .as_ref()
                                 .unwrap()
                                 .iter()
-                                .map(|node_id| *names.get(node_id.as_ref()).unwrap())
+                                .map(|node_id| name_map.get(node_id.as_ref()).unwrap())
+                                .map(|type_name| *type_keys.get(type_name).unwrap())
                                 .collect(),
                         );
                     }
@@ -140,7 +151,8 @@ impl TypeArena {
                                 .as_ref()
                                 .unwrap()
                                 .iter()
-                                .map(|node_id| *names.get(node_id.as_ref()).unwrap())
+                                .map(|node_id| name_map.get(node_id.as_ref()).unwrap())
+                                .map(|type_name| *type_keys.get(type_name).unwrap())
                                 .collect(),
                         );
                     }
@@ -151,7 +163,8 @@ impl TypeArena {
                                 .as_ref()
                                 .unwrap()
                                 .iter()
-                                .map(|node_id| *names.get(node_id.as_ref()).unwrap())
+                                .map(|node_id| name_map.get(node_id.as_ref()).unwrap())
+                                .map(|type_name| *type_keys.get(type_name).unwrap())
                                 .collect(),
                         );
                     }
