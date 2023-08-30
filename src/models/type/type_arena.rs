@@ -13,6 +13,10 @@ impl TypeArena {
         Default::default()
     }
 
+    pub fn get_model(&self, type_key: &TypeKey) -> Option<&TypeModel> {
+        self.models.get(type_key)
+    }
+
     pub fn new_from_intermediate_document(
         intermediate_document: &schemas::intermediate_a::SchemaJson,
     ) -> Self {
@@ -111,6 +115,7 @@ impl TypeArena {
                     }
                 };
                 let sub_type_model = TypeModel {
+                    name: None,
                     super_type_key: Some(type_key),
                     r#type: sub_type_type,
                     validators: Default::default(),
@@ -123,6 +128,7 @@ impl TypeArena {
             }
 
             let type_model = TypeModel {
+                name: Some(node_id.clone()),
                 super_type_key,
                 r#type: TypeEnum::Union(sub_type_keys),
                 validators,
