@@ -13,3 +13,9 @@ pub struct TypeModel {
     pub item: Option<TypeKey>,
     pub items: Vec<TypeKey>,
 }
+
+impl TypeArena {
+    pub fn get_model(&self, type_key: &TypeKey) -> Option<&TypeModel> {
+        self.models.get(type_key)
+    }
+}

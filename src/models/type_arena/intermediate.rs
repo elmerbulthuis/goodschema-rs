@@ -1,22 +1,9 @@
 use crate::schemas;
 
 use super::*;
-use std::{collections::HashMap, hash::Hash};
-
-#[derive(Debug, Default)]
-pub struct TypeArena {
-    models: HashMap<TypeKey, TypeModel>,
-}
+use std::collections::HashMap;
 
 impl TypeArena {
-    pub fn new() -> Self {
-        Default::default()
-    }
-
-    pub fn get_model(&self, type_key: &TypeKey) -> Option<&TypeModel> {
-        self.models.get(type_key)
-    }
-
     pub fn new_from_intermediate_document(
         intermediate_document: &schemas::intermediate_a::SchemaJson,
     ) -> Self {
