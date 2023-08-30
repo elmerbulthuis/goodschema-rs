@@ -1,3 +1,5 @@
+use super::TypeKey;
+
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum TypeEnum {
     Never,
@@ -10,5 +12,7 @@ pub enum TypeEnum {
     Tuple,
     Array,
     Object,
-    Record,
+    Map,
+    Union(Vec<TypeKey>),
+    Intersection(Vec<TypeKey>),
 }
