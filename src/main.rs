@@ -1,8 +1,9 @@
-pub mod documents;
-pub mod generators;
-pub mod schemas;
-pub mod selectors;
-pub mod utils;
+mod documents;
+mod generators;
+mod models;
+mod schemas;
+mod selectors;
+mod utils;
 
 mod programs;
 

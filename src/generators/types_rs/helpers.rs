@@ -215,7 +215,7 @@ impl<'a> ModelsRsGenerator<'a> {
             TypeEnum::Null => "Null",
             // boolean
             TypeEnum::Boolean => "Boolean",
-            // number
+            // integer
             TypeEnum::Integer => "Integer",
             // number
             TypeEnum::Number => "Number",

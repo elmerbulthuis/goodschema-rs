@@ -238,7 +238,17 @@ impl From<&schemas::intermediate_a::TypeUnion> for TypeEnum {
             // boolean
             schemas::intermediate_a::TypeUnion::BooleanType(_) => TypeEnum::Boolean,
             // number
-            schemas::intermediate_a::TypeUnion::DefsNumberType(_) => TypeEnum::Number,
+            schemas::intermediate_a::TypeUnion::DefsNumberType(type_node) => {
+                if let Some(number_type) = &type_node.number_type {
+                    match number_type.as_ref() {
+                        "integer" => TypeEnum::Integer,
+                        "float" => TypeEnum::Number,
+                        &_ => unreachable!(),
+                    }
+                } else {
+                    TypeEnum::Number
+                }
+            }
             // string
             schemas::intermediate_a::TypeUnion::StringType(_) => TypeEnum::String,
             // tuple
