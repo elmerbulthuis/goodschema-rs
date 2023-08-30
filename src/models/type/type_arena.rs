@@ -5,8 +5,8 @@ use std::collections::HashMap;
 
 #[derive(Debug, Default)]
 pub struct TypeArena {
-    type_references: HashMap<String, TypeKey>,
-    type_models: HashMap<TypeKey, TypeModel>,
+    names: HashMap<String, TypeKey>,
+    models: HashMap<TypeKey, TypeModel>,
 }
 
 impl TypeArena {
@@ -21,16 +21,19 @@ impl TypeArena {
 
         for node_id in intermediate_document.nodes.keys() {
             let type_key = TypeKey::new();
-            assert!(arena
-                .type_references
-                .insert(node_id.clone(), type_key)
-                .is_none());
+            assert!(arena.names.insert(node_id.clone(), type_key).is_none());
         }
 
         for (node_id, node) in intermediate_document.nodes.iter() {
-            let type_key = *arena.type_references.get(node_id).unwrap();
-            let type_model = Default::default();
-            assert!(arena.type_models.insert(type_key, type_model).is_none());
+            let type_key = *arena.names.get(node_id).unwrap();
+
+            let type_model = TypeModel {
+                super_type_key: None,
+                r#type: TypeEnum::Any,
+                properties: HashMap::new(),
+                validators: Vec::new(),
+            };
+            assert!(arena.models.insert(type_key, type_model).is_none());
         }
 
         arena

@@ -1,1 +1,1 @@
-pub mod type_arena;
+pub mod r#type;
