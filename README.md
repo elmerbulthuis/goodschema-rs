@@ -9,7 +9,17 @@ references:
 
 Rust types generated from the json schema specification are represented as new-types. This make (de)serialization easy and allows us to [parse-don't-validate](https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/). The `Deref` trait is implemented for every new-type to allow for better ergonomics.
 
-Composed types could be flattened, so if wou would have an all-of of all-ofs, then we could flatten them into one big all-of. Same goes for any-of and one-of. Types can only define either one-of, any-of, all-of or if-then-else, but not two or more of these at the same time.
+Composed types could be flattened, so if wou would have an all-of of all-ofs, then we could flatten them into one big all-of. Same goes for any-of and one-of.
+
+Merging is an important part of generating types for rust. Merging may happen when using all-of or super types, or when a composed type is defined on a base type. Remember that an piece of json is valid when all schema's are considered valid. So when merging we should consider this.
+
+types will be merged as followed:
+
+-   same types will merge perfectly with same types
+-   if one of the types is never, then the result is always never
+-   if one of the types is any, then this is removed from the result
+
+if the result of a merge is an empty list of types, then the result is any.
 
 ### never
 
