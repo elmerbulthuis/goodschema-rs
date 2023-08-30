@@ -4,7 +4,7 @@ use super::*;
 
 #[derive(Debug)]
 pub struct TypeModel {
-    pub id: Option<String>,
+    pub name: Option<String>,
     pub super_type_key: Option<TypeKey>,
     pub r#type: TypeEnum,
     pub validators: Vec<ValidatorEnum>,
