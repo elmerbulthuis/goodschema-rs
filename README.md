@@ -1,7 +1,5 @@
 # jns42-generator, Rust edition
 
-...
-
 references:
 
 -   [`Ord`](https://doc.rust-lang.org/std/cmp/trait.Ord.html).
@@ -10,6 +8,8 @@ references:
 ## types
 
 Rust types generated from the json schema specification are represented as new-types. This make (de)serialization easy and allows us to [parse-don't-validate](https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/). The `Deref` trait is implemented for every new-type to allow for better ergonomics.
+
+Composed types could be flattened, so if wou would have an all-of of all-ofs, then we could flatten them into one big all-of. Same goes for any-of and one-of. Types can only define either one-of, any-of, all-of or if-then-else, but not two or more of these at the same time.
 
 ### never
 
@@ -60,7 +60,7 @@ The array type can be represented in rust as a `Vec`.
 -   minimum and maximum items
 -   unique items
 
-Unique items is not enforced via a `BTreeSet` or a `HashSet`, if wou would do this we would have to implement `Ord` or `Hash` on all generated types.
+Unique items is not enforced via a `BTreeSet` or a `HashSet`, validating duplicate types would be impossible if we would use sets. Instead, when validating for uniqueness we can walk the vector and keep a set to check for uniqueness.
 
 ### object
 
@@ -74,16 +74,275 @@ Record types are `HashMap`'s in rust, the key being a `String`. Custom validatio
 
 ### one-of
 
-...
+One of is represented as an enum in rust. `TryFrom` and `From` is implemented for all types in the one-of.
+
+This pseudo json
+
+```json
+{
+    "a": {
+        "types": ["string"]
+    },
+    "b": {
+        "types": ["string"]
+    },
+    "c": {
+        "oneOf": ["a", "b"]
+    }
+}
+```
+
+would be
+
+```rust
+struct A(String);
+struct B(String);
+#[serde(untagged)]
+enum C {
+    A(A)
+    B(B)
+}
+impl TryFrom<C> for A {
+    type Error = ();
+    fn try_from(value: C) -> Result<Self, Self::Error> {
+        match value {
+            C::A(value) => Ok(value),
+            _ => Err(()),
+        }
+    }
+}
+impl From<A> for C {
+    fn from(value: A) -> Self {
+        Self::A(value)
+    }
+}
+// same TryFrom and From for type B
+```
 
 ### any-of
 
-...
+Any of is represented as a struct in rust, every type in the any-of is an optional property in the struct. `TryFrom` and `From` is implemented for all types in the any-of. Also `AsRef` is implemented for all these types.
+
+This pseudo json
+
+```json
+{
+    "a": {
+        "types": ["string"]
+    },
+    "b": {
+        "types": ["string"]
+    },
+    "c": {
+        "anyOf": ["a", "b"]
+    }
+}
+```
+
+would be
+
+```rust
+struct A(String);
+struct B(String);
+struct C {
+    #[serde(flatten)]
+    a: Option<A>,
+    #[serde(flatten)]
+    b: Option<B>,
+}
+impl TryFrom<C> for A {
+    type Error = ();
+    fn try_from(value: C) -> Result<Self, Self::Error> {
+        value.a.ok_or(())
+    }
+}
+impl From<A> for C {
+    fn from(value: A) -> Self {
+        Self{
+            a: Some(value),
+            b: None,
+        }
+    }
+}
+impl AsRef<Option<A>> for C {
+    fn as_ref(&self) -> &Option<A> {
+        &self.a
+    }
+}
+// same TryFrom and From and AsRef for type B
+```
 
 ### all-of
 
-...
+All of should result in a merge of all the types. This could also result in weird behavior if two types, like number and string, are merged. This would result in a never type, validation would always fail. `From` is implemented to convert from the all-of type.
+
+This pseudo json
+
+```json
+{
+    "string-type": {
+        "types": ["string"]
+    },
+    "a": {
+        "types": ["object"],
+        "properties": {
+            "a": "string-type"
+        }
+    },
+    "b": {
+        "types": ["object"],
+        "properties": {
+            "b": "string-type"
+        }
+    },
+    "c": {
+        "allOf": ["a", "b"]
+    }
+}
+```
+
+would be
+
+```rust
+struct StringType(String);
+struct A {
+    a: Option<StringType>,
+}
+struct B{
+    b: Option<StringType>,
+};
+struct C {
+    a: Option<StringType>,
+    b: Option<StringType>,
+}
+impl From<C> for A {
+    fn from(value: C) -> Self {
+        Self {
+            a: value.a
+        }
+    }
+}
+// same From for type B
+```
 
 ### if-then-else
 
-...
+If then else. Could result in two objects and an enum. If and then and the base schema are merged, this is one object. The second object is the base schema merged with the else schema. `From` and `TryFrom` are implemented. This type is a bit like the one of type.
+
+The else and then schemas extend the base schema, that is why we merge them. The if schema is merges with the then schema because they both need to validate. If they fail then we validate the else schema.
+
+This pseudo json
+
+```json
+{
+    "string-type": {
+        "types": ["string"]
+    },
+    "a": {
+        "types": ["object"],
+        "properties": {
+            "a": "string-type",
+            "b": "string-type"
+        },
+        "types": ["object"],
+        "if": {
+            "required": ["a"]
+        },
+        "then": {
+            "required": ["b"]
+        },
+        "else": {
+            "properties": {
+                "c": "string-type"
+            }
+        }
+    }
+}
+```
+
+would result in the following rust
+
+```rust
+struct StringType(String);
+struct AThen {
+    a: StringType,
+    b: StringType,
+}
+struct AElse{
+    a: Option<StringType>,
+    b: Option<StringType>,
+    c: Option<StringType>,
+};
+#[serde(untagged)]
+enum A {
+    AThen(AThen),
+    AElse(AElse),
+}
+impl TryFrom<A> for AThen {
+    type Error = ();
+    fn try_from(value: A) -> Result<Self, Self::Error> {
+        match value {
+            C::AThen(value) => Ok(value),
+            _ => Err(()),
+        }
+    }
+}
+impl From<AThen> for A {
+    fn from(value: AThen) -> Self {
+        Self::AThen(value)
+    }
+}
+// same TryFrom and From for type AElse
+
+```
+
+### not
+
+Not only affects validation and may affect option-ness of a member of a structure.
+
+### super-type
+
+Super types behave a bit like type inheritance. Also they behave a bit like all-of. `From` is implemented.
+
+This pseudo json
+
+```json
+{
+    "string-type": {
+        "types": ["string"]
+    },
+    "a": {
+        "types": ["object"],
+        "properties": {
+            "a": "string"
+        }
+    },
+    "b": {
+        "super": "a",
+        "types": ["object"],
+        "properties": {
+            "b": "string"
+        }
+    }
+}
+```
+
+would be
+
+```rust
+struct StringType(String);
+struct A {
+    a: StringType,
+}
+struct B{
+    a: StringType,
+    b: StringType,
+};
+impl From<B> for A {
+    fn from(value: B) -> Self {
+        Self {
+            a: value.a
+        }
+    }
+}
+```
