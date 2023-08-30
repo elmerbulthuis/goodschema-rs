@@ -13,6 +13,7 @@ pub enum TypeEnum {
     Array,
     Object,
     Map,
-    Union(Vec<TypeKey>),
-    Intersection(Vec<TypeKey>),
+    OneOf(Vec<TypeKey>),
+    AnyOf(Vec<TypeKey>),
+    AllOf(Vec<TypeKey>),
 }

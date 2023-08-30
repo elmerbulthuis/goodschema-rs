@@ -8,20 +8,23 @@ impl TypeArena {
         intermediate_document: &schemas::intermediate_a::SchemaJson,
     ) -> Self {
         let mut arena = Self::new();
-        let mut names = HashMap::new();
+        let mut ids = HashMap::new();
 
         for node_id in intermediate_document.nodes.keys() {
             let type_key = TypeKey::new();
-            assert!(names.insert(node_id.clone(), type_key).is_none());
+            assert!(ids.insert(node_id.clone(), type_key).is_none());
         }
 
         for (node_id, node) in intermediate_document.nodes.iter() {
             let super_type_key = node
                 .super_node_id
                 .as_ref()
-                .map(|super_node_id| *names.get(super_node_id.as_ref()).unwrap());
-            let type_key = *names.get(node_id).unwrap();
-            let mut sub_type_keys = Vec::new();
+                .map(|super_node_id| *ids.get(super_node_id.as_ref()).unwrap());
+            let type_key = *ids.get(node_id).unwrap();
+
+            let mut one_of_type_keys = Vec::new();
+            let mut any_of_type_keys = Vec::new();
+            let mut all_of_type_keys = Vec::new();
 
             let mut validators = Vec::new();
             let mut property = None;
@@ -30,8 +33,8 @@ impl TypeArena {
             let mut items = Vec::new();
 
             for type_node in node.types.iter() {
-                let sub_type_key = TypeKey::new();
-                sub_type_keys.push(sub_type_key);
+                let one_of_type_key = TypeKey::new();
+                one_of_type_keys.push(one_of_type_key);
 
                 let sub_type_type = match type_node {
                     schemas::intermediate_a::TypeUnion::NeverType(_type_node) => TypeEnum::Never,
@@ -65,7 +68,7 @@ impl TypeArena {
                             .as_ref()
                             .unwrap()
                             .iter()
-                            .map(|node_id| *names.get(node_id.as_ref()).unwrap())
+                            .map(|node_id| *ids.get(node_id.as_ref()).unwrap())
                             .collect();
                         validators.push(ValidatorEnum::Array(ArrayValidator {}));
                         TypeEnum::Tuple
@@ -74,7 +77,7 @@ impl TypeArena {
                         item = type_node
                             .item_type_node_id
                             .as_ref()
-                            .map(|node_id| *names.get(node_id.as_ref()).unwrap());
+                            .map(|node_id| *ids.get(node_id.as_ref()).unwrap());
                         validators.push(ValidatorEnum::Array(ArrayValidator {}));
                         TypeEnum::Array
                     }
@@ -85,7 +88,7 @@ impl TypeArena {
                             .unwrap()
                             .iter()
                             .map(|(name, node_id)| {
-                                (name.clone(), *names.get(node_id.as_ref()).unwrap())
+                                (name.clone(), *ids.get(node_id.as_ref()).unwrap())
                             })
                             .collect();
                         validators.push(ValidatorEnum::Map(MapValidator {}));
@@ -95,14 +98,14 @@ impl TypeArena {
                         property = type_node
                             .property_type_node_id
                             .as_ref()
-                            .map(|node_id| *names.get(node_id.as_ref()).unwrap());
+                            .map(|node_id| *ids.get(node_id.as_ref()).unwrap());
 
                         validators.push(ValidatorEnum::Map(MapValidator {}));
                         TypeEnum::Map
                     }
                 };
-                let sub_type_model = TypeModel {
-                    name: None,
+                let one_of_type_model = TypeModel {
+                    id: None,
                     super_type_key: Some(type_key),
                     r#type: sub_type_type,
                     validators: Default::default(),
@@ -111,13 +114,92 @@ impl TypeArena {
                     item: Default::default(),
                     items: Default::default(),
                 };
-                assert!(arena.models.insert(sub_type_key, sub_type_model).is_none());
+                assert!(arena
+                    .models
+                    .insert(one_of_type_key, one_of_type_model)
+                    .is_none());
+            }
+
+            for compound_node in node.compounds.iter() {
+                match compound_node {
+                    schemas::intermediate_a::CompoundUnion::OneOfCompound(compound_node) => {
+                        one_of_type_keys.append(
+                            &mut compound_node
+                                .type_node_ids
+                                .as_ref()
+                                .unwrap()
+                                .iter()
+                                .map(|node_id| *ids.get(node_id.as_ref()).unwrap())
+                                .collect(),
+                        );
+                    }
+                    schemas::intermediate_a::CompoundUnion::AnyOfCompound(compound_node) => {
+                        any_of_type_keys.append(
+                            &mut compound_node
+                                .type_node_ids
+                                .as_ref()
+                                .unwrap()
+                                .iter()
+                                .map(|node_id| *ids.get(node_id.as_ref()).unwrap())
+                                .collect(),
+                        );
+                    }
+                    schemas::intermediate_a::CompoundUnion::AllOfCompound(compound_node) => {
+                        all_of_type_keys.append(
+                            &mut compound_node
+                                .type_node_ids
+                                .as_ref()
+                                .unwrap()
+                                .iter()
+                                .map(|node_id| *ids.get(node_id.as_ref()).unwrap())
+                                .collect(),
+                        );
+                    }
+                }
+            }
+
+            if !one_of_type_keys.is_empty() {
+                let one_of_type_key = TypeKey::new();
+                one_of_type_keys.push(one_of_type_key);
+                let one_of_type_model = TypeModel {
+                    id: None,
+                    super_type_key,
+                    r#type: TypeEnum::OneOf(one_of_type_keys),
+                    validators: Default::default(),
+                    property: Default::default(),
+                    properties: Default::default(),
+                    item: Default::default(),
+                    items: Default::default(),
+                };
+                assert!(arena
+                    .models
+                    .insert(one_of_type_key, one_of_type_model)
+                    .is_none());
+            }
+
+            if !any_of_type_keys.is_empty() {
+                let any_of_type_key = TypeKey::new();
+                all_of_type_keys.push(any_of_type_key);
+                let any_of_type_model = TypeModel {
+                    id: None,
+                    super_type_key,
+                    r#type: TypeEnum::AnyOf(any_of_type_keys),
+                    validators: Default::default(),
+                    property: Default::default(),
+                    properties: Default::default(),
+                    item: Default::default(),
+                    items: Default::default(),
+                };
+                assert!(arena
+                    .models
+                    .insert(any_of_type_key, any_of_type_model)
+                    .is_none());
             }
 
             let type_model = TypeModel {
-                name: Some(node_id.clone()),
+                id: Some(node_id.clone()),
                 super_type_key,
-                r#type: TypeEnum::Union(sub_type_keys),
+                r#type: TypeEnum::AllOf(all_of_type_keys),
                 validators,
                 property,
                 properties,
