@@ -93,6 +93,14 @@ impl<'a> ModelsRsGenerator<'a> {
         });
 
         tokens.append_all(quote! {
+            impl std::borrow::Borrow<#interior_identifier> for #type_identifier {
+                fn borrow(&self) -> &#interior_identifier {
+                    self.as_ref()
+                }
+            }
+        });
+
+        tokens.append_all(quote! {
             impl std::ops::Deref for #type_identifier {
                 type Target = #interior_identifier;
 
@@ -132,6 +140,14 @@ impl<'a> ModelsRsGenerator<'a> {
             impl AsRef<str> for #type_identifier {
                 fn as_ref(&self) -> &str {
                     self.0.as_str()
+                }
+            }
+        });
+
+        tokens.append_all(quote! {
+            impl std::borrow::Borrow<str> for #type_identifier {
+                fn borrow(&self) -> &str {
+                    self.as_ref()
                 }
             }
         });
