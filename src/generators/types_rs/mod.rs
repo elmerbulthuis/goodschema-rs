@@ -3,8 +3,8 @@ mod helpers;
 mod types;
 
 use crate::{
-    schemas, selectors::document::DocumentSelectors, selectors::document::TypeEnum,
-    selectors::node::NodeSelectors,
+    models::type_arena::TypeArena, schemas, selectors::document::DocumentSelectors,
+    selectors::document::TypeEnum, selectors::node::NodeSelectors,
 };
 use proc_macro2::TokenStream;
 use quote::{format_ident, quote, TokenStreamExt};
@@ -13,6 +13,7 @@ use std::collections::HashMap;
 pub struct ModelsRsGenerator<'a> {
     intermediate_data: &'a schemas::intermediate_a::SchemaJson,
     names: &'a HashMap<String, String>,
+    arena: TypeArena,
 }
 
 impl<'a> ModelsRsGenerator<'a> {
@@ -20,9 +21,11 @@ impl<'a> ModelsRsGenerator<'a> {
         intermediate_data: &'a schemas::intermediate_a::SchemaJson,
         names: &'a HashMap<String, String>,
     ) -> Self {
+        let arena = TypeArena::new_from_intermediate_document(intermediate_data, names);
         Self {
             intermediate_data,
             names,
+            arena,
         }
     }
 }

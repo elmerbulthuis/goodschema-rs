@@ -1,8 +1,11 @@
-use crate::schemas;
-
 use super::*;
+use crate::{schemas, selectors::document::DocumentSelectors, selectors::node::NodeSelectors};
 use std::collections::HashMap;
 
+/**
+ * We store all type models in the type arena so we can easily generate types from them.
+ *
+ */
 impl TypeArena {
     pub fn new_from_intermediate_document(
         intermediate_document: &schemas::intermediate_a::SchemaJson,
@@ -11,20 +14,30 @@ impl TypeArena {
         let mut arena = Self::new();
         let mut type_keys = HashMap::new();
 
-        for node_id in intermediate_document.nodes.keys() {
+        for (node_id, node) in intermediate_document.nodes.iter() {
+            if node.select_is_empty() && node.super_node_id.is_some() {
+                continue;
+            }
+
             let type_key = TypeKey::new();
             let type_name = name_map.get(node_id).unwrap();
             assert!(type_keys.insert(type_name.clone(), type_key).is_none());
         }
 
         for (node_id, node) in intermediate_document.nodes.iter() {
+            if node.select_is_empty() && node.super_node_id.is_some() {
+                continue;
+            }
+
             let type_name = name_map.get(node_id).unwrap();
             let type_key = *type_keys.get(type_name).unwrap();
 
             let super_type_name = node
                 .super_node_id
                 .as_ref()
-                .map(|super_node_id| name_map.get(super_node_id.as_ref()).unwrap());
+                .map(|super_node_id| super_node_id.as_ref())
+                .map(|super_node_id| intermediate_document.select_non_empty(super_node_id))
+                .map(|super_node_id| name_map.get(super_node_id).unwrap());
             let super_type_key =
                 super_type_name.map(|super_type_name| *type_keys.get(super_type_name).unwrap());
 
@@ -75,7 +88,9 @@ impl TypeArena {
                             .as_ref()
                             .unwrap()
                             .iter()
-                            .map(|node_id| name_map.get(node_id.as_ref()).unwrap())
+                            .map(|node_id| node_id.as_ref())
+                            .map(|node_id| intermediate_document.select_non_empty(node_id))
+                            .map(|node_id| name_map.get(node_id).unwrap())
                             .map(|type_name| *type_keys.get(type_name).unwrap())
                             .collect();
                         validators.push(ValidatorEnum::Array(ArrayValidator {}));
@@ -85,7 +100,9 @@ impl TypeArena {
                         item = type_node
                             .item_type_node_id
                             .as_ref()
-                            .map(|node_id| name_map.get(node_id.as_ref()).unwrap())
+                            .map(|node_id| node_id.as_ref())
+                            .map(|node_id| intermediate_document.select_non_empty(node_id))
+                            .map(|node_id| name_map.get(node_id).unwrap())
                             .map(|type_name| *type_keys.get(type_name).unwrap());
                         validators.push(ValidatorEnum::Array(ArrayValidator {}));
                         TypeEnum::Array
@@ -96,7 +113,11 @@ impl TypeArena {
                             .as_ref()
                             .unwrap()
                             .iter()
-                            .map(|(key, node_id)| (key, name_map.get(node_id.as_ref()).unwrap()))
+                            .map(|(key, node_id)| (key, node_id.as_ref()))
+                            .map(|(key, node_id)| {
+                                (key, intermediate_document.select_non_empty(node_id))
+                            })
+                            .map(|(key, node_id)| (key, name_map.get(node_id).unwrap()))
                             .map(|(key, type_name)| {
                                 (key.clone(), *type_keys.get(type_name).unwrap())
                             })
@@ -108,7 +129,9 @@ impl TypeArena {
                         property = type_node
                             .property_type_node_id
                             .as_ref()
-                            .map(|node_id| name_map.get(node_id.as_ref()).unwrap())
+                            .map(|node_id| node_id.as_ref())
+                            .map(|node_id| intermediate_document.select_non_empty(node_id))
+                            .map(|node_id| name_map.get(node_id).unwrap())
                             .map(|type_name| *type_keys.get(type_name).unwrap());
 
                         validators.push(ValidatorEnum::Map(MapValidator {}));
@@ -154,7 +177,9 @@ impl TypeArena {
                                 .as_ref()
                                 .unwrap()
                                 .iter()
-                                .map(|node_id| name_map.get(node_id.as_ref()).unwrap())
+                                .map(|node_id| node_id.as_ref())
+                                .map(|node_id| intermediate_document.select_non_empty(node_id))
+                                .map(|node_id| name_map.get(node_id).unwrap())
                                 .map(|type_name| *type_keys.get(type_name).unwrap())
                                 .collect(),
                         );
@@ -166,7 +191,9 @@ impl TypeArena {
                                 .as_ref()
                                 .unwrap()
                                 .iter()
-                                .map(|node_id| name_map.get(node_id.as_ref()).unwrap())
+                                .map(|node_id| node_id.as_ref())
+                                .map(|node_id| intermediate_document.select_non_empty(node_id))
+                                .map(|node_id| name_map.get(node_id).unwrap())
                                 .map(|type_name| *type_keys.get(type_name).unwrap())
                                 .collect(),
                         );
@@ -178,7 +205,9 @@ impl TypeArena {
                                 .as_ref()
                                 .unwrap()
                                 .iter()
-                                .map(|node_id| name_map.get(node_id.as_ref()).unwrap())
+                                .map(|node_id| node_id.as_ref())
+                                .map(|node_id| intermediate_document.select_non_empty(node_id))
+                                .map(|node_id| name_map.get(node_id).unwrap())
                                 .map(|type_name| *type_keys.get(type_name).unwrap())
                                 .collect(),
                         );
