@@ -377,3 +377,103 @@ impl From<B> for A {
     }
 }
 ```
+
+## properties thoughts
+
+So properties are kind of special. They are hard to identify! Take the following pseudo schema as an example:
+
+```json
+{
+    "#/short-string": {
+        "type": "string",
+        "maxLength": 10
+    },
+    "#/non-empty-string": {
+        "type": "string",
+        "minLength": 1
+    },
+    "#/a": {
+        "properties": {
+            "a": "#/short-string"
+        }
+    },
+    "#/b": {
+        "properties": {
+            "a": "#/non-empty-string"
+        }
+    },
+    "#/c": {
+        "allOf": ["#/a", "#/b"]
+    }
+}
+```
+
+No we have the following types:
+
+-   ShortString
+-   NonEmptyString
+-   A
+-   B
+-   C
+
+But! we need another type. Because the types A and B are merged, the property a of both classes is aldo merge. But how do we name this property? It does not have a pointer to it.
+
+This is kind of like the type-types. If we have a type that is string on a node, then we can derive a name for the node, we cannot derive a name fot the string type. We name the string by simply appending "String" to then name of the node.
+
+This could be a way to solve the anonymous properties problem. We can add the name of the property to then name of the containing type.
+
+If we would do it like that the example schema would result in the following types:
+
+-   ShortString
+-   NonEmptyString
+-   A
+-   B
+-   C
+-   AA
+-   BA
+-   CA
+
+Now the AA and BA types will be an alias for ShortString and NonEmptyString, so they will not be emitted. We do get the CA type that is a merge between ShortString and NonEmptyString.
+
+So this:
+
+```json
+{
+    "ShortString": {
+        "type": "string",
+        "maxLength": 10
+    },
+    "NonEmptyString": {
+        "type": "string",
+        "minLength": 1
+    },
+    "A": {
+        "properties": {
+            "a": "AA"
+        }
+    },
+    "B": {
+        "properties": {
+            "a": "BA"
+        }
+    },
+    "C": {
+        "properties": {
+            "a": "CA"
+        }
+    },
+    "AA": {
+        "aliasFor": "ShortString"
+    },
+    "BA": {
+        "aliasFor": "NonEmptyString"
+    },
+    "CA": {
+        "type": "string",
+        "maxLength": 10,
+        "minLength": 1
+    }
+}
+```
+
+would be generated
