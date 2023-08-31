@@ -10,7 +10,7 @@ pub trait DocumentSelectors {
     fn select_tuple_item_type_node_ids(&self, node_id: &str) -> Vec<&str>;
     fn select_array_item_type_node_id(&self, node_id: &str) -> Option<&str>;
     fn select_object_property_type_node_ids(&self, node_id: &str) -> HashMap<&str, &str>;
-    fn select_record_property_type_node_id(&self, node_id: &str) -> Option<&str>;
+    fn select_map_property_type_node_id(&self, node_id: &str) -> Option<&str>;
     fn select_object_required_properties(&self, node_id: &str) -> HashSet<&str>;
     fn select_non_empty<'l>(&'l self, node_id: &'l str) -> &'l str;
 }
@@ -27,5 +27,5 @@ pub enum TypeEnum {
     Tuple,
     Array,
     Object,
-    Record,
+    Map,
 }

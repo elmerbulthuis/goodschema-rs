@@ -228,7 +228,7 @@ impl<'a> ModelsRsGenerator<'a> {
             // interface
             TypeEnum::Object => "Object",
             // record
-            TypeEnum::Record => "Record",
+            TypeEnum::Map => "Record",
         }
     }
 

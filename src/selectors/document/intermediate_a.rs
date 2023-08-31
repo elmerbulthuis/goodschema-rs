@@ -163,7 +163,7 @@ impl DocumentSelectors for schemas::intermediate_a::SchemaJson {
         property_type_node_ids
     }
 
-    fn select_record_property_type_node_id(&self, node_id: &str) -> Option<&str> {
+    fn select_map_property_type_node_id(&self, node_id: &str) -> Option<&str> {
         let node = self.nodes.get(node_id).unwrap();
 
         let mut property_type_node_id: Vec<_> = node
@@ -176,8 +176,7 @@ impl DocumentSelectors for schemas::intermediate_a::SchemaJson {
         let mut property_type_node_id = property_type_node_id.pop().unwrap_or_default();
 
         if let Some(super_node_id) = &node.super_node_id {
-            let super_property_type_node_id =
-                self.select_record_property_type_node_id(super_node_id);
+            let super_property_type_node_id = self.select_map_property_type_node_id(super_node_id);
 
             assert!(property_type_node_id.is_none() || super_property_type_node_id.is_none());
 
@@ -258,7 +257,7 @@ impl From<&schemas::intermediate_a::TypeUnion> for TypeEnum {
             // interface
             schemas::intermediate_a::TypeUnion::InterfaceType(_) => TypeEnum::Object,
             // record
-            schemas::intermediate_a::TypeUnion::RecordType(_) => TypeEnum::Record,
+            schemas::intermediate_a::TypeUnion::RecordType(_) => TypeEnum::Map,
         }
     }
 }

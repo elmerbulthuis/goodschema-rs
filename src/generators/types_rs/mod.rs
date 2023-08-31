@@ -158,10 +158,9 @@ impl<'a> ModelsRsGenerator<'a> {
                     tokens
                         .append_all(self.generate_object_token_stream(&model_type_name, node_id)?);
                 }
-                // record
-                TypeEnum::Record => {
-                    tokens
-                        .append_all(self.generate_record_token_stream(&model_type_name, node_id)?);
+                // map
+                TypeEnum::Map => {
+                    tokens.append_all(self.generate_map_token_stream(&model_type_name, node_id)?);
                 }
             }
         }

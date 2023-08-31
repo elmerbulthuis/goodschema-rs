@@ -402,7 +402,7 @@ impl<'a> ModelsRsGenerator<'a> {
         Ok(tokens)
     }
 
-    pub(super) fn generate_record_token_stream(
+    pub(super) fn generate_map_token_stream(
         &self,
         model_type_name: &str,
         node_id: &str,
@@ -416,7 +416,7 @@ impl<'a> ModelsRsGenerator<'a> {
 
         let property_type_node_id = self
             .intermediate_data
-            .select_record_property_type_node_id(node_id)
+            .select_map_property_type_node_id(node_id)
             .map(|node_id| self.intermediate_data.select_non_empty(node_id))
             .ok_or("item type not set")?;
         let property_type_name = self.get_model_name(property_type_node_id)?;
