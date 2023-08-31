@@ -131,17 +131,27 @@ impl From<A> for C {
 
 ### any-of
 
-Any of is represented as a struct in rust, every type in the any-of is an optional property in the struct. `TryFrom` and `From` is implemented for all types in the any-of. Also `AsRef` is implemented for all these types.
+All types are merged and put in an object that has all members as optional types.
 
 This pseudo json
 
 ```json
 {
-    "a": {
+    "string-type": {
         "types": ["string"]
     },
+    "a": {
+        "types": ["object"],
+        "required": :["a"],
+        "properties": {
+            "a": "string-type"
+        }
+    },
     "b": {
-        "types": ["string"]
+        "types": ["object"],
+        "properties": {
+            "b": "string-type"
+        }
     },
     "c": {
         "anyOf": ["a", "b"]
@@ -152,34 +162,44 @@ This pseudo json
 would be
 
 ```rust
-struct A(String);
-struct B(String);
+struct StringType(String);
+struct A {
+    pub a: StringType,
+}
+struct B {
+    pub b: Option<StringType>,
+}
 struct C {
-    #[serde(flatten)]
-    a: Option<A>,
-    #[serde(flatten)]
-    b: Option<B>,
+    a: Option<StringType>,
+    b: Option<StringType>,
 }
 impl TryFrom<C> for A {
     type Error = ();
     fn try_from(value: C) -> Result<Self, Self::Error> {
-        value.a.ok_or(())
+        let a = value.a.ok_or(())?;
+        Ok(Self { a })
     }
 }
 impl From<A> for C {
     fn from(value: A) -> Self {
-        Self{
-            a: Some(value),
-            b: None,
-        }
+        let a = Some(value.a);
+        Self { a, b: None }
     }
 }
-impl AsRef<Option<A>> for C {
-    fn as_ref(&self) -> &Option<A> {
-        &self.a
+impl TryFrom<C> for B {
+    type Error = ();
+    fn try_from(value: C) -> Result<Self, Self::Error> {
+        let b = value.b;
+        Ok(Self { b })
     }
 }
-// same TryFrom and From and AsRef for type B
+impl From<B> for C {
+    fn from(value: B) -> Self {
+        let b = value.b;
+        Self { a: None, b }
+    }
+}
+
 ```
 
 ### all-of
@@ -195,6 +215,7 @@ This pseudo json
     },
     "a": {
         "types": ["object"],
+        "required": :["a"],
         "properties": {
             "a": "string-type"
         }
@@ -216,13 +237,13 @@ would be
 ```rust
 struct StringType(String);
 struct A {
-    a: Option<StringType>,
+    a: StringType,
 }
 struct B{
     b: Option<StringType>,
 };
 struct C {
-    a: Option<StringType>,
+    a: StringType,
     b: Option<StringType>,
 }
 impl From<C> for A {
@@ -232,7 +253,7 @@ impl From<C> for A {
         }
     }
 }
-// same From for type B
+// same for type B
 ```
 
 ### if-then-else
