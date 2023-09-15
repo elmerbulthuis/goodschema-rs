@@ -1,11 +1,11 @@
 use super::TypeKey;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct RecordType {
+pub struct MapType {
     key: TypeKey,
     value: TypeKey,
 }
-impl RecordType {
+impl MapType {
     pub fn new(key: TypeKey, value: TypeKey) -> Self {
         Self { key, value }
     }
