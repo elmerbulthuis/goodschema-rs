@@ -2,19 +2,19 @@ use super::TypeKey;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct RecordType {
-    property: TypeKey,
+    key: TypeKey,
+    value: TypeKey,
 }
 impl RecordType {
-    pub fn new(property: TypeKey) -> Self {
-        Self { property }
+    pub fn new(key: TypeKey, value: TypeKey) -> Self {
+        Self { key, value }
     }
 
-    pub fn get_property(&self) -> &TypeKey {
-        &self.property
+    pub fn get_key(&self) -> &TypeKey {
+        &self.key
     }
-}
-impl From<TypeKey> for RecordType {
-    fn from(value: TypeKey) -> Self {
-        Self::new(value)
+
+    pub fn get_value(&self) -> &TypeKey {
+        &self.value
     }
 }

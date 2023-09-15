@@ -13,11 +13,3 @@ impl TupleType {
         &self.items
     }
 }
-impl<T> From<T> for TupleType
-where
-    T: IntoIterator<Item = TypeKey>,
-{
-    fn from(value: T) -> Self {
-        Self::new(value.into_iter().collect())
-    }
-}

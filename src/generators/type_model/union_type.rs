@@ -15,11 +15,3 @@ impl UnionType {
         &self.types
     }
 }
-impl<T> From<T> for UnionType
-where
-    T: IntoIterator<Item = TypeKey>,
-{
-    fn from(value: T) -> Self {
-        Self::new(value.into_iter().collect())
-    }
-}

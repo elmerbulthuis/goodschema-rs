@@ -15,11 +15,3 @@ impl IntersectionType {
         &self.types
     }
 }
-impl<T> From<T> for IntersectionType
-where
-    T: IntoIterator<Item = TypeKey>,
-{
-    fn from(value: T) -> Self {
-        Self::new(value.into_iter().collect())
-    }
-}

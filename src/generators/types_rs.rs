@@ -40,135 +40,135 @@ impl<'a> TypesRsGenerator<'a> {
             assert!(type_map.insert(node_id.clone(), type_key).is_none());
         }
 
-        for (node_id, node) in intermediate_data.nodes.iter() {
-            let type_key = *type_map.get(node_id).unwrap();
+        // for (node_id, node) in intermediate_data.nodes.iter() {
+        //     let type_key = *type_map.get(node_id).unwrap();
 
-            if let Some(super_node_id) = &node.super_node_id {
-                let super_type_key = *type_map.get(super_node_id.as_ref()).unwrap();
-                type_arena.add_type_by_intersection(
-                    type_key,
-                    type_model::TypeEnum::Alias(super_type_key),
-                );
-            }
+        //     if let Some(super_node_id) = &node.super_node_id {
+        //         let super_type_key = *type_map.get(super_node_id.as_ref()).unwrap();
+        //         type_arena.add_type_by_intersection(
+        //             type_key,
+        //             type_model::TypeEnum::Alias(super_type_key),
+        //         );
+        //     }
 
-            for node_type in node.types.iter() {
-                match node_type {
-                    // null
-                    schemas::intermediate_a::TypeUnion::TypeUnionOneOf0(_) => {
-                        type_arena.add_type_by_union(type_key, type_model::TypeEnum::Null)
-                    }
-                    // any
-                    schemas::intermediate_a::TypeUnion::TypeUnionOneOf1(_) => {
-                        type_arena.add_type_by_union(type_key, type_model::TypeEnum::Any)
-                    }
-                    // never
-                    schemas::intermediate_a::TypeUnion::TypeUnionOneOf2(_) => {
-                        type_arena.add_type_by_union(type_key, type_model::TypeEnum::Never)
-                    }
-                    // boolean
-                    schemas::intermediate_a::TypeUnion::OneOf3(_) => {
-                        type_arena.add_type_by_union(type_key, type_model::TypeEnum::Boolean)
-                    }
-                    // number
-                    schemas::intermediate_a::TypeUnion::OneOf4(_) => {
-                        type_arena.add_type_by_union(type_key, type_model::TypeEnum::Number)
-                    }
-                    // string
-                    schemas::intermediate_a::TypeUnion::OneOf5(_) => {
-                        type_arena.add_type_by_union(type_key, type_model::TypeEnum::String)
-                    }
-                    // tuple
-                    schemas::intermediate_a::TypeUnion::OneOf6(type_node) => {
-                        if let Some(node_ids) = &type_node.item_type_node_ids {
-                            let items = node_ids
-                                .iter()
-                                .map(|node_id| *type_map.get(node_id.as_ref()).unwrap());
+        //     for node_type in node.types.iter() {
+        //         match node_type {
+        //             // null
+        //             schemas::intermediate_a::TypeUnion::TypeUnionOneOf0(_) => {
+        //                 type_arena.add_type_by_union(type_key, type_model::TypeEnum::Null)
+        //             }
+        //             // any
+        //             schemas::intermediate_a::TypeUnion::TypeUnionOneOf1(_) => {
+        //                 type_arena.add_type_by_union(type_key, type_model::TypeEnum::Any)
+        //             }
+        //             // never
+        //             schemas::intermediate_a::TypeUnion::TypeUnionOneOf2(_) => {
+        //                 type_arena.add_type_by_union(type_key, type_model::TypeEnum::Never)
+        //             }
+        //             // boolean
+        //             schemas::intermediate_a::TypeUnion::OneOf3(_) => {
+        //                 type_arena.add_type_by_union(type_key, type_model::TypeEnum::Boolean)
+        //             }
+        //             // number
+        //             schemas::intermediate_a::TypeUnion::OneOf4(_) => {
+        //                 type_arena.add_type_by_union(type_key, type_model::TypeEnum::Number)
+        //             }
+        //             // string
+        //             schemas::intermediate_a::TypeUnion::OneOf5(_) => {
+        //                 type_arena.add_type_by_union(type_key, type_model::TypeEnum::String)
+        //             }
+        //             // tuple
+        //             schemas::intermediate_a::TypeUnion::OneOf6(type_node) => {
+        //                 if let Some(node_ids) = &type_node.item_type_node_ids {
+        //                     let items = node_ids
+        //                         .iter()
+        //                         .map(|node_id| *type_map.get(node_id.as_ref()).unwrap());
 
-                            type_arena.add_type_by_union(
-                                type_key,
-                                type_model::TypeEnum::Tuple(items.into()),
-                            );
-                        }
-                    }
-                    // array
-                    schemas::intermediate_a::TypeUnion::OneOf7(type_node) => {
-                        if let Some(node_id) = &type_node.item_type_node_id {
-                            let item = *type_map.get(node_id.as_ref()).unwrap();
+        //                     type_arena.add_type_by_union(
+        //                         type_key,
+        //                         type_model::TypeEnum::Tuple(items.into()),
+        //                     );
+        //                 }
+        //             }
+        //             // array
+        //             schemas::intermediate_a::TypeUnion::OneOf7(type_node) => {
+        //                 if let Some(node_id) = &type_node.item_type_node_id {
+        //                     let item = *type_map.get(node_id.as_ref()).unwrap();
 
-                            type_arena.add_type_by_union(
-                                type_key,
-                                type_model::TypeEnum::Array(item.into()),
-                            );
-                        }
-                    }
-                    // interface
-                    schemas::intermediate_a::TypeUnion::OneOf8(type_node) => {
-                        if let Some(node_ids) = &type_node.property_type_node_ids {
-                            let properties = node_ids.iter().map(|(name, node_id)| {
-                                (name.clone(), *type_map.get(node_id.as_ref()).unwrap())
-                            });
+        //                     type_arena.add_type_by_union(
+        //                         type_key,
+        //                         type_model::TypeEnum::Array(item.into()),
+        //                     );
+        //                 }
+        //             }
+        //             // interface
+        //             schemas::intermediate_a::TypeUnion::OneOf8(type_node) => {
+        //                 if let Some(node_ids) = &type_node.property_type_node_ids {
+        //                     let properties = node_ids.iter().map(|(name, node_id)| {
+        //                         (name.clone(), *type_map.get(node_id.as_ref()).unwrap())
+        //                     });
 
-                            type_arena.add_type_by_union(
-                                type_key,
-                                type_model::TypeEnum::Object(properties.into()),
-                            );
-                        }
-                    }
-                    // record
-                    schemas::intermediate_a::TypeUnion::OneOf9(type_node) => {
-                        if let Some(node_id) = &type_node.property_type_node_id {
-                            let property = *type_map.get(node_id.as_ref()).unwrap();
+        //                     type_arena.add_type_by_union(
+        //                         type_key,
+        //                         type_model::TypeEnum::Object(properties.into()),
+        //                     );
+        //                 }
+        //             }
+        //             // record
+        //             schemas::intermediate_a::TypeUnion::OneOf9(type_node) => {
+        //                 if let Some(node_id) = &type_node.property_type_node_id {
+        //                     let property = *type_map.get(node_id.as_ref()).unwrap();
 
-                            type_arena.add_type_by_union(
-                                type_key,
-                                type_model::TypeEnum::Record(property.into()),
-                            );
-                        }
-                    }
-                };
-            }
+        //                     type_arena.add_type_by_union(
+        //                         type_key,
+        //                         type_model::TypeEnum::Record(property.into()),
+        //                     );
+        //                 }
+        //             }
+        //         };
+        //     }
 
-            for node_compound in node.compounds.iter() {
-                match node_compound {
-                    // one-of
-                    schemas::intermediate_a::CompoundUnion::CompoundUnionOneOf0(compound_node) => {
-                        if let Some(node_ids) = &compound_node.type_node_ids {
-                            let types = node_ids
-                                .iter()
-                                .map(|node_id| *type_map.get(node_id.as_ref()).unwrap());
-                            type_arena.add_type_by_union(
-                                type_key,
-                                type_model::TypeEnum::Union(types.into()),
-                            )
-                        }
-                    }
-                    // any-of
-                    schemas::intermediate_a::CompoundUnion::CompoundUnionOneOf1(compound_node) => {
-                        if let Some(node_ids) = &compound_node.type_node_ids {
-                            let types = node_ids
-                                .iter()
-                                .map(|node_id| *type_map.get(node_id.as_ref()).unwrap());
-                            type_arena.add_type_by_union(
-                                type_key,
-                                type_model::TypeEnum::Union(types.into()),
-                            )
-                        }
-                    }
-                    // all-of
-                    schemas::intermediate_a::CompoundUnion::CompoundUnionOneOf2(compound_node) => {
-                        if let Some(node_ids) = &compound_node.type_node_ids {
-                            let types = node_ids
-                                .iter()
-                                .map(|node_id| *type_map.get(node_id.as_ref()).unwrap());
-                            type_arena.add_type_by_union(
-                                type_key,
-                                type_model::TypeEnum::Intersection(types.into()),
-                            )
-                        }
-                    }
-                }
-            }
-        }
+        //     for node_compound in node.compounds.iter() {
+        //         match node_compound {
+        //             // one-of
+        //             schemas::intermediate_a::CompoundUnion::CompoundUnionOneOf0(compound_node) => {
+        //                 if let Some(node_ids) = &compound_node.type_node_ids {
+        //                     let types = node_ids
+        //                         .iter()
+        //                         .map(|node_id| *type_map.get(node_id.as_ref()).unwrap());
+        //                     type_arena.add_type_by_union(
+        //                         type_key,
+        //                         type_model::TypeEnum::Union(types.into()),
+        //                     )
+        //                 }
+        //             }
+        //             // any-of
+        //             schemas::intermediate_a::CompoundUnion::CompoundUnionOneOf1(compound_node) => {
+        //                 if let Some(node_ids) = &compound_node.type_node_ids {
+        //                     let types = node_ids
+        //                         .iter()
+        //                         .map(|node_id| *type_map.get(node_id.as_ref()).unwrap());
+        //                     type_arena.add_type_by_union(
+        //                         type_key,
+        //                         type_model::TypeEnum::Union(types.into()),
+        //                     )
+        //                 }
+        //             }
+        //             // all-of
+        //             schemas::intermediate_a::CompoundUnion::CompoundUnionOneOf2(compound_node) => {
+        //                 if let Some(node_ids) = &compound_node.type_node_ids {
+        //                     let types = node_ids
+        //                         .iter()
+        //                         .map(|node_id| *type_map.get(node_id.as_ref()).unwrap());
+        //                     type_arena.add_type_by_union(
+        //                         type_key,
+        //                         type_model::TypeEnum::Intersection(types.into()),
+        //                     )
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
 
         (type_arena, type_map)
     }

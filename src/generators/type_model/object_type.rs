@@ -14,11 +14,3 @@ impl ObjectType {
         &self.properties
     }
 }
-impl<T> From<T> for ObjectType
-where
-    T: IntoIterator<Item = (String, TypeKey)>,
-{
-    fn from(value: T) -> Self {
-        Self::new(value.into_iter().collect())
-    }
-}
