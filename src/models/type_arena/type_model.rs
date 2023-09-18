@@ -4,7 +4,6 @@ use super::*;
 
 #[derive(Debug)]
 pub struct TypeModel {
-    pub super_type_name: Option<String>,
     pub r#type: TypeEnum,
     pub validators: Vec<ValidatorEnum>,
     pub property: Option<(String, String)>,
@@ -14,7 +13,7 @@ pub struct TypeModel {
 }
 
 impl TypeArena {
-    pub fn get_model(&self, type_key: &str) -> Option<&TypeModel> {
-        self.models.get(type_key)
+    pub fn get_model(&self, type_name: &str) -> Option<&TypeModel> {
+        self.models.get(type_name)
     }
 }
