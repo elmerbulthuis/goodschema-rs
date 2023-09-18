@@ -19,14 +19,6 @@ impl From<&schemas::intermediate_a::SchemaJson> for TypeArena {
             // get the name for this node
             let type_name = name_map.get(node_id).unwrap();
 
-            // get the super node name
-            let super_type_name = node
-                .super_node_id
-                .as_ref()
-                .map(|super_node_id| super_node_id.as_ref())
-                .map(|super_node_id| name_map.get(super_node_id).unwrap())
-                .map(|super_node_name| super_node_name.clone());
-
             // we'll fill these later
             let mut sub_type_names = Vec::new();
             let mut one_of_type_names = Vec::new();
@@ -174,6 +166,13 @@ impl From<&schemas::intermediate_a::SchemaJson> for TypeArena {
                 }
             }
 
+            // get the super node name
+            let super_type_name = node
+                .super_node_id
+                .as_ref()
+                .map(|super_node_id| super_node_id.as_ref())
+                .map(|super_node_id| name_map.get(super_node_id).unwrap())
+                .cloned();
             let type_type = TypeEnum::AllOf(all_of_type_names);
             let type_model = TypeModel {
                 super_type_name,
