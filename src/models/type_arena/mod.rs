@@ -6,7 +6,6 @@ mod map_validator;
 mod number_validator;
 mod string_validator;
 mod type_enum;
-mod type_key;
 mod type_model;
 mod validator_enum;
 
@@ -18,7 +17,6 @@ pub use map_validator::*;
 pub use number_validator::*;
 pub use string_validator::*;
 pub use type_enum::*;
-pub use type_key::*;
 pub use type_model::*;
 pub use validator_enum::*;
 

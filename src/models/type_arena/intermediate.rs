@@ -1,8 +1,7 @@
+use quote::format_ident;
+
 use super::*;
-use crate::{
-    schemas, selectors::document::DocumentSelectors,
-    utils::namer::Namer,
-};
+use crate::{schemas, utils::namer::Namer};
 use std::collections::HashMap;
 
 impl From<&schemas::intermediate_a::SchemaJson> for TypeArena {
@@ -18,14 +17,15 @@ impl From<&schemas::intermediate_a::SchemaJson> for TypeArena {
         let mut arena = Self::new();
         for (node_id, node) in intermediate_document.nodes.iter() {
             // get the name for this node
-            let base_type_name = name_map.get(node_id).unwrap();
+            let type_name = name_map.get(node_id).unwrap();
 
             // get the super node name
             let super_type_name = node
                 .super_node_id
                 .as_ref()
                 .map(|super_node_id| super_node_id.as_ref())
-                .map(|super_node_id| name_map.get(super_node_id).unwrap());
+                .map(|super_node_id| name_map.get(super_node_id).unwrap())
+                .map(|super_node_name| super_node_name.clone());
 
             // we'll fill these later
             let mut sub_type_names = Vec::new();
@@ -74,8 +74,8 @@ impl From<&schemas::intermediate_a::SchemaJson> for TypeArena {
                             .unwrap()
                             .iter()
                             .map(|node_id| node_id.as_ref())
-                            .map(|node_id| intermediate_document.select_non_empty(node_id))
                             .map(|node_id| name_map.get(node_id).unwrap())
+                            .cloned()
                             .collect();
                         validators.push(ValidatorEnum::Array(ArrayValidator {}));
                         TypeEnum::Tuple
@@ -85,8 +85,8 @@ impl From<&schemas::intermediate_a::SchemaJson> for TypeArena {
                             .item_type_node_id
                             .as_ref()
                             .map(|node_id| node_id.as_ref())
-                            .map(|node_id| intermediate_document.select_non_empty(node_id))
                             .map(|node_id| name_map.get(node_id).unwrap())
+                            .cloned();
                         validators.push(ValidatorEnum::Array(ArrayValidator {}));
                         TypeEnum::Array
                     }
@@ -97,30 +97,29 @@ impl From<&schemas::intermediate_a::SchemaJson> for TypeArena {
                             .unwrap()
                             .iter()
                             .map(|(key, node_id)| (key, node_id.as_ref()))
-                            .map(|(key, node_id)| {
-                                (key, intermediate_document.select_non_empty(node_id))
-                            })
                             .map(|(key, node_id)| (key, name_map.get(node_id).unwrap()))
+                            .map(|(key, node_name)| (key.clone(), node_name.clone()))
                             .collect();
                         validators.push(ValidatorEnum::Map(MapValidator {}));
                         TypeEnum::Object
                     }
                     schemas::intermediate_a::TypeUnion::RecordType(type_node) => {
+                        let key_type_name = format!("{}{}", type_name, "Property");
                         property = type_node
                             .property_type_node_id
                             .as_ref()
                             .map(|node_id| node_id.as_ref())
-                            .map(|node_id| intermediate_document.select_non_empty(node_id))
                             .map(|node_id| name_map.get(node_id).unwrap())
-                            .map(|type_key| (TypeKey::new(), type_key));
+                            .map(|node_name| (key_type_name, node_name.clone()));
 
                         validators.push(ValidatorEnum::Map(MapValidator {}));
                         TypeEnum::Map
                     }
                 };
-                let sub_type_name = format!("{}{}", base_type_name, sub_type);
+                let sub_type_name = format!("{}{}", type_name, sub_type);
+                sub_type_names.push(sub_type_name.clone());
                 let sub_type_model = TypeModel {
-                    super_type_name: Some(base_type_name.clone()),
+                    super_type_name: Some(type_name.clone()),
                     r#type: sub_type,
                     validators: Default::default(),
                     property: Default::default(),
@@ -130,6 +129,62 @@ impl From<&schemas::intermediate_a::SchemaJson> for TypeArena {
                 };
                 assert!(arena.models.insert(sub_type_name, sub_type_model).is_none());
             }
+
+            for compound_node in node.compounds.iter() {
+                match compound_node {
+                    schemas::intermediate_a::CompoundUnion::OneOfCompound(compound_node) => {
+                        one_of_type_names.append(
+                            &mut compound_node
+                                .type_node_ids
+                                .as_ref()
+                                .unwrap()
+                                .iter()
+                                .map(|node_id| node_id.as_ref())
+                                .map(|node_id| name_map.get(node_id).unwrap())
+                                .cloned()
+                                .collect(),
+                        );
+                    }
+                    schemas::intermediate_a::CompoundUnion::AnyOfCompound(compound_node) => {
+                        any_of_type_names.append(
+                            &mut compound_node
+                                .type_node_ids
+                                .as_ref()
+                                .unwrap()
+                                .iter()
+                                .map(|node_id| node_id.as_ref())
+                                .map(|node_id| name_map.get(node_id).unwrap())
+                                .cloned()
+                                .collect(),
+                        );
+                    }
+                    schemas::intermediate_a::CompoundUnion::AllOfCompound(compound_node) => {
+                        all_of_type_names.append(
+                            &mut compound_node
+                                .type_node_ids
+                                .as_ref()
+                                .unwrap()
+                                .iter()
+                                .map(|node_id| node_id.as_ref())
+                                .map(|node_id| name_map.get(node_id).unwrap())
+                                .cloned()
+                                .collect(),
+                        );
+                    }
+                }
+            }
+
+            let type_type = TypeEnum::AllOf(all_of_type_names);
+            let type_model = TypeModel {
+                super_type_name,
+                r#type: type_type,
+                validators,
+                property,
+                properties,
+                item,
+                items,
+            };
+            assert!(arena.models.insert(type_name.clone(), type_model).is_none());
         }
         arena
     }

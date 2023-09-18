@@ -1,7 +1,5 @@
 use std::fmt::Display;
 
-use super::TypeKey;
-
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum TypeEnum {
     Never,
@@ -15,9 +13,9 @@ pub enum TypeEnum {
     Array,
     Object,
     Map,
-    OneOf(Vec<TypeKey>),
-    AnyOf(Vec<TypeKey>),
-    AllOf(Vec<TypeKey>),
+    OneOf(Vec<String>),
+    AnyOf(Vec<String>),
+    AllOf(Vec<String>),
 }
 
 impl Display for TypeEnum {
