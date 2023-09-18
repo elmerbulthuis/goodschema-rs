@@ -1,10 +1,12 @@
-use quote::format_ident;
-
 use super::*;
 use crate::{schemas, utils::namer::Namer};
 use std::collections::HashMap;
 
 impl From<&schemas::intermediate_a::SchemaJson> for TypeArena {
+    /**
+     * creates a type arena from the intermediate model. Basically this creates the types from that
+     * model that can later be used to generate the actual rust types.
+     */
     fn from(intermediate_document: &schemas::intermediate_a::SchemaJson) -> Self {
         // first, generate names for every node
         let mut namer = Namer::new("");
