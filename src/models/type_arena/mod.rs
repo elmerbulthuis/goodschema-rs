@@ -26,7 +26,7 @@ use std::collections::HashMap;
 
 #[derive(Debug, Default)]
 pub struct TypeArena {
-    pub(super) models: HashMap<TypeKey, TypeModel>,
+    pub(super) models: HashMap<String, TypeModel>,
 }
 
 impl TypeArena {
