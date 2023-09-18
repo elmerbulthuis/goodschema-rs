@@ -403,6 +403,13 @@ impl From<&schemas::intermediate_a::SchemaJson> for TypeArena {
             };
             assert!(arena.models.insert(type_name.clone(), type_model).is_none());
         }
+        arena = arena.flatten();
         arena
+    }
+}
+
+impl TypeArena {
+    fn flatten(mut self) -> Self {
+        self
     }
 }
