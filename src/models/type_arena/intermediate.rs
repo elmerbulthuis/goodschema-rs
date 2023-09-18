@@ -132,7 +132,8 @@ impl TypeArena {
                             .map(|node_id| node_id.as_ref())
                             .map(|node_id| intermediate_document.select_non_empty(node_id))
                             .map(|node_id| name_map.get(node_id).unwrap())
-                            .map(|type_name| *type_keys.get(type_name).unwrap());
+                            .map(|type_name| *type_keys.get(type_name).unwrap())
+                            .map(|type_key| (TypeKey::new(), type_key));
 
                         validators.push(ValidatorEnum::Map(MapValidator {}));
                         TypeEnum::Map
