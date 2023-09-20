@@ -573,36 +573,30 @@ fn merge_all_of_types(arena: &TypeArena) -> usize {
                                 .cloned()
                                 .collect();
 
-                            if all_of_type_keys.is_empty() {
-                                if any_of_type_keys.is_empty() {
-                                    if one_of_type_keys.is_empty() {
-                                        // all of, any of, one of are empty
-                                        todo!()
-                                    } else {
-                                        // only one not empty
-                                        todo!()
-                                    }
-                                } else if one_of_type_keys.is_empty() {
-                                    // only any of not empty
-                                    todo!()
-                                } else {
-                                    // only all of is empty
-                                    todo!()
-                                }
-                            } else if any_of_type_keys.is_empty() {
-                                if one_of_type_keys.is_empty() {
-                                    // only all of not empty
-                                    TypeEnum::AllOf(all_of_type_keys.iter().cloned().collect())
-                                } else {
-                                    // only any of is empty
-                                    todo!()
-                                }
-                            } else if one_of_type_keys.is_empty() {
-                                // only one of is empty
-                                todo!()
-                            } else {
-                                // all of, any of, one of not empty
-                                todo!()
+                            match (
+                                all_of_type_keys.len(),
+                                any_of_type_keys.len(),
+                                one_of_type_keys.len(),
+                            ) {
+                                (0, 0, 0) => todo!(),
+
+                                (0, 1, 1) => todo!(),
+                                (1, 0, 1) => todo!(),
+                                (1, 1, 0) => todo!(),
+
+                                (0, 0, 1) => todo!(),
+                                (1, 0, 0) => todo!(),
+                                (0, 1, 0) => todo!(),
+
+                                (0, 0, _) => todo!(),
+                                (_, 0, 0) => todo!(),
+                                (0, _, 0) => todo!(),
+
+                                (_, _, 0) => todo!(),
+                                (0, _, _) => todo!(),
+                                (_, 0, _) => todo!(),
+
+                                (_, _, _) => todo!(),
                             }
                         }
                     } else {
