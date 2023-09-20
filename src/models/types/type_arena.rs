@@ -487,8 +487,11 @@ fn merge_all_of_types(arena: &TypeArena) -> usize {
                 .map(|type_key| arena.models.get(type_key).unwrap())
                 .cloned()
                 .collect();
-            let all_of_model_types: HashSet<_> =
-                all_of_models.iter().map(|model| model.r#type).collect();
+            let all_of_model_types: HashSet<_> = all_of_models
+                .iter()
+                .map(|model| &model.r#type)
+                .cloned()
+                .collect();
 
             let merged_type_validators = all_of_models
                 .iter()
@@ -571,10 +574,36 @@ fn merge_all_of_types(arena: &TypeArena) -> usize {
                                 .collect();
 
                             if all_of_type_keys.is_empty() {
+                                if any_of_type_keys.is_empty() {
+                                    if one_of_type_keys.is_empty() {
+                                        // all of, any of, one of are empty
+                                        todo!()
+                                    } else {
+                                        // only one not empty
+                                        todo!()
+                                    }
+                                } else if one_of_type_keys.is_empty() {
+                                    // only any of not empty
+                                    todo!()
+                                } else {
+                                    // only all of is empty
+                                    todo!()
+                                }
+                            } else if any_of_type_keys.is_empty() {
+                                if one_of_type_keys.is_empty() {
+                                    // only all of not empty
+                                    TypeEnum::AllOf(all_of_type_keys.iter().cloned().collect())
+                                } else {
+                                    // only any of is empty
+                                    todo!()
+                                }
+                            } else if one_of_type_keys.is_empty() {
+                                // only one of is empty
+                                todo!()
                             } else {
+                                // all of, any of, one of not empty
+                                todo!()
                             }
-
-                            todo!()
                         }
                     } else {
                         all_of_model_types
