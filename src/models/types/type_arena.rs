@@ -1,7 +1,22 @@
-use crate::schemas;
-
 use super::*;
+use crate::schemas;
 use std::collections::HashMap;
+
+#[derive(Debug, Default)]
+pub struct TypeArena {
+    pub(super) models: HashMap<TypeKey, TypeModel>,
+    pub(super) node_id_to_type_key: HashMap<String, TypeKey>,
+}
+
+impl TypeArena {
+    pub fn new() -> Self {
+        Default::default()
+    }
+
+    fn resolve_node_id(&self, node_id: impl AsRef<str>) -> TypeKey {
+        *self.node_id_to_type_key.get(node_id.as_ref()).unwrap()
+    }
+}
 
 impl From<&schemas::intermediate_a::SchemaJson> for TypeArena {
     fn from(intermediate_document: &schemas::intermediate_a::SchemaJson) -> Self {
@@ -10,8 +25,8 @@ impl From<&schemas::intermediate_a::SchemaJson> for TypeArena {
         // first we add all types to the arena from the intermediate document
         add_to_arena(&mut arena, intermediate_document);
 
-        // and then we flatten em!
-        flatten_types(&mut arena);
+        // and then we flatten em until there is nothing more to flatten!
+        while flatten_types(&mut arena) > 0 {}
 
         arena
     }
@@ -428,6 +443,7 @@ fn add_to_arena(
         let node_type_type = if node_type_keys.is_empty() {
             TypeEnum::Unknown
         } else {
+            // in the end the type will be all of, because all of the types need to validate
             TypeEnum::AllOf(node_type_keys)
         };
         let node_type_model = TypeModel {
@@ -447,6 +463,22 @@ fn add_to_arena(
     }
 }
 
-fn flatten_types(arena: &mut TypeArena) {
-    //
+fn flatten_types(arena: &mut TypeArena) -> usize {
+    let mut count = 0;
+
+    count += merge_all_of_types(arena);
+
+    count
+}
+
+/**
+ * Merge all of types into something else than all of
+ */
+fn merge_all_of_types(arena: &mut TypeArena) -> usize {
+    for (type_key, model) in arena.models.iter_mut() {
+        if let TypeEnum::AllOf(all_of_type_keys) = &model.r#type {
+            //
+        }
+    }
+    1
 }

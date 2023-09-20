@@ -3,7 +3,7 @@ mod helpers;
 mod types;
 
 use crate::{
-    models::type_arena::TypeArena, schemas, selectors::document::DocumentSelectors,
+    models::types::TypeArena, schemas, selectors::document::DocumentSelectors,
     selectors::document::TypeEnum, selectors::node::NodeSelectors,
 };
 use proc_macro2::TokenStream;
