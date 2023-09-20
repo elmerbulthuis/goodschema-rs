@@ -1,5 +1,6 @@
+use crate::schemas;
+
 use super::*;
-use crate::{schemas, selectors::document::DocumentSelectors, selectors::node::NodeSelectors};
 use std::collections::HashMap;
 
 /**
@@ -14,7 +15,7 @@ impl TypeArena {
         let mut arena = Self::new();
         let mut type_keys = HashMap::new();
 
-        for (node_id, node) in intermediate_document.nodes.iter() {
+        for (node_id, _node) in intermediate_document.nodes.iter() {
             let type_key = TypeKey::new();
             let type_name = name_map.get(node_id).unwrap();
             assert!(type_keys.insert(type_name.clone(), type_key).is_none());
@@ -47,13 +48,68 @@ impl TypeArena {
                 let simple_type_key = TypeKey::new();
                 simple_type_keys.push(simple_type_key);
 
-                let simple_type_type = match type_node {
-                    schemas::intermediate_a::TypeUnion::NeverType(_type_node) => TypeEnum::Never,
-                    schemas::intermediate_a::TypeUnion::AnyType(_type_node) => TypeEnum::Any,
-                    schemas::intermediate_a::TypeUnion::NullType(_type_node) => TypeEnum::Null,
+                match type_node {
+                    schemas::intermediate_a::TypeUnion::NeverType(_type_node) => {
+                        let simple_type_model = TypeModel {
+                            name: Some("Never".to_owned()),
+                            r#type: TypeEnum::Never,
+                            validators: Default::default(),
+                            property: Default::default(),
+                            properties: Default::default(),
+                            item: Default::default(),
+                            items: Default::default(),
+                        };
+                        assert!(arena
+                            .models
+                            .insert(simple_type_key, simple_type_model)
+                            .is_none());
+                    }
+                    schemas::intermediate_a::TypeUnion::AnyType(_type_node) => {
+                        let simple_type_model = TypeModel {
+                            name: Some("Any".to_owned()),
+                            r#type: TypeEnum::Any,
+                            validators: Default::default(),
+                            property: Default::default(),
+                            properties: Default::default(),
+                            item: Default::default(),
+                            items: Default::default(),
+                        };
+                        assert!(arena
+                            .models
+                            .insert(simple_type_key, simple_type_model)
+                            .is_none());
+                    }
+                    schemas::intermediate_a::TypeUnion::NullType(_type_node) => {
+                        let simple_type_model = TypeModel {
+                            name: Some("Null".to_owned()),
+                            r#type: TypeEnum::Null,
+                            validators: Default::default(),
+                            property: Default::default(),
+                            properties: Default::default(),
+                            item: Default::default(),
+                            items: Default::default(),
+                        };
+                        assert!(arena
+                            .models
+                            .insert(simple_type_key, simple_type_model)
+                            .is_none());
+                    }
                     schemas::intermediate_a::TypeUnion::BooleanType(_type_node) => {
+                        let simple_type_model = TypeModel {
+                            name: Some("Boolean".to_owned()),
+                            r#type: TypeEnum::Boolean,
+                            validators: Default::default(),
+                            property: Default::default(),
+                            properties: Default::default(),
+                            item: Default::default(),
+                            items: Default::default(),
+                        };
+                        assert!(arena
+                            .models
+                            .insert(simple_type_key, simple_type_model)
+                            .is_none());
+
                         validators.push(ValidatorEnum::Boolean(BooleanValidator {}));
-                        TypeEnum::Boolean
                     }
                     schemas::intermediate_a::TypeUnion::DefsNumberType(type_node) => {
                         let number_type = if let Some(number_type) = &type_node.number_type {
@@ -62,18 +118,71 @@ impl TypeArena {
                             "float"
                         };
                         if number_type == "integer" {
+                            let simple_type_model = TypeModel {
+                                name: Some("Integer".to_owned()),
+                                r#type: TypeEnum::Integer,
+                                validators: Default::default(),
+                                property: Default::default(),
+                                properties: Default::default(),
+                                item: Default::default(),
+                                items: Default::default(),
+                            };
+                            assert!(arena
+                                .models
+                                .insert(simple_type_key, simple_type_model)
+                                .is_none());
+
                             validators.push(ValidatorEnum::Integer(IntegerValidator {}));
-                            TypeEnum::Integer
                         } else {
+                            let simple_type_model = TypeModel {
+                                name: Some("Number".to_owned()),
+                                r#type: TypeEnum::Number,
+                                validators: Default::default(),
+                                property: Default::default(),
+                                properties: Default::default(),
+                                item: Default::default(),
+                                items: Default::default(),
+                            };
+                            assert!(arena
+                                .models
+                                .insert(simple_type_key, simple_type_model)
+                                .is_none());
+
                             validators.push(ValidatorEnum::Number(NumberValidator {}));
-                            TypeEnum::Number
                         }
                     }
                     schemas::intermediate_a::TypeUnion::StringType(_type_node) => {
+                        let simple_type_model = TypeModel {
+                            name: Some("String".to_owned()),
+                            r#type: TypeEnum::String,
+                            validators: Default::default(),
+                            property: Default::default(),
+                            properties: Default::default(),
+                            item: Default::default(),
+                            items: Default::default(),
+                        };
+                        assert!(arena
+                            .models
+                            .insert(simple_type_key, simple_type_model)
+                            .is_none());
+
                         validators.push(ValidatorEnum::String(StringValidator {}));
-                        TypeEnum::String
                     }
                     schemas::intermediate_a::TypeUnion::TupleType(type_node) => {
+                        let simple_type_model = TypeModel {
+                            name: Some("Tuple".to_owned()),
+                            r#type: TypeEnum::Tuple,
+                            validators: Default::default(),
+                            property: Default::default(),
+                            properties: Default::default(),
+                            item: Default::default(),
+                            items: Default::default(),
+                        };
+                        assert!(arena
+                            .models
+                            .insert(simple_type_key, simple_type_model)
+                            .is_none());
+
                         items = type_node
                             .item_type_node_ids
                             .as_ref()
@@ -83,20 +192,48 @@ impl TypeArena {
                             .map(|node_id| name_map.get(node_id).unwrap())
                             .map(|type_name| *type_keys.get(type_name).unwrap())
                             .collect();
+
                         validators.push(ValidatorEnum::Array(ArrayValidator {}));
-                        TypeEnum::Tuple
                     }
                     schemas::intermediate_a::TypeUnion::ArrayType(type_node) => {
+                        let simple_type_model = TypeModel {
+                            name: Some("Array".to_owned()),
+                            r#type: TypeEnum::Array,
+                            validators: Default::default(),
+                            property: Default::default(),
+                            properties: Default::default(),
+                            item: Default::default(),
+                            items: Default::default(),
+                        };
+                        assert!(arena
+                            .models
+                            .insert(simple_type_key, simple_type_model)
+                            .is_none());
+
                         item = type_node
                             .item_type_node_id
                             .as_ref()
                             .map(|node_id| node_id.as_ref())
                             .map(|node_id| name_map.get(node_id).unwrap())
                             .map(|type_name| *type_keys.get(type_name).unwrap());
+
                         validators.push(ValidatorEnum::Array(ArrayValidator {}));
-                        TypeEnum::Array
                     }
                     schemas::intermediate_a::TypeUnion::InterfaceType(type_node) => {
+                        let simple_type_model = TypeModel {
+                            name: Some("Object".to_owned()),
+                            r#type: TypeEnum::Object,
+                            validators: Default::default(),
+                            property: Default::default(),
+                            properties: Default::default(),
+                            item: Default::default(),
+                            items: Default::default(),
+                        };
+                        assert!(arena
+                            .models
+                            .insert(simple_type_key, simple_type_model)
+                            .is_none());
+
                         properties = type_node
                             .property_type_node_ids
                             .as_ref()
@@ -109,9 +246,22 @@ impl TypeArena {
                             })
                             .collect();
                         validators.push(ValidatorEnum::Map(MapValidator {}));
-                        TypeEnum::Object
                     }
                     schemas::intermediate_a::TypeUnion::RecordType(type_node) => {
+                        let simple_type_model = TypeModel {
+                            name: Some("Map".to_owned()),
+                            r#type: TypeEnum::Map,
+                            validators: Default::default(),
+                            property: Default::default(),
+                            properties: Default::default(),
+                            item: Default::default(),
+                            items: Default::default(),
+                        };
+                        assert!(arena
+                            .models
+                            .insert(simple_type_key, simple_type_model)
+                            .is_none());
+
                         property = type_node
                             .property_type_node_id
                             .as_ref()
@@ -121,22 +271,8 @@ impl TypeArena {
                             .map(|type_key| (TypeKey::new(), type_key));
 
                         validators.push(ValidatorEnum::Map(MapValidator {}));
-                        TypeEnum::Map
                     }
                 };
-                let simple_type_model = TypeModel {
-                    name: Some(format!("{}", simple_type_type)),
-                    r#type: simple_type_type,
-                    validators: Default::default(),
-                    property: Default::default(),
-                    properties: Default::default(),
-                    item: Default::default(),
-                    items: Default::default(),
-                };
-                assert!(arena
-                    .models
-                    .insert(simple_type_key, simple_type_model)
-                    .is_none());
             }
 
             for compound_node in node.compounds.iter() {
@@ -183,22 +319,25 @@ impl TypeArena {
                 }
             }
 
-            let mut type_keys = Vec::new();
+            let mut node_type_keys = Vec::new();
 
             if !simple_type_keys.is_empty() {
-                let sub_type_key = TypeKey::new();
-                simple_type_keys.push(sub_type_key);
-                let sub_type_type = TypeEnum::OneOf(simple_type_keys);
+                let simple_type_key = TypeKey::new();
+                node_type_keys.push(simple_type_key);
+                let simple_type_type = TypeEnum::OneOf(simple_type_keys);
                 let sub_type_model = TypeModel {
-                    name: None,
-                    r#type: sub_type_type,
+                    name: Some("Type".to_string()),
+                    r#type: simple_type_type,
                     validators: Default::default(),
                     property: Default::default(),
                     properties: Default::default(),
                     item: Default::default(),
                     items: Default::default(),
                 };
-                assert!(arena.models.insert(sub_type_key, sub_type_model).is_none());
+                assert!(arena
+                    .models
+                    .insert(simple_type_key, sub_type_model)
+                    .is_none());
             }
 
             if !one_of_type_keys.is_empty() {
@@ -206,7 +345,7 @@ impl TypeArena {
                 one_of_type_keys.push(one_of_type_key);
                 let one_of_type_type = TypeEnum::OneOf(one_of_type_keys);
                 let one_of_type_model = TypeModel {
-                    name: Some(format!("{}{}", node_type_name, one_of_type_type)),
+                    name: Some("OneOf".to_string()),
                     r#type: one_of_type_type,
                     validators: Default::default(),
                     property: Default::default(),
@@ -225,7 +364,7 @@ impl TypeArena {
                 all_of_type_keys.push(any_of_type_key);
                 let any_of_type_type = TypeEnum::AnyOf(any_of_type_keys);
                 let any_of_type_model = TypeModel {
-                    name: Some(format!("{}{}", node_type_name, any_of_type_type)),
+                    name: Some("AnyOf".to_string()),
                     r#type: any_of_type_type,
                     validators: Default::default(),
                     property: Default::default(),
@@ -239,17 +378,28 @@ impl TypeArena {
                     .is_none());
             }
 
-            let type_type = TypeEnum::AllOf(type_keys);
-            let type_model = TypeModel {
-                name: Some(node_type_name.clone()),
-                r#type: type_type,
+            if let Some(super_type_key) = super_type_key {
+                node_type_keys.push(super_type_key);
+            }
+
+            let node_type_type = if node_type_keys.is_empty() {
+                TypeEnum::Unknown
+            } else {
+                TypeEnum::AllOf(node_type_keys)
+            };
+            let node_type_model = TypeModel {
+                name: Some(node_type_name.to_string()),
+                r#type: node_type_type,
                 validators,
                 property,
                 properties,
                 item,
                 items,
             };
-            assert!(arena.models.insert(node_type_key, type_model).is_none());
+            assert!(arena
+                .models
+                .insert(node_type_key, node_type_model)
+                .is_none());
         }
 
         arena
