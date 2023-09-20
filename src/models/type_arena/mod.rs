@@ -27,10 +27,15 @@ use std::collections::HashMap;
 #[derive(Debug, Default)]
 pub struct TypeArena {
     pub(super) models: HashMap<TypeKey, TypeModel>,
+    pub(super) node_id_to_type_key: HashMap<String, TypeKey>,
 }
 
 impl TypeArena {
     pub fn new() -> Self {
         Default::default()
+    }
+
+    fn resolve_node_id(&self, node_id: impl AsRef<str>) -> TypeKey {
+        *self.node_id_to_type_key.get(node_id.as_ref()).unwrap()
     }
 }

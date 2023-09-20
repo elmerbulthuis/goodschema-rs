@@ -6,7 +6,13 @@ use std::collections::HashMap;
 impl From<&schemas::intermediate_a::SchemaJson> for TypeArena {
     fn from(intermediate_document: &schemas::intermediate_a::SchemaJson) -> Self {
         let mut arena = Self::new();
+
+        // first we add all types to the arena from the intermediate document
         add_to_arena(&mut arena, intermediate_document);
+
+        // and then we flatten em!
+        flatten_types(&mut arena);
+
         arena
     }
 }
@@ -16,18 +22,18 @@ fn add_to_arena(
     arena: &mut TypeArena,
     intermediate_document: &schemas::intermediate_a::SchemaJson,
 ) {
-    // keep from node id to type key
-    let mut type_keys = HashMap::new();
-
     // create type keys for all nodes so we can later lookup the type key for every node
     for (node_id, _node) in intermediate_document.nodes.iter() {
         let type_key = TypeKey::new();
-        assert!(type_keys.insert(node_id.clone(), type_key).is_none());
+        assert!(arena
+            .node_id_to_type_key
+            .insert(node_id.clone(), type_key)
+            .is_none());
     }
 
     // and now walk through the nodes and add the types they create
     for (node_id, node) in intermediate_document.nodes.iter() {
-        let node_type_key = *type_keys.get(node_id).unwrap();
+        let node_type_key = arena.resolve_node_id(node_id);
 
         let mut simple_type_keys = Vec::new();
         let mut one_of_type_keys = Vec::new();
@@ -205,8 +211,7 @@ fn add_to_arena(
                         .as_ref()
                         .unwrap()
                         .iter()
-                        .map(|node_id| node_id.as_ref())
-                        .map(|node_id| *type_keys.get(node_id).unwrap())
+                        .map(|node_id| arena.resolve_node_id(node_id))
                         .collect();
 
                     node_type_validators.push(ValidatorEnum::Array(ArrayValidator {}));
@@ -232,8 +237,7 @@ fn add_to_arena(
                     item = type_node
                         .item_type_node_id
                         .as_ref()
-                        .map(|node_id| node_id.as_ref())
-                        .map(|node_id| *type_keys.get(node_id).unwrap());
+                        .map(|node_id| arena.resolve_node_id(node_id));
 
                     node_type_validators.push(ValidatorEnum::Array(ArrayValidator {}));
                 }
@@ -260,8 +264,7 @@ fn add_to_arena(
                         .as_ref()
                         .unwrap()
                         .iter()
-                        .map(|(key, node_id)| (key, node_id.as_ref()))
-                        .map(|(key, node_id)| (key.to_string(), *type_keys.get(node_id).unwrap()))
+                        .map(|(key, node_id)| (key.to_string(), arena.resolve_node_id(node_id)))
                         .collect();
                     node_type_validators.push(ValidatorEnum::Map(MapValidator {}));
                 }
@@ -305,8 +308,7 @@ fn add_to_arena(
                     property = type_node
                         .property_type_node_id
                         .as_ref()
-                        .map(|node_id| node_id.as_ref())
-                        .map(|node_id| *type_keys.get(node_id).unwrap())
+                        .map(|node_id| arena.resolve_node_id(node_id))
                         .map(|type_key| (property_key_type_key, type_key));
 
                     node_type_validators.push(ValidatorEnum::Map(MapValidator {}));
@@ -323,8 +325,7 @@ fn add_to_arena(
                             .as_ref()
                             .unwrap()
                             .iter()
-                            .map(|node_id| node_id.as_ref())
-                            .map(|node_id| *type_keys.get(node_id).unwrap())
+                            .map(|node_id| arena.resolve_node_id(node_id))
                             .collect(),
                     );
                 }
@@ -335,8 +336,7 @@ fn add_to_arena(
                             .as_ref()
                             .unwrap()
                             .iter()
-                            .map(|node_id| node_id.as_ref())
-                            .map(|node_id| *type_keys.get(node_id).unwrap())
+                            .map(|node_id| arena.resolve_node_id(node_id))
                             .collect(),
                     );
                 }
@@ -347,8 +347,7 @@ fn add_to_arena(
                             .as_ref()
                             .unwrap()
                             .iter()
-                            .map(|node_id| node_id.as_ref())
-                            .map(|node_id| *type_keys.get(node_id).unwrap())
+                            .map(|node_id| arena.resolve_node_id(node_id))
                             .collect(),
                     );
                 }
@@ -420,8 +419,7 @@ fn add_to_arena(
         let super_type_key = node
             .super_node_id
             .as_ref()
-            .map(|super_node_id| super_node_id.as_ref())
-            .map(|super_node_id| *type_keys.get(super_node_id).unwrap());
+            .map(|super_node_id| arena.resolve_node_id(super_node_id));
 
         if let Some(super_type_key) = super_type_key {
             node_type_keys.push(super_type_key);
@@ -447,4 +445,8 @@ fn add_to_arena(
             .insert(node_type_key, node_type_model)
             .is_none());
     }
+}
+
+fn flatten_types(arena: &mut TypeArena) {
+    //
 }
