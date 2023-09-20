@@ -21,7 +21,7 @@ impl<'a> ModelsRsGenerator<'a> {
         intermediate_data: &'a schemas::intermediate_a::SchemaJson,
         names: &'a HashMap<String, String>,
     ) -> Self {
-        let arena = TypeArena::new_from_intermediate_document(intermediate_data, names);
+        let arena = TypeArena::from(intermediate_data);
         Self {
             intermediate_data,
             names,
