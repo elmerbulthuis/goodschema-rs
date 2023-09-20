@@ -1,7 +1,7 @@
 use super::*;
 use std::collections::HashMap;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TypeModel {
     pub node_id: Option<String>,
     pub name: Option<String>,
@@ -41,11 +41,5 @@ impl TypeModel {
             TypeEnum::AllOf(type_keys) if type_keys.len() == 1 => type_keys.get(0).cloned(),
             _ => None,
         }
-    }
-}
-
-impl TypeArena {
-    pub fn get_model(&self, type_key: &TypeKey) -> Option<&TypeModel> {
-        self.models.get(type_key)
     }
 }

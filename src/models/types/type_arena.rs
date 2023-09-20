@@ -1,6 +1,9 @@
 use super::*;
 use crate::schemas;
-use std::collections::HashMap;
+use std::{
+    collections::{HashMap, HashSet},
+    iter::empty,
+};
 
 #[derive(Debug, Default)]
 pub struct TypeArena {
@@ -23,7 +26,7 @@ impl From<&schemas::intermediate_a::SchemaJson> for TypeArena {
         let mut arena = Self::new();
 
         // first we add all types to the arena from the intermediate document
-        add_to_arena(&mut arena, intermediate_document);
+        add_intermediate_to_arena(&mut arena, intermediate_document);
 
         // and then we flatten em until there is nothing more to flatten!
         while flatten_types(&mut arena) > 0 {}
@@ -33,7 +36,7 @@ impl From<&schemas::intermediate_a::SchemaJson> for TypeArena {
 }
 
 // Add all types to arena from intermediate document
-fn add_to_arena(
+fn add_intermediate_to_arena(
     arena: &mut TypeArena,
     intermediate_document: &schemas::intermediate_a::SchemaJson,
 ) {
@@ -474,11 +477,133 @@ fn flatten_types(arena: &mut TypeArena) -> usize {
 /**
  * Merge all of types into something else than all of
  */
-fn merge_all_of_types(arena: &mut TypeArena) -> usize {
-    for (type_key, model) in arena.models.iter_mut() {
+fn merge_all_of_types(arena: &TypeArena) -> usize {
+    let mut count = 0;
+    for (type_key, model) in arena.models.iter() {
         if let TypeEnum::AllOf(all_of_type_keys) = &model.r#type {
-            //
+            count += 1;
+            let all_of_models: Vec<_> = all_of_type_keys
+                .iter()
+                .map(|type_key| arena.models.get(type_key).unwrap())
+                .cloned()
+                .collect();
+            let all_of_model_types: HashSet<_> =
+                all_of_models.iter().map(|model| model.r#type).collect();
+
+            let merged_type_validators = all_of_models
+                .iter()
+                .flat_map(|model| model.validators.iter())
+                .cloned()
+                .collect();
+
+            let merged_property_vec: Vec<_> = all_of_models
+                .iter()
+                .filter_map(|model| model.property)
+                .collect();
+            let merged_property = if merged_property_vec.len() > 1 {
+                let property_key_type_key = TypeKey::new();
+                let property_value_type_key = TypeKey::new();
+
+                // todo create all of type here
+
+                Some((property_key_type_key, property_value_type_key))
+            } else {
+                merged_property_vec.first().cloned()
+            };
+
+            // todo
+            let merged_properties = HashMap::new();
+
+            // todo
+            let merged_item = None;
+
+            // todo
+            let merged_items = Vec::new();
+
+            let merged_type_type = {
+                if all_of_model_types.len() > 1 {
+                    let all_of_model_types: HashSet<_> = all_of_model_types
+                        .into_iter()
+                        .filter(|r#type| r#type != &TypeEnum::Unknown)
+                        .filter(|r#type| r#type != &TypeEnum::Any)
+                        .collect();
+
+                    if all_of_model_types.len() > 1 {
+                        if all_of_model_types.contains(&TypeEnum::Never) {
+                            TypeEnum::Never
+                        } else {
+                            // ok lets get to merging!
+
+                            let all_of_type_keys: HashSet<_> = all_of_model_types
+                                .iter()
+                                .flat_map(|r#type| {
+                                    if let TypeEnum::AllOf(type_keys) = r#type {
+                                        type_keys.iter()
+                                    } else {
+                                        Default::default()
+                                    }
+                                })
+                                .cloned()
+                                .collect();
+
+                            let any_of_type_keys: HashSet<_> = all_of_model_types
+                                .iter()
+                                .flat_map(|r#type| {
+                                    if let TypeEnum::AnyOf(type_keys) = r#type {
+                                        type_keys.iter()
+                                    } else {
+                                        Default::default()
+                                    }
+                                })
+                                .cloned()
+                                .collect();
+
+                            let one_of_type_keys: HashSet<_> = all_of_model_types
+                                .iter()
+                                .flat_map(|r#type| {
+                                    if let TypeEnum::OneOf(type_keys) = r#type {
+                                        type_keys.iter()
+                                    } else {
+                                        Default::default()
+                                    }
+                                })
+                                .cloned()
+                                .collect();
+
+                            if all_of_type_keys.is_empty() {
+                            } else {
+                            }
+
+                            todo!()
+                        }
+                    } else {
+                        all_of_model_types
+                            .iter()
+                            .next()
+                            .cloned()
+                            .unwrap_or_default()
+                    }
+                } else {
+                    all_of_model_types
+                        .iter()
+                        .next()
+                        .cloned()
+                        .unwrap_or_default()
+                }
+            };
+
+            let _merged_type_model = TypeModel {
+                node_id: None,
+                name: None,
+                r#type: merged_type_type,
+                validators: merged_type_validators,
+                property: merged_property,
+                properties: merged_properties,
+                item: merged_item,
+                items: merged_items,
+            };
         }
     }
-    1
+
+    count
 }
