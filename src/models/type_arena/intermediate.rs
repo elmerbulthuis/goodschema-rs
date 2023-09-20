@@ -15,33 +15,24 @@ impl TypeArena {
         let mut type_keys = HashMap::new();
 
         for (node_id, node) in intermediate_document.nodes.iter() {
-            if node.select_is_empty() && node.super_node_id.is_some() {
-                continue;
-            }
-
             let type_key = TypeKey::new();
             let type_name = name_map.get(node_id).unwrap();
             assert!(type_keys.insert(type_name.clone(), type_key).is_none());
         }
 
         for (node_id, node) in intermediate_document.nodes.iter() {
-            if node.select_is_empty() && node.super_node_id.is_some() {
-                continue;
-            }
-
-            let type_name = name_map.get(node_id).unwrap();
-            let type_key = *type_keys.get(type_name).unwrap();
+            let node_type_name = name_map.get(node_id).unwrap();
+            let node_type_key = *type_keys.get(node_type_name).unwrap();
 
             let super_type_name = node
                 .super_node_id
                 .as_ref()
                 .map(|super_node_id| super_node_id.as_ref())
-                .map(|super_node_id| intermediate_document.select_non_empty(super_node_id))
                 .map(|super_node_id| name_map.get(super_node_id).unwrap());
             let super_type_key =
                 super_type_name.map(|super_type_name| *type_keys.get(super_type_name).unwrap());
 
-            let mut sub_type_keys = Vec::new();
+            let mut simple_type_keys = Vec::new();
             let mut one_of_type_keys = Vec::new();
             let mut any_of_type_keys = Vec::new();
             let mut all_of_type_keys = Vec::new();
@@ -53,10 +44,10 @@ impl TypeArena {
             let mut items = Vec::new();
 
             for type_node in node.types.iter() {
-                let sub_type_key = TypeKey::new();
-                sub_type_keys.push(sub_type_key);
+                let simple_type_key = TypeKey::new();
+                simple_type_keys.push(simple_type_key);
 
-                let sub_type = match type_node {
+                let simple_type_type = match type_node {
                     schemas::intermediate_a::TypeUnion::NeverType(_type_node) => TypeEnum::Never,
                     schemas::intermediate_a::TypeUnion::AnyType(_type_node) => TypeEnum::Any,
                     schemas::intermediate_a::TypeUnion::NullType(_type_node) => TypeEnum::Null,
@@ -89,7 +80,6 @@ impl TypeArena {
                             .unwrap()
                             .iter()
                             .map(|node_id| node_id.as_ref())
-                            .map(|node_id| intermediate_document.select_non_empty(node_id))
                             .map(|node_id| name_map.get(node_id).unwrap())
                             .map(|type_name| *type_keys.get(type_name).unwrap())
                             .collect();
@@ -101,7 +91,6 @@ impl TypeArena {
                             .item_type_node_id
                             .as_ref()
                             .map(|node_id| node_id.as_ref())
-                            .map(|node_id| intermediate_document.select_non_empty(node_id))
                             .map(|node_id| name_map.get(node_id).unwrap())
                             .map(|type_name| *type_keys.get(type_name).unwrap());
                         validators.push(ValidatorEnum::Array(ArrayValidator {}));
@@ -114,9 +103,6 @@ impl TypeArena {
                             .unwrap()
                             .iter()
                             .map(|(key, node_id)| (key, node_id.as_ref()))
-                            .map(|(key, node_id)| {
-                                (key, intermediate_document.select_non_empty(node_id))
-                            })
                             .map(|(key, node_id)| (key, name_map.get(node_id).unwrap()))
                             .map(|(key, type_name)| {
                                 (key.clone(), *type_keys.get(type_name).unwrap())
@@ -130,7 +116,6 @@ impl TypeArena {
                             .property_type_node_id
                             .as_ref()
                             .map(|node_id| node_id.as_ref())
-                            .map(|node_id| intermediate_document.select_non_empty(node_id))
                             .map(|node_id| name_map.get(node_id).unwrap())
                             .map(|type_name| *type_keys.get(type_name).unwrap())
                             .map(|type_key| (TypeKey::new(), type_key));
@@ -139,34 +124,19 @@ impl TypeArena {
                         TypeEnum::Map
                     }
                 };
-                let sub_type_model = TypeModel {
-                    name: Some(format!("{}{}", type_name, sub_type)),
-                    super_type_key: Some(type_key),
-                    r#type: sub_type,
+                let simple_type_model = TypeModel {
+                    name: Some(format!("{}", simple_type_type)),
+                    r#type: simple_type_type,
                     validators: Default::default(),
                     property: Default::default(),
                     properties: Default::default(),
                     item: Default::default(),
                     items: Default::default(),
                 };
-                assert!(arena.models.insert(sub_type_key, sub_type_model).is_none());
-            }
-
-            if !sub_type_keys.is_empty() {
-                let sub_type_key = TypeKey::new();
-                sub_type_keys.push(sub_type_key);
-                let sub_type_type = TypeEnum::OneOf(sub_type_keys);
-                let sub_type_model = TypeModel {
-                    name: None,
-                    super_type_key: Some(type_key),
-                    r#type: sub_type_type,
-                    validators: Default::default(),
-                    property: Default::default(),
-                    properties: Default::default(),
-                    item: Default::default(),
-                    items: Default::default(),
-                };
-                assert!(arena.models.insert(sub_type_key, sub_type_model).is_none());
+                assert!(arena
+                    .models
+                    .insert(simple_type_key, simple_type_model)
+                    .is_none());
             }
 
             for compound_node in node.compounds.iter() {
@@ -179,7 +149,6 @@ impl TypeArena {
                                 .unwrap()
                                 .iter()
                                 .map(|node_id| node_id.as_ref())
-                                .map(|node_id| intermediate_document.select_non_empty(node_id))
                                 .map(|node_id| name_map.get(node_id).unwrap())
                                 .map(|type_name| *type_keys.get(type_name).unwrap())
                                 .collect(),
@@ -193,7 +162,6 @@ impl TypeArena {
                                 .unwrap()
                                 .iter()
                                 .map(|node_id| node_id.as_ref())
-                                .map(|node_id| intermediate_document.select_non_empty(node_id))
                                 .map(|node_id| name_map.get(node_id).unwrap())
                                 .map(|type_name| *type_keys.get(type_name).unwrap())
                                 .collect(),
@@ -207,7 +175,6 @@ impl TypeArena {
                                 .unwrap()
                                 .iter()
                                 .map(|node_id| node_id.as_ref())
-                                .map(|node_id| intermediate_document.select_non_empty(node_id))
                                 .map(|node_id| name_map.get(node_id).unwrap())
                                 .map(|type_name| *type_keys.get(type_name).unwrap())
                                 .collect(),
@@ -216,13 +183,30 @@ impl TypeArena {
                 }
             }
 
+            let mut type_keys = Vec::new();
+
+            if !simple_type_keys.is_empty() {
+                let sub_type_key = TypeKey::new();
+                simple_type_keys.push(sub_type_key);
+                let sub_type_type = TypeEnum::OneOf(simple_type_keys);
+                let sub_type_model = TypeModel {
+                    name: None,
+                    r#type: sub_type_type,
+                    validators: Default::default(),
+                    property: Default::default(),
+                    properties: Default::default(),
+                    item: Default::default(),
+                    items: Default::default(),
+                };
+                assert!(arena.models.insert(sub_type_key, sub_type_model).is_none());
+            }
+
             if !one_of_type_keys.is_empty() {
                 let one_of_type_key = TypeKey::new();
                 one_of_type_keys.push(one_of_type_key);
                 let one_of_type_type = TypeEnum::OneOf(one_of_type_keys);
                 let one_of_type_model = TypeModel {
-                    name: Some(format!("{}{}", type_name, one_of_type_type)),
-                    super_type_key: Some(type_key),
+                    name: Some(format!("{}{}", node_type_name, one_of_type_type)),
                     r#type: one_of_type_type,
                     validators: Default::default(),
                     property: Default::default(),
@@ -241,8 +225,7 @@ impl TypeArena {
                 all_of_type_keys.push(any_of_type_key);
                 let any_of_type_type = TypeEnum::AnyOf(any_of_type_keys);
                 let any_of_type_model = TypeModel {
-                    name: Some(format!("{}{}", type_name, any_of_type_type)),
-                    super_type_key: Some(type_key),
+                    name: Some(format!("{}{}", node_type_name, any_of_type_type)),
                     r#type: any_of_type_type,
                     validators: Default::default(),
                     property: Default::default(),
@@ -256,10 +239,9 @@ impl TypeArena {
                     .is_none());
             }
 
-            let type_type = TypeEnum::AllOf(all_of_type_keys);
+            let type_type = TypeEnum::AllOf(type_keys);
             let type_model = TypeModel {
-                name: Some(type_name.clone()),
-                super_type_key,
+                name: Some(node_type_name.clone()),
                 r#type: type_type,
                 validators,
                 property,
@@ -267,7 +249,7 @@ impl TypeArena {
                 item,
                 items,
             };
-            assert!(arena.models.insert(type_key, type_model).is_none());
+            assert!(arena.models.insert(node_type_key, type_model).is_none());
         }
 
         arena
