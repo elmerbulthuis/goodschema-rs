@@ -1,9 +1,8 @@
 use super::*;
 use crate::schemas;
 use std::{
-    cell::RefCell,
-    collections::{HashMap, HashSet},
-    iter::empty,
+    collections::HashMap,
+    iter::{empty, once},
 };
 
 #[derive(Debug, Default)]
@@ -434,8 +433,6 @@ fn merge_all_of_types(arena: &mut TypeArena) -> usize {
         let mut type_model = arena.models.remove(&type_key).unwrap();
 
         if let TypeEnum::AllOf(compound_type_keys) = &type_model.r#type {
-            count += 1;
-
             let compound_models: HashMap<_, _> = compound_type_keys
                 .iter()
                 .map(|key| (*key, arena.models.get(key).unwrap().clone()))
@@ -452,18 +449,92 @@ fn merge_all_of_types(arena: &mut TypeArena) -> usize {
                 })
                 .collect();
 
+            let compound_model_any_of_type_keys: HashMap<_, _> = compound_models
+                .iter()
+                .filter_map(|(key, model)| {
+                    if let TypeEnum::AnyOf(type_keys) = &model.r#type {
+                        Some((*key, type_keys.clone()))
+                    } else {
+                        None
+                    }
+                })
+                .collect();
+
+            let compound_model_one_of_type_keys: HashMap<_, _> = compound_models
+                .iter()
+                .filter_map(|(key, model)| {
+                    if let TypeEnum::OneOf(type_keys) = &model.r#type {
+                        Some((*key, type_keys.clone()))
+                    } else {
+                        None
+                    }
+                })
+                .collect();
+
             if !compound_model_all_of_type_keys.is_empty() {
-                type_model.r#type = TypeEnum::AllOf(
-                    empty()
-                        .chain(compound_model_all_of_type_keys.values().flatten())
-                        .chain(
-                            compound_type_keys
-                                .iter()
-                                .filter(|key| !compound_model_all_of_type_keys.contains_key(key)),
-                        )
-                        .cloned()
-                        .collect(),
-                );
+                count += 1;
+
+                let type_keys: Vec<_> = empty()
+                    .chain(compound_model_all_of_type_keys.values().flatten())
+                    .chain(
+                        compound_type_keys
+                            .iter()
+                            .filter(|key| !compound_model_all_of_type_keys.contains_key(key)),
+                    )
+                    .cloned()
+                    .collect();
+
+                if type_keys.len() > 1 {
+                    type_model.r#type = TypeEnum::AllOf(type_keys);
+                } else {
+                    type_model.r#type = TypeEnum::Alias(*type_keys.first().unwrap());
+                }
+            } else if !compound_model_any_of_type_keys.is_empty() {
+                // if we have an all of of any of's then we make it into an any of of all of's
+                count += 1;
+
+                let mut type_keys = Vec::new();
+                for any_of_key in compound_model_any_of_type_keys.values().flatten() {
+                    let key = TypeKey::new();
+                    let model = TypeModel {
+                        r#type: TypeEnum::AllOf(
+                            once(any_of_key)
+                                .chain(compound_type_keys.iter().filter(|key| {
+                                    !compound_model_any_of_type_keys.contains_key(key)
+                                }))
+                                .cloned()
+                                .collect(),
+                        ),
+                        ..Default::default()
+                    };
+                    assert!(arena.models.insert(key, model).is_none());
+                    type_keys.push(key);
+                }
+
+                type_model.r#type = TypeEnum::AnyOf(type_keys);
+            } else if !compound_model_one_of_type_keys.is_empty() {
+                // if we have an all of of one of's then we make it into an one of of all of's
+                count += 1;
+
+                let mut type_keys = Vec::new();
+                for one_of_key in compound_model_one_of_type_keys.values().flatten() {
+                    let key = TypeKey::new();
+                    let model = TypeModel {
+                        r#type: TypeEnum::AllOf(
+                            once(one_of_key)
+                                .chain(compound_type_keys.iter().filter(|key| {
+                                    !compound_model_one_of_type_keys.contains_key(key)
+                                }))
+                                .cloned()
+                                .collect(),
+                        ),
+                        ..Default::default()
+                    };
+                    assert!(arena.models.insert(key, model).is_none());
+                    type_keys.push(key);
+                }
+
+                type_model.r#type = TypeEnum::OneOf(type_keys);
             }
         }
 
@@ -513,7 +584,7 @@ mod tests {
         assert!(arena.models.insert(key_4, model_4).is_none());
         assert!(arena.models.insert(key_5, model_5).is_none());
 
-        merge_all_of_types(&mut arena);
+        while merge_all_of_types(&mut arena) > 0 {}
 
         let model_5 = arena.models.get(&key_5).unwrap();
 
@@ -525,6 +596,58 @@ mod tests {
             }
         );
 
-        println!("{:?}", arena);
+        for m in arena.models.iter() {
+            println!("{:?}", m);
+        }
+    }
+
+    #[test]
+    fn test_2() {
+        let mut arena = TypeArena::new();
+
+        let key_1 = TypeKey::new();
+        let key_2 = TypeKey::new();
+        let key_3 = TypeKey::new();
+        let key_4 = TypeKey::new();
+        let key_5 = TypeKey::new();
+
+        let model_1 = TypeModel {
+            r#type: TypeEnum::String,
+            ..Default::default()
+        };
+        let model_2 = TypeModel {
+            r#type: TypeEnum::String,
+            ..Default::default()
+        };
+        let model_3 = TypeModel {
+            r#type: TypeEnum::AnyOf([key_1, key_2].into()),
+            ..Default::default()
+        };
+        let model_4 = TypeModel {
+            r#type: TypeEnum::String,
+            ..Default::default()
+        };
+        let model_5 = TypeModel {
+            r#type: TypeEnum::AllOf([key_3, key_4].into()),
+            ..Default::default()
+        };
+
+        assert!(arena.models.insert(key_1, model_1).is_none());
+        assert!(arena.models.insert(key_2, model_2).is_none());
+        assert!(arena.models.insert(key_3, model_3).is_none());
+        assert!(arena.models.insert(key_4, model_4).is_none());
+        assert!(arena.models.insert(key_5, model_5).is_none());
+
+        for m in arena.models.iter() {
+            println!("{:?}", m);
+        }
+        println!();
+
+        merge_all_of_types(&mut arena);
+
+        for m in arena.models.iter() {
+            println!("{:?}", m);
+        }
+        println!();
     }
 }
