@@ -643,7 +643,7 @@ mod tests {
         }
         println!();
 
-        merge_all_of_types(&mut arena);
+        while merge_all_of_types(&mut arena) > 0 {}
 
         for m in arena.models.iter() {
             println!("{:?}", m);
