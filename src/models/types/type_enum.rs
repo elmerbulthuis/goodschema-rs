@@ -22,13 +22,10 @@ pub enum TypeEnum {
 
 impl TypeEnum {
     pub fn is_compound(&self) -> bool {
-        match self {
-            TypeEnum::OneOf(_) => true,
-            TypeEnum::AnyOf(_) => true,
-            TypeEnum::AllOf(_) => true,
-            TypeEnum::Alias(_) => true,
-            _ => false,
-        }
+        matches!(
+            self,
+            TypeEnum::OneOf(_) | TypeEnum::AnyOf(_) | TypeEnum::AllOf(_) | TypeEnum::Alias(_)
+        )
     }
 }
 
