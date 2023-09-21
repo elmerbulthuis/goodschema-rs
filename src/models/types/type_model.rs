@@ -1,7 +1,7 @@
 use super::*;
 use std::collections::HashMap;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Default)]
 pub struct TypeModel {
     pub node_id: Option<String>,
     pub name: Option<String>,
@@ -11,6 +11,7 @@ pub struct TypeModel {
     pub properties: HashMap<String, TypeKey>,
     pub item: Option<TypeKey>,
     pub items: Vec<TypeKey>,
+    pub required: Vec<String>,
 }
 
 impl TypeModel {

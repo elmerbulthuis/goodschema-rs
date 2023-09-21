@@ -63,6 +63,7 @@ fn add_intermediate_to_arena(
         let mut properties = HashMap::new();
         let mut item = None;
         let mut items = Vec::new();
+        let mut required = Vec::new();
 
         for type_node in node.types.iter() {
             match type_node {
@@ -73,11 +74,7 @@ fn add_intermediate_to_arena(
                         node_id: None,
                         name: Some("Never".to_string()),
                         r#type: TypeEnum::Never,
-                        validators: Default::default(),
-                        property: Default::default(),
-                        properties: Default::default(),
-                        item: Default::default(),
-                        items: Default::default(),
+                        ..Default::default()
                     };
                     assert!(arena
                         .models
@@ -91,11 +88,7 @@ fn add_intermediate_to_arena(
                         node_id: None,
                         name: Some("Any".to_string()),
                         r#type: TypeEnum::Any,
-                        validators: Default::default(),
-                        property: Default::default(),
-                        properties: Default::default(),
-                        item: Default::default(),
-                        items: Default::default(),
+                        ..Default::default()
                     };
                     assert!(arena
                         .models
@@ -109,11 +102,7 @@ fn add_intermediate_to_arena(
                         node_id: None,
                         name: Some("Null".to_string()),
                         r#type: TypeEnum::Null,
-                        validators: Default::default(),
-                        property: Default::default(),
-                        properties: Default::default(),
-                        item: Default::default(),
-                        items: Default::default(),
+                        ..Default::default()
                     };
                     assert!(arena
                         .models
@@ -127,11 +116,7 @@ fn add_intermediate_to_arena(
                         node_id: None,
                         name: Some("Boolean".to_string()),
                         r#type: TypeEnum::Boolean,
-                        validators: Default::default(),
-                        property: Default::default(),
-                        properties: Default::default(),
-                        item: Default::default(),
-                        items: Default::default(),
+                        ..Default::default()
                     };
                     assert!(arena
                         .models
@@ -153,11 +138,7 @@ fn add_intermediate_to_arena(
                             node_id: None,
                             name: Some("Integer".to_string()),
                             r#type: TypeEnum::Integer,
-                            validators: Default::default(),
-                            property: Default::default(),
-                            properties: Default::default(),
-                            item: Default::default(),
-                            items: Default::default(),
+                            ..Default::default()
                         };
                         assert!(arena
                             .models
@@ -172,11 +153,7 @@ fn add_intermediate_to_arena(
                             node_id: None,
                             name: Some("Number".to_string()),
                             r#type: TypeEnum::Number,
-                            validators: Default::default(),
-                            property: Default::default(),
-                            properties: Default::default(),
-                            item: Default::default(),
-                            items: Default::default(),
+                            ..Default::default()
                         };
                         assert!(arena
                             .models
@@ -193,11 +170,7 @@ fn add_intermediate_to_arena(
                         node_id: None,
                         name: Some("String".to_string()),
                         r#type: TypeEnum::String,
-                        validators: Default::default(),
-                        property: Default::default(),
-                        properties: Default::default(),
-                        item: Default::default(),
-                        items: Default::default(),
+                        ..Default::default()
                     };
                     assert!(arena
                         .models
@@ -213,11 +186,7 @@ fn add_intermediate_to_arena(
                         node_id: None,
                         name: Some("Tuple".to_string()),
                         r#type: TypeEnum::Tuple,
-                        validators: Default::default(),
-                        property: Default::default(),
-                        properties: Default::default(),
-                        item: Default::default(),
-                        items: Default::default(),
+                        ..Default::default()
                     };
                     assert!(arena
                         .models
@@ -241,11 +210,7 @@ fn add_intermediate_to_arena(
                         node_id: None,
                         name: Some("Array".to_string()),
                         r#type: TypeEnum::Array,
-                        validators: Default::default(),
-                        property: Default::default(),
-                        properties: Default::default(),
-                        item: Default::default(),
-                        items: Default::default(),
+                        ..Default::default()
                     };
                     assert!(arena
                         .models
@@ -266,11 +231,7 @@ fn add_intermediate_to_arena(
                         node_id: None,
                         name: Some("Object".to_string()),
                         r#type: TypeEnum::Object,
-                        validators: Default::default(),
-                        property: Default::default(),
-                        properties: Default::default(),
-                        item: Default::default(),
-                        items: Default::default(),
+                        ..Default::default()
                     };
                     assert!(arena
                         .models
@@ -296,10 +257,7 @@ fn add_intermediate_to_arena(
                         name: Some("PropertyKey".to_string()),
                         r#type: TypeEnum::String,
                         validators: property_key_type_validators,
-                        property: Default::default(),
-                        properties: Default::default(),
-                        item: Default::default(),
-                        items: Default::default(),
+                        ..Default::default()
                     };
                     assert!(arena
                         .models
@@ -312,11 +270,7 @@ fn add_intermediate_to_arena(
                         node_id: None,
                         name: Some("Map".to_string()),
                         r#type: TypeEnum::Map,
-                        validators: Default::default(),
-                        property: Default::default(),
-                        properties: Default::default(),
-                        item: Default::default(),
-                        items: Default::default(),
+                        ..Default::default()
                     };
                     assert!(arena
                         .models
@@ -330,6 +284,14 @@ fn add_intermediate_to_arena(
                         .map(|type_key| (property_key_type_key, type_key));
 
                     node_type_validators.push(ValidatorEnum::Map(MapValidator {}));
+                    if let Some(required_properties) = &type_node.required_properties {
+                        required.append(
+                            &mut required_properties
+                                .iter()
+                                .map(|property| property.to_string())
+                                .collect(),
+                        )
+                    }
                 }
             };
         }
@@ -382,11 +344,7 @@ fn add_intermediate_to_arena(
                 node_id: None,
                 name: Some("Type".to_string()),
                 r#type: simple_type_type,
-                validators: Default::default(),
-                property: Default::default(),
-                properties: Default::default(),
-                item: Default::default(),
-                items: Default::default(),
+                ..Default::default()
             };
             assert!(arena
                 .models
@@ -402,11 +360,7 @@ fn add_intermediate_to_arena(
                 node_id: None,
                 name: Some("OneOf".to_string()),
                 r#type: one_of_type_type,
-                validators: Default::default(),
-                property: Default::default(),
-                properties: Default::default(),
-                item: Default::default(),
-                items: Default::default(),
+                ..Default::default()
             };
             assert!(arena
                 .models
@@ -422,11 +376,7 @@ fn add_intermediate_to_arena(
                 node_id: None,
                 name: Some("AnyOf".to_string()),
                 r#type: any_of_type_type,
-                validators: Default::default(),
-                property: Default::default(),
-                properties: Default::default(),
-                item: Default::default(),
-                items: Default::default(),
+                ..Default::default()
             };
             assert!(arena
                 .models
@@ -458,6 +408,7 @@ fn add_intermediate_to_arena(
             properties,
             item,
             items,
+            required,
         };
         assert!(arena
             .models
@@ -523,6 +474,10 @@ fn merge_all_of_types(arena: &TypeArena) -> usize {
             // todo
             let merged_items = Vec::new();
 
+            // todo
+            let merged_required = Vec::new();
+
+            // todo
             let merged_type_type = {
                 if all_of_model_types.len() > 1 {
                     let all_of_model_types: HashSet<_> = all_of_model_types
@@ -624,6 +579,7 @@ fn merge_all_of_types(arena: &TypeArena) -> usize {
                 properties: merged_properties,
                 item: merged_item,
                 items: merged_items,
+                required: merged_required,
             };
         }
     }
